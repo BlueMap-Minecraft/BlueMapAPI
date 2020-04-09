@@ -1,0 +1,16 @@
+plugins {
+	id 'java'
+}
+
+repositories {
+	jcenter()
+	mavenCentral()
+	maven {
+		url 'https://jitpack.io'
+	}
+}
+
+apply plugin: 'java'
+
+group = 'de.bluecolored.bluemap.api'
+version = apiVersion
