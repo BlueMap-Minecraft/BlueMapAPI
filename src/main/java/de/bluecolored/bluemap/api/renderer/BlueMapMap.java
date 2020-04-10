@@ -28,6 +28,10 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
+/**
+ * This class represents a map that is rendered by BlueMap of a specific world ({@link BlueMapWorld}).
+ * Each map belongs to a map configured in BlueMap's configuration file (in the <code>maps: []</code> list).
+ */
 public interface BlueMapMap {
 
 	/**

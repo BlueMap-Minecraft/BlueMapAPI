@@ -27,6 +27,7 @@ package de.bluecolored.bluemap.api;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
+import java.util.UUID;
 
 import de.bluecolored.bluemap.api.renderer.BlueMapMap;
 import de.bluecolored.bluemap.api.renderer.BlueMapWorld;
@@ -44,15 +45,35 @@ public abstract class BlueMapAPI {
 	
 	/**
 	 * Getter for all {@link BlueMapMap}s loaded by BlueMap.
-	 * @return an immutable collection of all loaded {@link BlueMapMap}s 
+	 * @return an unmodifiable collection of all loaded {@link BlueMapMap}s 
 	 */
 	public abstract Collection<BlueMapMap> getMaps();
 	
 	/**
 	 * Getter for all {@link BlueMapWorld}s loaded by BlueMap.
-	 * @return an immutable collection of all loaded {@link BlueMapWorld}s
+	 * @return an unmodifiable collection of all loaded {@link BlueMapWorld}s
 	 */
 	public abstract Collection<BlueMapWorld> getWorlds();
+	
+	/**
+	 * Getter for a {@link BlueMapWorld} loaded by BlueMap with the given {@link UUID}.
+	 *
+	 * <p><i>See the documentation of {@link BlueMapWorld#getUuid()} for more information about the nature of the worlds {@link UUID}s!</i></p>  
+	 * 
+	 * @see BlueMapWorld#getUuid()
+	 * 
+	 * @param uuid the {@link UUID} of the world
+	 * 
+	 * @return an {@link Optional} with the {@link BlueMapWorld} if it exists
+	 */
+	public abstract Optional<BlueMapWorld> getWorld(UUID uuid);
+	
+	/**
+	 * Getter for a {@link BlueMapMap} loaded by BlueMap with the given id.
+	 * @param id the map id (equivalent to the id configured in BlueMap's config
+	 * @return an {@link Optional} with the {@link BlueMapMap} if it exists
+	 */
+	public abstract Optional<BlueMapMap> getMap(String id);
 	
 	/**
 	 * Getter for the installed BlueMap version
@@ -91,26 +112,30 @@ public abstract class BlueMapAPI {
 	 * Used by BlueMap to register the API and call the listeners properly. 
 	 * @param instance {@link BlueMapAPI}-instance
 	 */
-	static synchronized void registerInstance(BlueMapAPI instance) {
-		if (BlueMapAPI.instance != null) throw new IllegalStateException("There already is an API instance registered!");
+	protected static synchronized boolean registerInstance(BlueMapAPI instance) {
+		if (BlueMapAPI.instance != null) return false;
 		
 		BlueMapAPI.instance = instance;
 
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
 			listener.onEnable(BlueMapAPI.instance);
 		}
+
+		return true;
 	}
 	
 	/**
 	 * Used by BlueMap to unregister the API and call the listeners properly.
 	 */
-	static synchronized void unregisterInstance() {
-		if (BlueMapAPI.instance == null) throw new IllegalStateException("There is no API instance registered!");
+	protected static synchronized boolean unregisterInstance(BlueMapAPI instance) {
+		if (BlueMapAPI.instance != instance) return false;
 		
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
 			listener.onDisable(BlueMapAPI.instance);
 		}	
 		
 		BlueMapAPI.instance = null;
+		
+		return true;
 	}
 }

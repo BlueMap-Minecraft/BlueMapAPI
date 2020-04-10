@@ -28,22 +28,26 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.UUID;
 
+/**
+ * This class represents a world loaded by BlueMap.
+ */
 public interface BlueMapWorld {
 
 	/**
 	 * <p>Getter for the {@link UUID} of the world.</p>
 	 * <p>
-	 * 	The {@link UUID} of this world is <b>not</b> guaranteed to be consistent across reloads/restarts!
+	 * 	The {@link UUID}s of this worlds are <b>not</b> guaranteed to be consistent across reloads/restarts!
 	 * </p>
 	 * <p>
 	 * 	<b>Implementation notes:</b><br>
 	 * 	The used UUID highly depends on the implementation
 	 * 	<table>
-	 *  	<tr><th>Sponge</th><td>The UUID is equal to the returned UUID by World-Instances of the Sponge-API, so you can just use <code>spongeWorld.getUniqueId()</code><td><tr>
-	 *  	<tr><th>Bukkit</th><td>The UUID is equal to the returned UUID by World-Instances of the Bukkit-API, so you can just use <code>bukkitWorld.getUID()</code><td><tr>
+	 *  	<tr><th>Sponge</th><td>The UUID is equal to the returned UUID by world-instances of the Sponge-API, so you can just use <code>spongeWorld.getUniqueId()</code><td><tr>
+	 *  	<tr><th>Bukkit</th><td>The UUID is equal to the returned UUID by world-instances of the Bukkit-API, so you can just use <code>bukkitWorld.getUID()</code><td><tr>
 	 *  	<tr><th>Forge</th><td>The UUID is randomly generated, and changes on each reload/restart</code><td><tr>
 	 *  	<tr><th>CLI</th><td>The UUID is randomly generated, and changes on each reload/restart</code><td><tr>
 	 *  </table>
+	 * </p>
 	 * 
 	 * @return the {@link UUID} of the world
 	 */
@@ -57,7 +61,7 @@ public interface BlueMapWorld {
 	
 	/**
 	 * Getter for all {@link BlueMapMap}s for this world
-	 * @return a {@link Collection} of all {@link BlueMapMap}s for this world
+	 * @return an unmodifiable {@link Collection} of all {@link BlueMapMap}s for this world
 	 */
 	Collection<BlueMapMap> getMaps();
 	

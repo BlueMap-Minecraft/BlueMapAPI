@@ -24,89 +24,110 @@
  */
 package de.bluecolored.bluemap.api.renderer;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.UUID;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
+/**
+ * The {@link Renderer} is used to schedule tile-renders and process them on a number of different threads.
+ */
 public interface Renderer {
 
 	/**
-	 * Schedules the map-tile at this block position for all maps of this world and returns the created render-tickets.<br>
-	 * If there already is a render-ticket scheduled for a tile, the existing one is returned instead of creating a new one.
+	 * Schedules the render of the map-tile at this block position for all maps of this world.<br>
+	 * If there already is a render scheduled for one of the tiles, a second one will <b>not</b> be created.
 	 * 
 	 * @param world the {@link UUID} of the {@link BlueMapWorld} to render
 	 * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tiles will be rendered not only that block)
 	 * 
-	 * @return a {@link Collection} of the scheduled {@link RenderTicket}s 
+	 * @throws IllegalArgumentException if there is no world loaded with the provided {@link UUID} 
 	 */
-	Collection<RenderTicket> render(UUID world, Vector3i blockPosition);
+	void render(UUID world, Vector3i blockPosition);
 
 	/**
-	 * Schedules the map-tile at this block position for all maps of this world and returns the created render-tickets.<br>
-	 * If there already is a render-ticket scheduled for a tile, the existing one is returned instead of creating a new one.
+	 * Schedules the render of the map-tile at this block position for all maps of this world.<br>
+	 * If there already is a render scheduled for one of the tiles, a second one will <b>not</b> be created.
 	 * 
 	 * @param world the {@link BlueMapWorld} to render
 	 * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tiles will be rendered not only that block)
-	 * 
-	 * @return a {@link Collection} of the scheduled {@link RenderTicket}s 
 	 */
-	default Collection<RenderTicket> render(BlueMapWorld world, Vector3i blockPosition) {
-		Collection<RenderTicket> tickets = new HashSet<>();
-		
+	default void render(BlueMapWorld world, Vector3i blockPosition) {
 		for (BlueMapMap map : world.getMaps()) {
-			tickets.add(render(map, blockPosition));
+			render(map, blockPosition);
 		}
-		
-		return tickets;
 	}
 
 	/**
-	 * Schedules the map-tile at this block position and returns the created render-ticket.<br>
-	 * If there already is a render-ticket scheduled for that map-tile, the existing one is returned instead of creating a new one.
+	 * Schedules the render of the map-tile at this block position.<br>
+	 * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
 	 * 
 	 * @param mapId the id of the {@link BlueMapMap} to render
 	 * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tile will be rendered not only that block)
 	 * 
 	 * @return the scheduled {@link RenderTicket}
+	 * 
+	 * @throws IllegalArgumentException if there is no map loaded with the provided mapId
 	 */
-	RenderTicket render(String mapId, Vector3i blockPosition);
+	void render(String mapId, Vector3i blockPosition);
 
 	/**
-	 * Schedules the map-tile at this block position and returns the created render-ticket.<br>
-	 * If there already is a render-ticket scheduled for that map-tile, the existing one is returned instead of creating a new one.
+	 * Schedules the render of map-tile at this block position and returns the created render-ticket.<br>
+	 * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
 	 * 
 	 * @param map the {@link BlueMapMap}
 	 * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tile will be rendered not only that block)
-	 * 
-	 * @return the scheduled {@link RenderTicket}
 	 */
-	default RenderTicket render(BlueMapMap map, Vector3i blockPosition) {
-		return render(map, map.posToTile(blockPosition));
+	default void render(BlueMapMap map, Vector3i blockPosition) {
+		render(map, map.posToTile(blockPosition));
 	}
 	
 	/**
-	 * Schedules the map-tile and returns the created render-ticket.<br>
-	 * If there already is a render-ticket scheduled for that map-tile, the existing one is returned instead of creating a new one.
+	 * Schedules the render of the map-tile.<br>
+	 * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
 	 * 
 	 * @param mapId the id of the {@link BlueMapMap} to render
 	 * @param tile a {@link Vector2i} for the tile-position to render
 	 * 
-	 * @return the scheduled {@link RenderTicket}
+	 * @throws IllegalArgumentException if there is no map loaded with the provided mapId
 	 */
-	RenderTicket render(String mapId, Vector2i tile);
+	void render(String mapId, Vector2i tile);
 
 	/**
-	 * Schedules the map-tile and returns the created render-ticket.<br>
-	 * If there already is a render-ticket scheduled for that map-tile, the existing one is returned instead of creating a new one.
+	 * Schedules the render of the map-tile.<br>
+	 * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
 	 * 
 	 * @param map the {@link BlueMapMap}
 	 * @param tile a {@link Vector2i} for the tile-position to render
-	 * 
-	 * @return the scheduled {@link RenderTicket}
 	 */
-	RenderTicket render(BlueMapMap map, Vector2i tile);
+	void render(BlueMapMap map, Vector2i tile);
+	
+	/**
+	 * Getter for the current size of the render-queue.
+	 * @return the current size of the render-queue
+	 */
+	int renderQueueSize();
+	
+	/**
+	 * Getter for the count of render threads.
+	 * @return the count of render threads
+	 */
+	int renderThreadCount();
+	
+	/**
+	 * Whether this {@link Renderer} is currently running or paused.
+	 * @return <code>true</code> if this renderer is running
+	 */
+	boolean isRunning();
+	
+	/**
+	 * Starts the renderer if it is not already running.
+	 */
+	void start();
+
+	/**
+	 * Pauses the renderer if it currently is running.
+	 */
+	void pause();
 	
 }
