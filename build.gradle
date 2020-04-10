@@ -10,6 +10,10 @@ repositories {
 	}
 }
 
+dependencies {
+   compile 'com.flowpowered:flow-math:1.0.3'
+}
+
 apply plugin: 'java'
 
 group = 'de.bluecolored.bluemap.api'
