@@ -30,9 +30,9 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
 /**
- * The {@link Renderer} is used to schedule tile-renders and process them on a number of different threads.
+ * The {@link RenderAPI} is used to schedule tile-renders and process them on a number of different threads.
  */
-public interface Renderer {
+public interface RenderAPI {
 
 	/**
 	 * Schedules the render of the map-tile at this block position for all maps of this world.<br>
@@ -115,7 +115,7 @@ public interface Renderer {
 	int renderThreadCount();
 	
 	/**
-	 * Whether this {@link Renderer} is currently running or paused.
+	 * Whether this {@link RenderAPI} is currently running or paused.
 	 * @return <code>true</code> if this renderer is running
 	 */
 	boolean isRunning();

@@ -24,24 +24,39 @@
  */
 package de.bluecolored.bluemap.api;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+import de.bluecolored.bluemap.api.marker.Marker;
+import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.bluecolored.bluemap.api.renderer.BlueMapMap;
 import de.bluecolored.bluemap.api.renderer.BlueMapWorld;
-import de.bluecolored.bluemap.api.renderer.Renderer;
+import de.bluecolored.bluemap.api.renderer.RenderAPI;
 
+/**
+ * An API to control the running instance of BlueMap.
+ * <p>This API is thread-save, so you <b>can</b> use it async, off the main-server-thread, to save performance!</p> 
+ */
 public abstract class BlueMapAPI {
 	private static BlueMapAPI instance;
 	private static Collection<BlueMapAPIListener> listener = new ArrayList<>();
 
 	/**
-	 * Getter for the {@link Renderer} instance.
-	 * @return the {@link Renderer}
+	 * Getter for the {@link RenderAPI}.
+	 * @return the {@link RenderAPI}
 	 */
-	public abstract Renderer getRenderer();
+	public abstract RenderAPI getRenderAPI();
+	
+	/**
+	 * Getter for the {@link MarkerAPI}.<br>
+	 * Calling this gives you a fresh loaded {@link MarkerAPI}, so you don't have to call {@link MarkerAPI#load()} right away!
+	 * @return the {@link MarkerAPI}
+	 */
+	public abstract MarkerAPI getMarkerAPI() throws IOException;
 	
 	/**
 	 * Getter for all {@link BlueMapMap}s loaded by BlueMap.
@@ -74,6 +89,18 @@ public abstract class BlueMapAPI {
 	 * @return an {@link Optional} with the {@link BlueMapMap} if it exists
 	 */
 	public abstract Optional<BlueMapMap> getMap(String id);
+	
+	/**
+	 * Creates an image-file with the given {@link BufferedImage} somewhere in the web-root, so it can be used in the web-app (e.g. for {@link Marker}-icons).
+	 * 
+	 * <p>The given <code>path</code> is used as file-name and (separated with '/') optional folders to organize the image-files. Do NOT include the file-ending! (e.g. <code>"someFolder/somePOIIcon"</code> will result in a file "somePOIIcon.png" in a folder "someFolder").</p>
+	 * <p>If the image file with the given path already exists, it will be replaced.</p>
+	 * 
+	 * @param image the image to create
+	 * @param path the path/name of this image, the separator-char is '/'
+	 * @return the relative address of the image in the web-app
+	 */
+	public abstract String createImage(BufferedImage image, String path);
 	
 	/**
 	 * Getter for the installed BlueMap version
@@ -132,7 +159,7 @@ public abstract class BlueMapAPI {
 		
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
 			listener.onDisable(BlueMapAPI.instance);
-		}	
+		}
 		
 		BlueMapAPI.instance = null;
 		
