@@ -36,23 +36,18 @@ public interface ShapeMarker {
 	Shape getShape();
 	
 	/**
-	 * Sets the {@link Shape} of this {@link ShapeMarker}.
-	 * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be the z-coordinates in the map.</p>
-	 * @param shape the new {@link Shape}
-	 */
-	void setShape(Shape shape);
-	
-	/**
 	 * Getter for the height (y-coordinate) of where the shape is displayed on the map.
 	 * @return the height of the shape on the map
 	 */
 	float getHeight();
 	
 	/**
-	 * Sets the height (y-coordinate) of where the shape is displayed on the map.
+	 * Sets the {@link Shape} of this {@link ShapeMarker}.
+	 * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be the z-coordinates in the map.</p>
+	 * @param shape the new {@link Shape}
 	 * @param height the new height of the shape on the map
 	 */
-	void setHeight(float height);
+	void setShape(Shape shape, float height);
 	
 	/**
 	 * Getter for the {@link Color} of the border of the shape.

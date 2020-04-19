@@ -140,5 +140,10 @@ public interface Marker {
 	 * @param newTab whether the link should be opened in a new tab
 	 */
 	void setLink(String link, boolean newTab);
+
+	/**
+	 * Removes the link of this {@link Marker}.
+	 */
+	void removeLink();
 	
 }

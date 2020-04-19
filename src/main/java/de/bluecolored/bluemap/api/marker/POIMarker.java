@@ -48,7 +48,9 @@ public interface POIMarker {
 	 * @param anchorX the x-position of the position (in pixels) where the icon is anchored to the map
 	 * @param anchorY the y-position of the position (in pixels) where the icon is anchored to the map
 	 */
-	void setIcon(String iconAddress, int anchorX, int anchorY);
+	default void setIcon(String iconAddress, int anchorX, int anchorY) {
+		setIcon(iconAddress, new Vector2i(anchorX, anchorY));
+	}
 	
 	/**
 	 * Sets the icon for this {@link POIMarker}.

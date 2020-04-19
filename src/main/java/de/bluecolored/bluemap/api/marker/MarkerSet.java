@@ -139,9 +139,11 @@ public interface MarkerSet {
 	 * @param id the id of the new marker
 	 * @param map the {@link BlueMapMap} of the new marker
 	 * @param position the position of the new marker
+	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param height the height of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
 	 * @return the created {@link ShapeMarker}
 	 */
-	ShapeMarker createShapeMarker(String id, BlueMapMap map, Vector3d position, Shape shape);
+	ShapeMarker createShapeMarker(String id, BlueMapMap map, Vector3d position, Shape shape, float height);
 	
 	/**
 	 * Creates a {@link ShapeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
@@ -152,18 +154,13 @@ public interface MarkerSet {
 	 * @param posX the x-position of the new marker
 	 * @param posY the y-position of the new marker
 	 * @param posZ the z-position of the new marker
+	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param height the height of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
 	 * @return the created {@link ShapeMarker}
 	 */
-	default ShapeMarker createShapeMarker(String id, BlueMapMap map, double posX, double posY, double posZ, Shape shape) {
-		return createShapeMarker(id, map, new Vector3d(posX, posY, posZ), shape);
+	default ShapeMarker createShapeMarker(String id, BlueMapMap map, double posX, double posY, double posZ, Shape shape, float height) {
+		return createShapeMarker(id, map, new Vector3d(posX, posY, posZ), shape, height);
 	}
-	
-	/**
-	 * Adds the given {@link Marker} to this {@link MarkerSet}.<br>
-	 * If a {@link Marker} with the id of the given {@link Marker} already exists it will be replaced!
-	 * @param marker the {@link Marker} to be added
-	 */
-	void addMarker(Marker marker);
 	
 	/**
 	 * Removes the given Marker from this {@link MarkerSet}.<br>

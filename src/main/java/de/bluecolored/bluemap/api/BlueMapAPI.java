@@ -99,8 +99,9 @@ public abstract class BlueMapAPI {
 	 * @param image the image to create
 	 * @param path the path/name of this image, the separator-char is '/'
 	 * @return the relative address of the image in the web-app
+	 * @throws IOException If an {@link IOException} is thrown while writing the image
 	 */
-	public abstract String createImage(BufferedImage image, String path);
+	public abstract String createImage(BufferedImage image, String path) throws IOException;
 	
 	/**
 	 * Getter for the installed BlueMap version

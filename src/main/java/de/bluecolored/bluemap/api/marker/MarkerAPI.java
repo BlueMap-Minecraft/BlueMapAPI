@@ -66,13 +66,6 @@ public interface MarkerAPI {
 	 * @return a {@link MarkerSet} with the given id
 	 */
 	MarkerSet createMarkerSet(String id);
-
-	/**
-	 * Adds the given {@link MarkerSet}.<br>
-	 * If a {@link MarkerSet} with the id of the given {@link MarkerSet} already exists it will be replaced!
-	 * @param markerSet the {@link MarkerSet} to be added
-	 */
-	void addMarkerSet(MarkerSet markerSet);
 	
 	/**
 	 * Removes the given {@link MarkerSet}.<br>
