@@ -29,6 +29,9 @@ import java.util.UUID;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
 
+import de.bluecolored.bluemap.api.BlueMapMap;
+import de.bluecolored.bluemap.api.BlueMapWorld;
+
 /**
  * The {@link RenderAPI} is used to schedule tile-renders and process them on a number of different threads.
  */

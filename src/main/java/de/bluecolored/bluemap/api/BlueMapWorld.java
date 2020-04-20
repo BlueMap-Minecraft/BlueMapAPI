@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.bluecolored.bluemap.api.renderer;
+package de.bluecolored.bluemap.api;
 
 import java.nio.file.Path;
 import java.util.Collection;

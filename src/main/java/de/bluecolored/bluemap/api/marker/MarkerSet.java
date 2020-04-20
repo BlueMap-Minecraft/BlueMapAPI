@@ -29,7 +29,7 @@ import java.util.Optional;
 
 import com.flowpowered.math.vector.Vector3d;
 
-import de.bluecolored.bluemap.api.renderer.BlueMapMap;
+import de.bluecolored.bluemap.api.BlueMapMap;
 
 /**
  * A set of {@link Marker}s that are displayed on the maps in the web-app.

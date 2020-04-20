@@ -28,7 +28,7 @@ import java.util.Optional;
 
 import com.flowpowered.math.vector.Vector3d;
 
-import de.bluecolored.bluemap.api.renderer.BlueMapMap;
+import de.bluecolored.bluemap.api.BlueMapMap;
 
 /**
  * A marker that is displayed on one of the maps in the web-app.

@@ -28,13 +28,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import de.bluecolored.bluemap.api.marker.Marker;
 import de.bluecolored.bluemap.api.marker.MarkerAPI;
-import de.bluecolored.bluemap.api.renderer.BlueMapMap;
-import de.bluecolored.bluemap.api.renderer.BlueMapWorld;
 import de.bluecolored.bluemap.api.renderer.RenderAPI;
 
 /**
@@ -140,13 +140,26 @@ public abstract class BlueMapAPI {
 	 * Used by BlueMap to register the API and call the listeners properly. 
 	 * @param instance {@link BlueMapAPI}-instance
 	 */
-	protected static synchronized boolean registerInstance(BlueMapAPI instance) {
+	protected static synchronized boolean registerInstance(BlueMapAPI instance) throws ExecutionException {
 		if (BlueMapAPI.instance != null) return false;
 		
 		BlueMapAPI.instance = instance;
 
+		List<Exception> thrownExceptions = new ArrayList<>(0);
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
-			listener.onEnable(BlueMapAPI.instance);
+			try {
+				listener.onEnable(BlueMapAPI.instance);
+			} catch (Exception ex) {
+				thrownExceptions.add(ex);
+			}
+		}
+		
+		if (!thrownExceptions.isEmpty()) {
+			ExecutionException ex = new ExecutionException(thrownExceptions.get(0));
+			for (int i = 1; i < thrownExceptions.size(); i++) {
+				ex.addSuppressed(thrownExceptions.get(i));
+			}
+			throw ex;
 		}
 
 		return true;
@@ -155,14 +168,27 @@ public abstract class BlueMapAPI {
 	/**
 	 * Used by BlueMap to unregister the API and call the listeners properly.
 	 */
-	protected static synchronized boolean unregisterInstance(BlueMapAPI instance) {
+	protected static synchronized boolean unregisterInstance(BlueMapAPI instance) throws ExecutionException {
 		if (BlueMapAPI.instance != instance) return false;
-		
+
+		List<Exception> thrownExceptions = new ArrayList<>(0);
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
-			listener.onDisable(BlueMapAPI.instance);
+			try {
+				listener.onDisable(BlueMapAPI.instance);	
+			} catch (Exception ex) {
+				thrownExceptions.add(ex);
+			}
 		}
 		
 		BlueMapAPI.instance = null;
+
+		if (!thrownExceptions.isEmpty()) {
+			ExecutionException ex = new ExecutionException(thrownExceptions.get(0));
+			for (int i = 1; i < thrownExceptions.size(); i++) {
+				ex.addSuppressed(thrownExceptions.get(i));
+			}
+			throw ex;
+		}
 		
 		return true;
 	}
