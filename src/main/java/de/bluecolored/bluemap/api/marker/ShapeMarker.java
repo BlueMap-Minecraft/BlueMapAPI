@@ -26,7 +26,7 @@ package de.bluecolored.bluemap.api.marker;
 
 import java.awt.Color;
 
-public interface ShapeMarker {
+public interface ShapeMarker extends Marker {
 
 	/**
 	 * Getter for {@link Shape} of this {@link ShapeMarker}.

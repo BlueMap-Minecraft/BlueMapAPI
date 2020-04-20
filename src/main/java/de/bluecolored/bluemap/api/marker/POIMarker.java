@@ -28,7 +28,7 @@ import com.flowpowered.math.vector.Vector2i;
 
 import de.bluecolored.bluemap.api.BlueMapAPI;
 
-public interface POIMarker {
+public interface POIMarker extends Marker {
 
 	/**
 	 * Getter for the relative address of the icon used to display this {@link POIMarker}
