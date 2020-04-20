@@ -1,7 +1,8 @@
 ![title-banner](https://bluecolored.de/paste/BluemapBanner.png)
 
 ### Using BlueMapAPI
-- (TODO) -
+See the wiki for instructions on how to use the API:
+[https://github.com/BlueMap-Minecraft/BlueMapAPI/wiki](https://github.com/BlueMap-Minecraft/BlueMapAPI/wiki)
 
 ### Discord
 If you have a question, help others using BlueMap or get the latest news and info you are welcome to join us [on Discord](https://discord.gg/zmkyJa3)!
