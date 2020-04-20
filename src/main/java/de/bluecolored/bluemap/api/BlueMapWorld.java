@@ -41,13 +41,14 @@ public interface BlueMapWorld {
 	 * <p>
 	 * 	<b>Implementation notes:</b><br>
 	 * 	The used UUID highly depends on the implementation
-	 * 	<table>
-	 *  	<tr><th>Sponge</th><td>The UUID is equal to the returned UUID by world-instances of the Sponge-API, so you can just use <code>spongeWorld.getUniqueId()</code><td><tr>
-	 *  	<tr><th>Bukkit</th><td>The UUID is equal to the returned UUID by world-instances of the Bukkit-API, so you can just use <code>bukkitWorld.getUID()</code><td><tr>
-	 *  	<tr><th>Forge</th><td>The UUID is randomly generated, and changes on each reload/restart</code><td><tr>
-	 *  	<tr><th>CLI</th><td>The UUID is randomly generated, and changes on each reload/restart</code><td><tr>
-	 *  </table>
 	 * </p>
+	 * 	<table>
+	 * 		<caption>Implementations</caption>
+	 *  	<tr><th>Sponge</th><td>The UUID is equal to the returned UUID by world-instances of the Sponge-API, so you can just use <code>spongeWorld.getUniqueId()</code></td></tr>
+	 *  	<tr><th>Bukkit</th><td>The UUID is equal to the returned UUID by world-instances of the Bukkit-API, so you can just use <code>bukkitWorld.getUID()</code></td></tr>
+	 *  	<tr><th>Forge</th><td>The UUID is randomly generated, and changes on each reload/restart</td></tr>
+	 *  	<tr><th>CLI</th><td>The UUID is randomly generated, and changes on each reload/restart</td></tr>
+	 *  </table>
 	 * 
 	 * @return the {@link UUID} of the world
 	 */

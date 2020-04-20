@@ -75,8 +75,8 @@ public interface ShapeMarker extends Marker {
 	
 	/**
 	 * Sets the border- and fill- color. 
-	 * @param borderColor
-	 * @param fillColor
+	 * @param borderColor the new border-color
+	 * @param fillColor the new fill-color
 	 * @see #setBorderColor(Color)
 	 * @see #setFillColor(Color)
 	 */

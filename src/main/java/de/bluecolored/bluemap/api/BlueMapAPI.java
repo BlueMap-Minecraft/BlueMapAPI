@@ -55,6 +55,7 @@ public abstract class BlueMapAPI {
 	 * Getter for the {@link MarkerAPI}.<br>
 	 * Calling this gives you a fresh loaded {@link MarkerAPI}, so you don't have to call {@link MarkerAPI#load()} right away!
 	 * @return the {@link MarkerAPI}
+	 * @throws IOException if there was an IOException loading the marker.json
 	 */
 	public abstract MarkerAPI getMarkerAPI() throws IOException;
 	
@@ -138,7 +139,9 @@ public abstract class BlueMapAPI {
 	
 	/**
 	 * Used by BlueMap to register the API and call the listeners properly. 
-	 * @param instance {@link BlueMapAPI}-instance
+	 * @param instance the {@link BlueMapAPI}-instance
+	 * @return <code>true</code> if the instance has been registered, <code>false</code> if there already was an instance registered 
+	 * @throws ExecutionException if a {@link BlueMapAPIListener} threw an exception during the registration
 	 */
 	protected static synchronized boolean registerInstance(BlueMapAPI instance) throws ExecutionException {
 		if (BlueMapAPI.instance != null) return false;
@@ -167,6 +170,9 @@ public abstract class BlueMapAPI {
 	
 	/**
 	 * Used by BlueMap to unregister the API and call the listeners properly.
+	 * @param instance the {@link BlueMapAPI} instance
+	 * @return <code>true</code> if the instance was unregistered, <code>false</code> if there was no or an other instance registered
+	 * @throws ExecutionException if a {@link BlueMapAPIListener} threw an exception during the un-registration
 	 */
 	protected static synchronized boolean unregisterInstance(BlueMapAPI instance) throws ExecutionException {
 		if (BlueMapAPI.instance != instance) return false;

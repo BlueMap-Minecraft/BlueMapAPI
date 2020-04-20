@@ -67,6 +67,10 @@ public interface BlueMapMap {
 	
 	/**
 	 * Converts a block-position to a map-tile-coordinate for this map
+	 * 
+	 * @param blockX the x-position of the block
+	 * @param blockZ the z-position of the block
+	 * @return the tile position
 	 */
 	default Vector2i posToTile(double blockX, double blockZ){
 		Vector2i offset = getTileOffset();
@@ -80,6 +84,9 @@ public interface BlueMapMap {
 	
 	/**
 	 * Converts a block-position to a map-tile-coordinate for this map
+	 * 
+	 * @param pos the position of the block
+	 * @return the tile position
 	 */
 	default Vector2i posToTile(Vector3i pos){
 		return posToTile(pos.getX(), pos.getZ());
@@ -87,6 +94,9 @@ public interface BlueMapMap {
 
 	/**
 	 * Converts a block-position to a map-tile-coordinate for this map
+	 * 
+	 * @param pos the position of the block
+	 * @return the tile position
 	 */
 	default Vector2i posToTile(Vector3d pos){
 		return posToTile(pos.getX(), pos.getZ()); 

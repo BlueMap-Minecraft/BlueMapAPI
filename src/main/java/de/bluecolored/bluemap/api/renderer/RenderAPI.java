@@ -68,8 +68,6 @@ public interface RenderAPI {
 	 * @param mapId the id of the {@link BlueMapMap} to render
 	 * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tile will be rendered not only that block)
 	 * 
-	 * @return the scheduled {@link RenderTicket}
-	 * 
 	 * @throws IllegalArgumentException if there is no map loaded with the provided mapId
 	 */
 	void render(String mapId, Vector3i blockPosition);
