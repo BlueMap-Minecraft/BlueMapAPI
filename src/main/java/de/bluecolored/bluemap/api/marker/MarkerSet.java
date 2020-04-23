@@ -27,6 +27,7 @@ package de.bluecolored.bluemap.api.marker;
 import java.util.Collection;
 import java.util.Optional;
 
+import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector3d;
 
 import de.bluecolored.bluemap.api.BlueMapMap;
@@ -136,11 +137,13 @@ public interface MarkerSet {
 	 * Creates a {@link ShapeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
 	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link ShapeMarker}!
 	 * 
+	 * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+	 * 
 	 * @param id the id of the new marker
 	 * @param map the {@link BlueMapMap} of the new marker
 	 * @param position the position of the new marker
 	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
-	 * @param height the height of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param height the height (y-position on the map) of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
 	 * @return the created {@link ShapeMarker}
 	 */
 	ShapeMarker createShapeMarker(String id, BlueMapMap map, Vector3d position, Shape shape, float height);
@@ -149,17 +152,36 @@ public interface MarkerSet {
 	 * Creates a {@link ShapeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
 	 * If a Marker with that id already exists, it will be replaced by the new {@link ShapeMarker}!
 	 * 
+	 * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+	 * 
 	 * @param id the id of the new marker
 	 * @param map the {@link BlueMapMap} of the new marker
 	 * @param posX the x-position of the new marker
 	 * @param posY the y-position of the new marker
 	 * @param posZ the z-position of the new marker
 	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
-	 * @param height the height of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param height the height (y-position on the map) of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
 	 * @return the created {@link ShapeMarker}
 	 */
 	default ShapeMarker createShapeMarker(String id, BlueMapMap map, double posX, double posY, double posZ, Shape shape, float height) {
 		return createShapeMarker(id, map, new Vector3d(posX, posY, posZ), shape, height);
+	}
+	
+	/**
+	 * Creates a {@link ShapeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a Marker with that id already exists, it will be replaced by the new {@link ShapeMarker}!
+	 * 
+	 * <p><i>(The position of the marker will be the center of the shape (it's bounding box))</i></p>
+	 * 
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param height the height of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @return the created {@link ShapeMarker}
+	 */
+	default ShapeMarker createShapeMarker(String id, BlueMapMap map, Shape shape, float height) {
+		Vector2d center = shape.getMin().add(shape.getMax()).div(2);
+		return createShapeMarker(id, map, new Vector3d(center.getX(), height, center.getY()), shape, height);
 	}
 	
 	/**

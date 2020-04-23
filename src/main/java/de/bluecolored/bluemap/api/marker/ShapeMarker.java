@@ -48,6 +48,18 @@ public interface ShapeMarker extends Marker {
 	 * @param height the new height of the shape on the map
 	 */
 	void setShape(Shape shape, float height);
+
+	/**
+	 * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the border of the marker when it is - for example - under the ground.
+	 * @return <code>true</code> if the depthTest is enabled
+	 */
+	boolean isDepthTestEnabled();
+	
+	/**
+	 * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the border of the marker when it is - for example - under the ground.
+	 * @param enabled if the depth-test should be enabled for this {@link ShapeMarker}
+	 */
+	void setDepthTestEnabled(boolean enabled);
 	
 	/**
 	 * Getter for the {@link Color} of the border of the shape.
