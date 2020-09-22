@@ -123,7 +123,7 @@ public class Shape {
 	public static Shape createRect(double x1, double y1, double x2, double y2) {
 		return createRect(new Vector2d(x1, y1), new Vector2d(x2, y2));
 	}
-
+	
 	/**
 	 * Creates a {@link Shape} representing an ellipse.
 	 * @param centerPos the center of the ellipse
@@ -134,7 +134,7 @@ public class Shape {
 	 */
 	public static Shape createEllipse(Vector2d centerPos, double radiusX, double radiusY, int points) {
 		if (points < 3) throw new IllegalArgumentException("A shape has to have at least 3 points!");
-
+	
 		Vector2d[] pointArray = new Vector2d[points];
 		double segmentAngle = 2 * Math.PI / points;
 		double angle = 0d;
@@ -142,10 +142,10 @@ public class Shape {
 			pointArray[i] = centerPos.add(Math.sin(angle) * radiusX, Math.cos(angle) * radiusY);
 			angle += segmentAngle;
 		}
-
+		
 		return new Shape(pointArray);
 	}
-
+	
 	/**
 	 * Creates a {@link Shape} representing an ellipse.
 	 * @param centerX the x-position of the center of the ellipse
@@ -158,7 +158,7 @@ public class Shape {
 	public static Shape createEllipse(double centerX, double centerY, double radiusX, double radiusY, int points) {
 		return createEllipse(new Vector2d(centerX, centerY), radiusX, radiusY, points);
 	}
-
+	
 	/**
 	 * Creates a {@link Shape} representing a circle.
 	 * @param centerPos the center of the circle
