@@ -118,7 +118,7 @@ public interface Marker {
 	void setLabel(String label);
 	
 	/**
-	 * Gets the link-adress of this {@link Marker}.<br>
+	 * Gets the link-address of this {@link Marker}.<br>
 	 * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
 	 * 
 	 * @return the {@link Optional} link
@@ -133,7 +133,7 @@ public interface Marker {
 	boolean isNewTab();
 	
 	/**
-	 * Sets the link-adress of this {@link Marker}.<br>
+	 * Sets the link-address of this {@link Marker}.<br>
 	 * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
 	 * 
 	 * @param link the link, or <code>null</code> to disable the link

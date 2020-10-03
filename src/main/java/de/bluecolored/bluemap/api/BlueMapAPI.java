@@ -46,10 +46,10 @@ public abstract class BlueMapAPI {
 	private static BlueMapAPI instance;
 
 	@Deprecated
-	private static Collection<BlueMapAPIListener> listener = new ArrayList<>(2);
+	private static final Collection<BlueMapAPIListener> listener = new ArrayList<>(2);
 	
-	private static Collection<Consumer<BlueMapAPI>> onEnableConsumers = new ArrayList<>(2);
-	private static Collection<Consumer<BlueMapAPI>> onDisableConsumers = new ArrayList<>(2);
+	private static final Collection<Consumer<BlueMapAPI>> onEnableConsumers = new ArrayList<>(2);
+	private static final Collection<Consumer<BlueMapAPI>> onDisableConsumers = new ArrayList<>(2);
 
 	/**
 	 * Getter for the {@link RenderAPI}.

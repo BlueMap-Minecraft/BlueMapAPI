@@ -72,7 +72,14 @@ public interface MarkerSet {
 	 * @param toggleable whether this {@link MarkerSet} should be toggleable
 	 */
 	void setToggleable(boolean toggleable);
-	
+
+	/**
+	 * @deprecated method name has a typo, use {@link #isDefaultHidden()} instead.
+	 */
+	default boolean isDefautHidden() {
+		return isDefaultHidden();
+	}
+
 	/**
 	 * Checks if this {@link MarkerSet} is hidden by default.
 	 * <p>This is basically the default-state of the toggle-button from {@link #isToggleable()}. If this is <code>true</code> the markers of this marker set will initially be hidden and can be displayed using the toggle-button.</p> 
@@ -80,7 +87,7 @@ public interface MarkerSet {
 	 * @return whether this {@link MarkerSet} is hidden by default
 	 * @see #isToggleable()
 	 */
-	boolean isDefautHidden();
+	boolean isDefaultHidden();
 	
 	/**
 	 * Sets if this {@link MarkerSet} is hidden by default.
