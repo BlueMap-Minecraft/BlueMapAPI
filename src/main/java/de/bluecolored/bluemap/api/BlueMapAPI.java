@@ -153,8 +153,8 @@ public abstract class BlueMapAPI {
 
 	/**
 	 * Registers a {@link Consumer} that will be called when BlueMap has been loaded and started and the API is ready to use.<br>
-	 * If {@link BlueMapAPI} is already enabled when this listener is registered this method will be called immediately <i>(on the same thread)</i>!
-	 * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
+	 * If {@link BlueMapAPI} is already enabled when this listener is registered the consumer will be called immediately <i>(on the same thread)</i>!
+	 * <p><i>(Note: The consumer will likely be called asynchronously, <b>not</b> on the server-thread!)</i></p>
 	 * @param consumer the {@link Consumer}
 	 */
 	public static synchronized void onEnable(Consumer<BlueMapAPI> consumer) {
@@ -162,10 +162,10 @@ public abstract class BlueMapAPI {
 	}
 	
 	/**
-	 * Registers a {@link Consumer} that will be called <b>before</b> BlueMap is being unloaded and stopped, after this method returns the API is no longer usable!<br>
-	 * Unlike {@link BlueMapAPIListener#onEnable(BlueMapAPI)}, if {@link BlueMapAPI} is not enabled when this listener is registered this method will <b>not</b> be called immediately.
-	 * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
-	 * @param blueMapApi the {@link BlueMapAPI}
+	 * Registers a {@link Consumer} that will be called <b>before</b> BlueMap is being unloaded and stopped, after the consumer returns the API is no longer usable!<br>
+	 * Unlike with {@link BlueMapAPI#onEnable(Consumer)}, if {@link BlueMapAPI} is not enabled when this listener is registered the consumer will <b>not</b> be called.
+	 * <p><i>(Note: The consumer will likely be called asynchronously, <b>not</b> on the server-thread!)</i></p>
+	 * @param consumer the {@link Consumer}
 	 */
 	public static synchronized void onDisable(Consumer<BlueMapAPI> consumer) {
 		onDisableConsumers.add(consumer);
