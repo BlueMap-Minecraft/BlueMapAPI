@@ -24,6 +24,11 @@
  */
 package de.bluecolored.bluemap.api;
 
+/**
+ * @deprecated Implementing {@link BlueMapAPIListener} can cause a ClassNotFoundException when you soft-depend on BlueMap and your plugin/mod gets used without BlueMap.
+ * Use {@link BlueMapAPI#onEnable(Consumer)} and {@link BlueMapAPI#onDisable(Consumer)} instead.
+ */
+@Deprecated
 public interface BlueMapAPIListener {
 
 	/**

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import de.bluecolored.bluemap.api.marker.Marker;
 import de.bluecolored.bluemap.api.marker.MarkerAPI;
@@ -43,7 +44,12 @@ import de.bluecolored.bluemap.api.renderer.RenderAPI;
  */
 public abstract class BlueMapAPI {
 	private static BlueMapAPI instance;
-	private static Collection<BlueMapAPIListener> listener = new ArrayList<>();
+
+	@Deprecated
+	private static Collection<BlueMapAPIListener> listener = new ArrayList<>(2);
+	
+	private static Collection<Consumer<BlueMapAPI>> onEnableConsumers = new ArrayList<>(2);
+	private static Collection<Consumer<BlueMapAPI>> onDisableConsumers = new ArrayList<>(2);
 
 	/**
 	 * Getter for the {@link RenderAPI}.
@@ -113,7 +119,11 @@ public abstract class BlueMapAPI {
 	/**
 	 * Register a listener that will be called when the API enables/disables
 	 * @param listener the {@link BlueMapAPIListener}
+	 * 
+	 * @deprecated Implementing {@link BlueMapAPIListener} can cause a ClassNotFoundException when you soft-depend on BlueMap and your plugin/mod gets used without BlueMap.
+	 * Use {@link BlueMapAPI#onEnable(Consumer)} and {@link BlueMapAPI#onDisable(Consumer)} instead. 
 	 */
+	@Deprecated
 	public static synchronized void registerListener(BlueMapAPIListener listener) {
 		BlueMapAPI.listener.add(listener);
 		if (BlueMapAPI.instance != null) listener.onEnable(BlueMapAPI.instance);
@@ -124,7 +134,11 @@ public abstract class BlueMapAPI {
 	 * @param listener the {@link BlueMapAPIListener} instance that has been registered previously
 	 * 
 	 * @return <code>true</code> if a listener was removed as a result of this call
+	 * 
+	 * @deprecated Implementing {@link BlueMapAPIListener} can cause a ClassNotFoundException when you soft-depend on BlueMap and your plugin/mod gets used without BlueMap.
+	 * Use {@link BlueMapAPI#onEnable(Consumer)} and {@link BlueMapAPI#onDisable(Consumer)} instead. 
 	 */
+	@Deprecated
 	public static synchronized boolean unregisterListener(BlueMapAPIListener listener) {
 		return BlueMapAPI.listener.remove(listener);
 	}
@@ -136,6 +150,26 @@ public abstract class BlueMapAPI {
 	public static synchronized Optional<BlueMapAPI> getInstance() {
 		return Optional.ofNullable(instance);
 	}
+
+	/**
+	 * Registers a {@link Consumer} that will be called when BlueMap has been loaded and started and the API is ready to use.<br>
+	 * If {@link BlueMapAPI} is already enabled when this listener is registered this method will be called immediately <i>(on the same thread)</i>!
+	 * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
+	 * @param consumer the {@link Consumer}
+	 */
+	public static synchronized void onEnable(Consumer<BlueMapAPI> consumer) {
+		onEnableConsumers.add(consumer);
+	}
+	
+	/**
+	 * Registers a {@link Consumer} that will be called <b>before</b> BlueMap is being unloaded and stopped, after this method returns the API is no longer usable!<br>
+	 * Unlike {@link BlueMapAPIListener#onEnable(BlueMapAPI)}, if {@link BlueMapAPI} is not enabled when this listener is registered this method will <b>not</b> be called immediately.
+	 * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
+	 * @param blueMapApi the {@link BlueMapAPI}
+	 */
+	public static synchronized void onDisable(Consumer<BlueMapAPI> consumer) {
+		onDisableConsumers.add(consumer);
+	}
 	
 	/**
 	 * Used by BlueMap to register the API and call the listeners properly. 
@@ -143,12 +177,23 @@ public abstract class BlueMapAPI {
 	 * @return <code>true</code> if the instance has been registered, <code>false</code> if there already was an instance registered 
 	 * @throws ExecutionException if a {@link BlueMapAPIListener} threw an exception during the registration
 	 */
+	@SuppressWarnings("deprecation")
 	protected static synchronized boolean registerInstance(BlueMapAPI instance) throws ExecutionException {
 		if (BlueMapAPI.instance != null) return false;
 		
 		BlueMapAPI.instance = instance;
 
 		List<Exception> thrownExceptions = new ArrayList<>(0);
+		
+		for (Consumer<BlueMapAPI> listener : BlueMapAPI.onEnableConsumers) {
+			try {
+				listener.accept(BlueMapAPI.instance);
+			} catch (Exception ex) {
+				thrownExceptions.add(ex);
+			}
+		}
+		
+		// backwards compatibility
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
 			try {
 				listener.onEnable(BlueMapAPI.instance);
@@ -174,10 +219,21 @@ public abstract class BlueMapAPI {
 	 * @return <code>true</code> if the instance was unregistered, <code>false</code> if there was no or an other instance registered
 	 * @throws ExecutionException if a {@link BlueMapAPIListener} threw an exception during the un-registration
 	 */
+	@SuppressWarnings("deprecation")
 	protected static synchronized boolean unregisterInstance(BlueMapAPI instance) throws ExecutionException {
 		if (BlueMapAPI.instance != instance) return false;
 
 		List<Exception> thrownExceptions = new ArrayList<>(0);
+		
+		for (Consumer<BlueMapAPI> listener : BlueMapAPI.onDisableConsumers) {
+			try {
+				listener.accept(BlueMapAPI.instance);
+			} catch (Exception ex) {
+				thrownExceptions.add(ex);
+			}
+		}
+
+		// backwards compatibility
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
 			try {
 				listener.onDisable(BlueMapAPI.instance);	
