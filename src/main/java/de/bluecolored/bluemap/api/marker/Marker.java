@@ -93,7 +93,7 @@ public interface Marker {
 	
 	/**
 	 * Sets the maximum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-	 * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
+	 * If the camera is further to this {@link Marker} than this distance, it will be hidden!
 	 * 
 	 * @param maxDistance the new maximum distance
 	 */
