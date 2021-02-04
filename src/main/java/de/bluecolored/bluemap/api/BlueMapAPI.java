@@ -24,19 +24,15 @@
  */
 package de.bluecolored.bluemap.api;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Consumer;
-
 import de.bluecolored.bluemap.api.marker.Marker;
 import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.bluecolored.bluemap.api.renderer.RenderAPI;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 /**
  * An API to control the running instance of BlueMap.
@@ -46,10 +42,10 @@ public abstract class BlueMapAPI {
 	private static BlueMapAPI instance;
 
 	@Deprecated
-	private static final Collection<BlueMapAPIListener> listener = new ArrayList<>(2);
+	private static final Collection<BlueMapAPIListener> listener = new HashSet<>(2);
 	
-	private static final Collection<Consumer<BlueMapAPI>> onEnableConsumers = new ArrayList<>(2);
-	private static final Collection<Consumer<BlueMapAPI>> onDisableConsumers = new ArrayList<>(2);
+	private static final Collection<Consumer<BlueMapAPI>> onEnableConsumers = new HashSet<>(2);
+	private static final Collection<Consumer<BlueMapAPI>> onDisableConsumers = new HashSet<>(2);
 
 	/**
 	 * Getter for the {@link RenderAPI}.
@@ -136,7 +132,7 @@ public abstract class BlueMapAPI {
 	 * @return <code>true</code> if a listener was removed as a result of this call
 	 * 
 	 * @deprecated Implementing {@link BlueMapAPIListener} can cause a ClassNotFoundException when you soft-depend on BlueMap and your plugin/mod gets used without BlueMap.
-	 * Use {@link BlueMapAPI#onEnable(Consumer)} and {@link BlueMapAPI#onDisable(Consumer)} instead. 
+	 * Use {@link BlueMapAPI#onEnable(Consumer)} and {@link BlueMapAPI#onDisable(Consumer)} instead.
 	 */
 	@Deprecated
 	public static synchronized boolean unregisterListener(BlueMapAPIListener listener) {
@@ -152,25 +148,39 @@ public abstract class BlueMapAPI {
 	}
 
 	/**
-	 * Registers a {@link Consumer} that will be called when BlueMap has been loaded and started and the API is ready to use.<br>
-	 * If {@link BlueMapAPI} is already enabled when this listener is registered the consumer will be called immediately <i>(on the same thread)</i>!
+	 * Registers a {@link Consumer} that will be called every time BlueMap has just been loaded and started and the API is ready to use.<br>
+	 * If {@link BlueMapAPI} is already enabled when this listener is registered the consumer will be called immediately <i>(once, on the same thread)</i>!
+	 * <p><b>The {@link Consumer} can be called multiple times if BlueMap disables and enables again, e.g. if BlueMap gets reloaded!</b></p>
 	 * <p><i>(Note: The consumer will likely be called asynchronously, <b>not</b> on the server-thread!)</i></p>
+	 * <p>Remember to unregister the consumer when you no longer need it using {@link #unregisterListener(Consumer)}.</p>
 	 * @param consumer the {@link Consumer}
 	 */
 	public static synchronized void onEnable(Consumer<BlueMapAPI> consumer) {
 		onEnableConsumers.add(consumer);
+		if (BlueMapAPI.instance != null) consumer.accept(BlueMapAPI.instance);
 	}
 	
 	/**
-	 * Registers a {@link Consumer} that will be called <b>before</b> BlueMap is being unloaded and stopped, after the consumer returns the API is no longer usable!<br>
+	 * Registers a {@link Consumer} that will be called every time <b>before</b> BlueMap is being unloaded and stopped, after the consumer returns the API is no longer usable!<br>
 	 * Unlike with {@link BlueMapAPI#onEnable(Consumer)}, if {@link BlueMapAPI} is not enabled when this listener is registered the consumer will <b>not</b> be called.
+	 * <p><b>The {@link Consumer} can be called multiple times if BlueMap disables and enables again, e.g. if BlueMap gets reloaded!</b></p>
 	 * <p><i>(Note: The consumer will likely be called asynchronously, <b>not</b> on the server-thread!)</i></p>
+	 * <p>Remember to unregister the consumer when you no longer need it using {@link #unregisterListener(Consumer)}.</p>
 	 * @param consumer the {@link Consumer}
 	 */
 	public static synchronized void onDisable(Consumer<BlueMapAPI> consumer) {
 		onDisableConsumers.add(consumer);
 	}
-	
+
+	/**
+	 * Removes a {@link Consumer} that has been registered using {@link #onEnable(Consumer)} or {@link #onDisable(Consumer)}.
+	 * @param consumer the {@link Consumer} instance that has been registered previously
+	 * @return <code>true</code> if a listener was removed as a result of this call
+	 */
+	public static synchronized boolean unregisterListener(Consumer<BlueMapAPI> consumer) {
+		return onEnableConsumers.remove(consumer) | onDisableConsumers.remove(consumer);
+	}
+
 	/**
 	 * Used by BlueMap to register the API and call the listeners properly. 
 	 * @param instance the {@link BlueMapAPI}-instance
