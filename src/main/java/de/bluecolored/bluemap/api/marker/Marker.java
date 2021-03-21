@@ -24,11 +24,10 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import java.util.Optional;
-
 import com.flowpowered.math.vector.Vector3d;
-
 import de.bluecolored.bluemap.api.BlueMapMap;
+
+import java.util.Optional;
 
 /**
  * A marker that is displayed on one of the maps in the web-app.
@@ -68,45 +67,16 @@ public interface Marker {
 	void setPosition(Vector3d position);
 	
 	/**
-	 * Getter for the minimum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-	 * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
-	 *  
-	 * @return the minimum distance for this {@link Marker} to be displayed
-	 */
-	double getMinDistance();
-	
-	/**
-	 * Sets the minimum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-	 * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
-	 * 
-	 * @param minDistance the new minimum distance
-	 */
-	void setMinDistance(double minDistance);
-	
-	/**
-	 * Getter for the maximum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-	 * If the camera is further to this {@link Marker} than this distance, it will be hidden!
-	 *  
-	 * @return the maximum distance for this {@link Marker} to be displayed
-	 */
-	double getMaxDistance();
-	
-	/**
-	 * Sets the maximum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-	 * If the camera is further to this {@link Marker} than this distance, it will be hidden!
-	 * 
-	 * @param maxDistance the new maximum distance
-	 */
-	void setMaxDistance(double maxDistance);
-	
-	/**
-	 * Getter for the label of this marker. The label can include html-tags.
-	 * @return the label of this 
+	 * Getter for the label of this marker.
+	 * @return the label of this {@link Marker}
 	 */
 	String getLabel();
 	
 	/**
-	 * Sets the label of this {@link Marker}. The label can include html-tags.
+	 * Sets the label of this {@link Marker}.
+	 * <p>
+	 * 	<b>Using html-tags in the label is possible but deprecated!</b>
+	 * </p>
 	 * <p>
 	 * 	<b>Important:</b><br>
 	 * 	Html-tags in the label will not be escaped, so you can use them to style the {@link Marker}-labels.<br>
@@ -116,12 +86,49 @@ public interface Marker {
 	 * @param label the new label for this {@link Marker}
 	 */
 	void setLabel(String label);
-	
+
+	/**
+	 * Getter for the minimum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
+	 * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
+	 *
+	 * @return the minimum distance for this {@link Marker} to be displayed
+	 * @deprecated Not all marker-types support this
+	 */
+	double getMinDistance();
+
+	/**
+	 * Sets the minimum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
+	 * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
+	 *
+	 * @param minDistance the new minimum distance
+	 * @deprecated Not all marker-types support this
+	 */
+	void setMinDistance(double minDistance);
+
+	/**
+	 * Getter for the maximum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
+	 * If the camera is further to this {@link Marker} than this distance, it will be hidden!
+	 *
+	 * @return the maximum distance for this {@link Marker} to be displayed
+	 * @deprecated Not all marker-types support this
+	 */
+	double getMaxDistance();
+
+	/**
+	 * Sets the maximum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
+	 * If the camera is further to this {@link Marker} than this distance, it will be hidden!
+	 *
+	 * @param maxDistance the new maximum distance
+	 * @deprecated Not all marker-types support this
+	 */
+	void setMaxDistance(double maxDistance);
+
 	/**
 	 * Gets the link-address of this {@link Marker}.<br>
 	 * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
 	 * 
 	 * @return the {@link Optional} link
+	 * @deprecated Not all marker-types support this
 	 */
 	Optional<String> getLink();
 
@@ -129,6 +136,7 @@ public interface Marker {
 	 * If this is <code>true</code> the link ({@link #getLink()}) will be opened in a new tab.
 	 * @return whether the link will be opened in a new tab
 	 * @see #getLink()
+	 * @deprecated Not all marker-types support this
 	 */
 	boolean isNewTab();
 	
@@ -138,11 +146,13 @@ public interface Marker {
 	 * 
 	 * @param link the link, or <code>null</code> to disable the link
 	 * @param newTab whether the link should be opened in a new tab
+	 * @deprecated Not all marker-types support this
 	 */
 	void setLink(String link, boolean newTab);
 
 	/**
 	 * Removes the link of this {@link Marker}.
+	 * @deprecated Not all marker-types support this
 	 */
 	void removeLink();
 	

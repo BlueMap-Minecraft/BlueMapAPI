@@ -25,47 +25,26 @@
 package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector2i;
-
 import de.bluecolored.bluemap.api.BlueMapAPI;
 
-public interface POIMarker extends Marker, DistanceRangedMarker {
-
-	/**
-	 * Getter for the relative address of the icon used to display this {@link POIMarker}
-	 * @return the relative web-address of the icon
-	 */
-	String getIconAddress();
-	
-	/**
-	 * Getter for the position (in pixels) where the icon is anchored to the map.
-	 * @return the anchor-position in pixels
-	 * @deprecated Use {@link #getAnchor()} instead
-	 */
-	default Vector2i getIconAnchor() {
-		return getAnchor();
-	}
+public interface HtmlMarker extends Marker, DistanceRangedMarker {
 
 	/**
 	 * Getter for the position (in pixels) where the icon is anchored to the map.
 	 * @return the anchor-position in pixels
 	 */
 	Vector2i getAnchor();
-
-	/**
-	 * Sets the icon for this {@link POIMarker}.
-	 * @param iconAddress the web-address of the icon-image. Can be an absolute or relative. You can also use an address returned by {@link BlueMapAPI#createImage(java.awt.image.BufferedImage, String)}.
-	 * @param anchorX the x-position of the position (in pixels) where the icon is anchored to the map
-	 * @param anchorY the y-position of the position (in pixels) where the icon is anchored to the map
-	 */
-	default void setIcon(String iconAddress, int anchorX, int anchorY) {
-		setIcon(iconAddress, new Vector2i(anchorX, anchorY));
-	}
 	
 	/**
-	 * Sets the icon for this {@link POIMarker}.
-	 * @param iconAddress the web-address of the icon-image. Can be an absolute or relative. You can also use an address returned by {@link BlueMapAPI#createImage(java.awt.image.BufferedImage, String)}.
-	 * @param anchor the position of the position (in pixels) where the icon is anchored to the map
+	 * Sets the html for this {@link HtmlMarker}.
+	 *
+	 * <p>
+	 * 	<b>Important:</b><br>
+	 * 	Make sure you escape all html-tags from possible user inputs to prevent possible <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
+	 * </p>
+	 *
+	 * @param html the html-element that will be inserted as the marker.
 	 */
-	void setIcon(String iconAddress, Vector2i anchor);
+	void setHtml(String html);
 	
 }

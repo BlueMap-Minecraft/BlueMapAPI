@@ -24,13 +24,12 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import java.util.Collection;
-import java.util.Optional;
-
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector3d;
-
 import de.bluecolored.bluemap.api.BlueMapMap;
+
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * A set of {@link Marker}s that are displayed on the maps in the web-app.
@@ -139,6 +138,36 @@ public interface MarkerSet {
 	default POIMarker createPOIMarker(String id, BlueMapMap map, double posX, double posY, double posZ) {
 		return createPOIMarker(id, map, new Vector3d(posX, posY, posZ));
 	}
+
+
+
+	/**
+	 * Creates a {@link HtmlMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a Marker with that id already exists, it will be replaced by the new {@link HtmlMarker}!
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param position the position of the new marker
+	 * @param html the html-content of the new marker
+	 * @return the created {@link HtmlMarker}
+	 */
+	HtmlMarker createHtmlMarker(String id, BlueMapMap map, Vector3d position, String html);
+
+	/**
+	 * Creates a {@link HtmlMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link HtmlMarker}!
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param posX the x-position of the new marker
+	 * @param posY the y-position of the new marker
+	 * @param posZ the z-position of the new marker
+	 * @param html the html-content of the new marker
+	 * @return the created {@link HtmlMarker}
+	 */
+	default HtmlMarker createHtmlMarker(String id, BlueMapMap map, double posX, double posY, double posZ, String html) {
+		return createHtmlMarker(id, map, new Vector3d(posX, posY, posZ), html);
+	}
 	
 	/**
 	 * Creates a {@link ShapeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
@@ -150,10 +179,10 @@ public interface MarkerSet {
 	 * @param map the {@link BlueMapMap} of the new marker
 	 * @param position the position of the new marker
 	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
-	 * @param height the height (y-position on the map) of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param y the height (y-position on the map) of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
 	 * @return the created {@link ShapeMarker}
 	 */
-	ShapeMarker createShapeMarker(String id, BlueMapMap map, Vector3d position, Shape shape, float height);
+	ShapeMarker createShapeMarker(String id, BlueMapMap map, Vector3d position, Shape shape, float y);
 	
 	/**
 	 * Creates a {@link ShapeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
@@ -167,11 +196,11 @@ public interface MarkerSet {
 	 * @param posY the y-position of the new marker
 	 * @param posZ the z-position of the new marker
 	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
-	 * @param height the height (y-position on the map) of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param y the height (y-position on the map) of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
 	 * @return the created {@link ShapeMarker}
 	 */
-	default ShapeMarker createShapeMarker(String id, BlueMapMap map, double posX, double posY, double posZ, Shape shape, float height) {
-		return createShapeMarker(id, map, new Vector3d(posX, posY, posZ), shape, height);
+	default ShapeMarker createShapeMarker(String id, BlueMapMap map, double posX, double posY, double posZ, Shape shape, float y) {
+		return createShapeMarker(id, map, new Vector3d(posX, posY, posZ), shape, y);
 	}
 	
 	/**
@@ -183,12 +212,115 @@ public interface MarkerSet {
 	 * @param id the id of the new marker
 	 * @param map the {@link BlueMapMap} of the new marker
 	 * @param shape the Shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
-	 * @param height the height of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
+	 * @param y the height of shape of the marker (See: {@link ShapeMarker#setShape(Shape, float)})
 	 * @return the created {@link ShapeMarker}
 	 */
-	default ShapeMarker createShapeMarker(String id, BlueMapMap map, Shape shape, float height) {
+	default ShapeMarker createShapeMarker(String id, BlueMapMap map, Shape shape, float y) {
 		Vector2d center = shape.getMin().add(shape.getMax()).div(2);
-		return createShapeMarker(id, map, new Vector3d(center.getX(), height, center.getY()), shape, height);
+		return createShapeMarker(id, map, new Vector3d(center.getX(), y, center.getY()), shape, y);
+	}
+
+	/**
+	 * Creates a {@link ExtrudeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link ExtrudeMarker}!
+	 *
+	 * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param position the position of the new marker
+	 * @param shape the {@link Shape} of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @param minY the min-height (y-position on the map) of the shape of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @param maxY the max-height (y-position on the map) of the shape of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @return the created {@link ExtrudeMarker}
+	 */
+	ExtrudeMarker createExtrudeMarker(String id, BlueMapMap map, Vector3d position, Shape shape, float minY, float maxY);
+
+	/**
+	 * Creates a {@link ExtrudeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link ExtrudeMarker}!
+	 *
+	 * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param posX the x-position of the new marker
+	 * @param posY the y-position of the new marker
+	 * @param posZ the z-position of the new marker
+	 * @param shape the {@link Shape} of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @param minY the min-height (y-position on the map) of the shape of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @param maxY the max-height (y-position on the map) of the shape of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @return the created {@link ExtrudeMarker}
+	 */
+	default ExtrudeMarker createExtrudeMarker(String id, BlueMapMap map, double posX, double posY, double posZ, Shape shape, float minY, float maxY) {
+		return createExtrudeMarker(id, map, new Vector3d(posX, posY, posZ), shape, minY, maxY);
+	}
+
+	/**
+	 * Creates a {@link ExtrudeMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link ExtrudeMarker}!
+	 *
+	 * <p><i>(The position of the marker will be the center of the shape (it's bounding box))</i></p>
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param shape the {@link Shape} of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @param minY the min-height (y-position on the map) of the shape of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @param maxY the max-height (y-position on the map) of the shape of the marker (See: {@link ExtrudeMarker#setShape(Shape, float, float)})
+	 * @return the created {@link ExtrudeMarker}
+	 */
+	default ExtrudeMarker createExtrudeMarker(String id, BlueMapMap map, Shape shape, float minY, float maxY) {
+		Vector2d center = shape.getMin().add(shape.getMax()).div(2f);
+		float y = (minY + maxY)/2f;
+		return createExtrudeMarker(id, map, new Vector3d(center.getX(), y, center.getY()), shape, minY, maxY);
+	}
+
+	/**
+	 * Creates a {@link LineMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link LineMarker}!
+	 *
+	 * <p><i>(Since the line has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param position the position of the new marker
+	 * @param line the {@link Line} of the marker (See: {@link LineMarker#setLine(Line)})
+	 * @return the created {@link LineMarker}
+	 */
+	LineMarker createLineMarker(String id, BlueMapMap map, Vector3d position, Line line);
+
+	/**
+	 * Creates a {@link LineMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link LineMarker}!
+	 *
+	 * <p><i>(Since the line has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param posX the x-position of the new marker
+	 * @param posY the y-position of the new marker
+	 * @param posZ the z-position of the new marker
+	 * @param line the {@link Line} of the marker (See: {@link LineMarker#setLine(Line)})
+	 * @return the created {@link LineMarker}
+	 */
+	default LineMarker createLineMarker(String id, BlueMapMap map, double posX, double posY, double posZ, Line line) {
+		return createLineMarker(id, map, new Vector3d(posX, posY, posZ), line);
+	}
+
+	/**
+	 * Creates a {@link LineMarker} with the given id and adds it to this {@link MarkerSet}.<br>
+	 * If a {@link Marker} with that id already exists, it will be replaced by the new {@link LineMarker}!
+	 *
+	 * <p><i>(The position of the marker will be the center of the line (it's bounding box))</i></p>
+	 *
+	 * @param id the id of the new marker
+	 * @param map the {@link BlueMapMap} of the new marker
+	 * @param line the {@link Line} of the marker (See: {@link LineMarker#setLine(Line)})
+	 * @return the created {@link LineMarker}
+	 */
+	default LineMarker createLineMarker(String id, BlueMapMap map, Line line) {
+		Vector3d center = line.getMin().add(line.getMax()).div(2f);
+		return createLineMarker(id, map, center, line);
 	}
 	
 	/**

@@ -24,39 +24,40 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import java.awt.Color;
+import java.awt.*;
 
-public interface ShapeMarker extends ObjectMarker, DistanceRangedMarker {
+public interface ExtrudeMarker extends ObjectMarker, DistanceRangedMarker {
 
 	/**
-	 * Getter for {@link Shape} of this {@link ShapeMarker}.
+	 * Getter for {@link Shape} of this {@link ExtrudeMarker}.
 	 * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points are the z-coordinates in the map.</p>
 	 * @return the {@link Shape}
 	 */
 	Shape getShape();
-	
-	/**
-	 * Getter for the height (y-coordinate) of where the shape is displayed on the map.
-	 * @return the height of the shape on the map
-	 * @deprecated Use {@link #getShapeY()} instead
-	 */
-	default float getHeight() {
-		return getShapeY();
-	}
 
 	/**
-	 * Getter for the height (y-coordinate) of where the shape is displayed on the map.
-	 * @return the height of the shape on the map
+	 * Getter for the minimum height (y-coordinate) of where the shape is displayed on the map.<br>
+	 * <i>(The shape will be extruded from this value to {@link #getShapeMaxY()} on the map)</i>
+	 * @return the min-height of the shape on the map
 	 */
-	float getShapeY();
+	float getShapeMinY();
+
+	/**
+	 * Getter for the maximum height (y-coordinate) of where the shape is displayed on the map.
+	 * <i>(The shape will be extruded from {@link #getShapeMinY()} to this value on the map)</i>
+	 * @return the max-height of the shape on the map
+	 */
+	float getShapeMaxY();
 	
 	/**
-	 * Sets the {@link Shape} of this {@link ShapeMarker}.
+	 * Sets the {@link Shape} of this {@link ExtrudeMarker}.
 	 * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be the z-coordinates in the map.</p>
+	 * <i>(The shape will be extruded from minY to maxY on the map)</i>
 	 * @param shape the new {@link Shape}
-	 * @param y the new height (y-coordinate) of the shape on the map
+	 * @param minY the new min-height (y-coordinate) of the shape on the map
+	 * @param maxY the new max-height (y-coordinate) of the shape on the map
 	 */
-	void setShape(Shape shape, float y);
+	void setShape(Shape shape, float minY, float maxY);
 
 	/**
 	 * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
@@ -66,39 +67,21 @@ public interface ShapeMarker extends ObjectMarker, DistanceRangedMarker {
 	
 	/**
 	 * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
-	 * @param enabled if the depth-test should be enabled for this {@link ShapeMarker}
+	 * @param enabled if the depth-test should be enabled for this {@link ExtrudeMarker}
 	 */
 	void setDepthTestEnabled(boolean enabled);
 
 	/**
-	 * Getter for the width of the border-line of this {@link ShapeMarker}.
-	 * @return the width of the line in pixels
+	 * Getter for the width of the lines of this {@link ExtrudeMarker}.
+	 * @return the width of the lines in pixels
 	 */
 	int getLineWidth();
 
 	/**
-	 * Sets the width of the border-line for this {@link ShapeMarker}.
+	 * Sets the width of the lines for this {@link ExtrudeMarker}.
 	 * @param width the new width in pixels
 	 */
 	void setLineWidth(int width);
-
-	/**
-	 * Getter for the {@link Color} of the border of the shape.
-	 * @return the border-color
-	 * @deprecated Use {@link #getLineColor()} instead
-	 */
-	default Color getBorderColor() {
-		return getLineColor();
-	}
-	
-	/**
-	 * Sets the {@link Color} of the border of the shape.
-	 * @param color the new border-color
-	 * @deprecated Use {@link #setLineColor(Color)} instead
-	 */
-	default void setBorderColor(Color color){
-		setLineColor(color);
-	}
 
 	/**
 	 * Getter for the {@link Color} of the border-line of the shape.

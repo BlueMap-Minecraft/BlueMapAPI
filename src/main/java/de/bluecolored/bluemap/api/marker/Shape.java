@@ -24,9 +24,9 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import java.util.Arrays;
-
 import com.flowpowered.math.vector.Vector2d;
+
+import java.util.Arrays;
 
 /**
  * A shape consisting of 3 or more {@link Vector2d}-points on a plane.
