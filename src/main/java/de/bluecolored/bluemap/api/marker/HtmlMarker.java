@@ -30,11 +30,32 @@ import de.bluecolored.bluemap.api.BlueMapAPI;
 public interface HtmlMarker extends Marker, DistanceRangedMarker {
 
 	/**
-	 * Getter for the position (in pixels) where the icon is anchored to the map.
+	 * Getter for the position (in pixels) where the html-element is anchored to the map.
 	 * @return the anchor-position in pixels
 	 */
 	Vector2i getAnchor();
-	
+
+	/**
+	 * Sets the position (in pixels) where the html-element is anchored to the map.
+	 * @param anchor the anchor-position in pixels
+	 */
+	void setAnchor(Vector2i anchor);
+
+	/**
+	 * Sets the position (in pixels) where the html-element is anchored to the map.
+	 * @param x the anchor-x-position in pixels
+	 * @param y the anchor-y-position in pixels
+	 */
+	default void setAnchor(int x, int y) {
+		setAnchor(new Vector2i(x, y));
+	}
+
+	/**
+	 * Getter for the html-code of this HTML marker
+	 * @return the html-code
+	 */
+	String getHtml();
+
 	/**
 	 * Sets the html for this {@link HtmlMarker}.
 	 *
@@ -43,7 +64,7 @@ public interface HtmlMarker extends Marker, DistanceRangedMarker {
 	 * 	Make sure you escape all html-tags from possible user inputs to prevent possible <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
 	 * </p>
 	 *
-	 * @param html the html-element that will be inserted as the marker.
+	 * @param html the html that will be inserted as the marker.
 	 */
 	void setHtml(String html);
 	
