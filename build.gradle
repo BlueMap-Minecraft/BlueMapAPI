@@ -1,20 +1,27 @@
 plugins {
 	id 'java'
+	id 'java-library'
 }
 
 repositories {
 	jcenter()
 	mavenCentral()
-	maven {
-		url 'https://jitpack.io'
-	}
 }
 
 dependencies {
-   compile 'com.flowpowered:flow-math:1.0.3'
+   api 'com.flowpowered:flow-math:1.0.3'
 }
 
 apply plugin: 'java'
 
 group = 'de.bluecolored.bluemap.api'
 version = apiVersion
+
+javadoc {
+	options {
+		links += [
+			'https://docs.oracle.com/javase/8/docs/api/',
+			'https://javadoc.io/doc/com.flowpowered/flow-math/1.0.3/'
+		]
+	}
+}
