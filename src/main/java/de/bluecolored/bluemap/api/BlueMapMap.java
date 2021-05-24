@@ -28,6 +28,9 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
+import java.util.Optional;
+import java.util.function.Predicate;
+
 /**
  * This class represents a map that is rendered by BlueMap of a specific world ({@link BlueMapWorld}).
  * Each map belongs to a map configured in BlueMap's configuration file (in the <code>maps: []</code> list).
@@ -64,7 +67,34 @@ public interface BlueMapMap {
 	 * @return the tile-offset in blocks
 	 */
 	Vector2i getTileOffset();
-	
+
+	/**
+	 * <p></p>Sets a filter that determines if a specific (hires) tile of this map should be updated or not.
+	 * If this filter returns false for a tile, the "render"-process of this tile will be cancelled and the tile will be left untouched.</p>
+	 * <p><b>Warning:</b> Using this method will harm the integrity of the map! Since BlueMap will still assume that the tile got updated properly.</p>
+	 * <p>Any previously set filters will get overwritten with the new one. You can get the current filter using {@link #getTileFilter()} and combine them if you wish.</p>
+	 * @param filter The filter that will be used from now on.
+	 */
+	void setTileFilter(Predicate<Vector2i> filter);
+
+	/**
+	 * Freezes or unfreezes the map in the same way the `/bluemap freeze` command does.
+	 * BlueMap will no longer attempt to update this map if it is frozen.
+	 * @param frozen Whether the map will be frozen or not
+	 */
+	void setFrozen(boolean frozen);
+
+	/**
+	 * Checks if the map is currently frozen
+	 * @return true if the map is frozen, false otherwise
+	 */
+	boolean isFrozen();
+
+	/**
+	 * Returns the currently set TileFilter. The default TileFilter is equivalent to <code>t -> true</code>.
+	 */
+	Predicate<Vector2i> getTileFilter();
+
 	/**
 	 * Converts a block-position to a map-tile-coordinate for this map
 	 * 

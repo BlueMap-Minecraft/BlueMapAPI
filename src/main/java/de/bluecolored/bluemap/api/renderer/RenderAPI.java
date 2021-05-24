@@ -24,13 +24,14 @@
  */
 package de.bluecolored.bluemap.api.renderer;
 
-import java.util.UUID;
-
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3i;
-
 import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.BlueMapWorld;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.UUID;
 
 /**
  * The {@link RenderAPI} is used to schedule tile-renders and process them on a number of different threads.
@@ -46,6 +47,7 @@ public interface RenderAPI {
 	 * 
 	 * @throws IllegalArgumentException if there is no world loaded with the provided {@link UUID} 
 	 */
+	@Deprecated
 	void render(UUID world, Vector3i blockPosition);
 
 	/**
@@ -55,6 +57,7 @@ public interface RenderAPI {
 	 * @param world the {@link BlueMapWorld} to render
 	 * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tiles will be rendered not only that block)
 	 */
+	@Deprecated
 	default void render(BlueMapWorld world, Vector3i blockPosition) {
 		for (BlueMapMap map : world.getMaps()) {
 			render(map, blockPosition);
@@ -70,6 +73,7 @@ public interface RenderAPI {
 	 * 
 	 * @throws IllegalArgumentException if there is no map loaded with the provided mapId
 	 */
+	@Deprecated
 	void render(String mapId, Vector3i blockPosition);
 
 	/**
@@ -79,6 +83,7 @@ public interface RenderAPI {
 	 * @param map the {@link BlueMapMap}
 	 * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tile will be rendered not only that block)
 	 */
+	@Deprecated
 	default void render(BlueMapMap map, Vector3i blockPosition) {
 		render(map, map.posToTile(blockPosition));
 	}
@@ -92,6 +97,7 @@ public interface RenderAPI {
 	 * 
 	 * @throws IllegalArgumentException if there is no map loaded with the provided mapId
 	 */
+	@Deprecated
 	void render(String mapId, Vector2i tile);
 
 	/**
@@ -101,8 +107,45 @@ public interface RenderAPI {
 	 * @param map the {@link BlueMapMap}
 	 * @param tile a {@link Vector2i} for the tile-position to render
 	 */
+	@Deprecated
 	void render(BlueMapMap map, Vector2i tile);
-	
+
+	/**
+	 * Schedules a task to update the given map.
+	 * @param map the map to be updated
+	 * @return true if a new task has been scheduled, false if not (usually because there is already an update-task for this map scheduled)
+	 */
+	default boolean scheduleMapUpdateTask(BlueMapMap map) {
+		return scheduleMapUpdateTask(map, false);
+	}
+
+	/**
+	 * Schedules a task to update the given map.
+	 * @param map the map to be updated
+	 * @param force it this is true, the task will forcefully re-render all tiles, even if there are no changes since the last map-update.
+	 * @return true if a new task has been scheduled, false if not (usually because there is already an update-task for this map scheduled)
+	 */
+	boolean scheduleMapUpdateTask(BlueMapMap map, boolean force);
+
+	/**
+	 * Schedules a task to update the given map.
+	 * @param map the map to be updated
+	 * @param regions The regions that should be updated ("region" refers to the coordinates of a minecraft region-file (32x32 chunks, 512x512 blocks))<br>
+	 *                BlueMaps updating-system works based on region-files. For this reason you can always only update a whole region-file at once.
+	 * @param force it this is true, the task will forcefully re-render all tiles, even if there are no changes since the last map-update.
+	 * @return true if a new task has been scheduled, false if not (usually because there is already an update-task for this map scheduled)
+	 */
+	boolean scheduleMapUpdateTask(BlueMapMap map, Collection<Vector2i> regions, boolean force);
+
+	/**
+	 * Schedules a task to purge the given map.
+	 * An update-task will be scheduled right after the purge, to get the map up-to-date again.
+	 * @param map the map to be purged
+	 * @return true if a new task has been scheduled, false if not (usually because there is already an update-task for this map scheduled)
+	 * @throws IOException if an IOException occurs while trying to create the task.
+	 */
+	boolean scheduleMapPurgeTask(BlueMapMap map) throws IOException;
+
 	/**
 	 * Getter for the current size of the render-queue.
 	 * @return the current size of the render-queue
