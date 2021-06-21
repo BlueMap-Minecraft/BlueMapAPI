@@ -193,12 +193,12 @@ public abstract class BlueMapAPI {
 		
 		BlueMapAPI.instance = instance;
 
-		List<Exception> thrownExceptions = new ArrayList<>(0);
+		List<Throwable> thrownExceptions = new ArrayList<>(0);
 		
 		for (Consumer<BlueMapAPI> listener : BlueMapAPI.onEnableConsumers) {
 			try {
 				listener.accept(BlueMapAPI.instance);
-			} catch (Exception ex) {
+			} catch (Throwable ex) {
 				thrownExceptions.add(ex);
 			}
 		}
@@ -207,7 +207,7 @@ public abstract class BlueMapAPI {
 		for (BlueMapAPIListener listener : BlueMapAPI.listener) {
 			try {
 				listener.onEnable(BlueMapAPI.instance);
-			} catch (Exception ex) {
+			} catch (Throwable ex) {
 				thrownExceptions.add(ex);
 			}
 		}
