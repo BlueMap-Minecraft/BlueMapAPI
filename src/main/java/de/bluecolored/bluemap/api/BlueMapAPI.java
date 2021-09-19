@@ -30,6 +30,7 @@ import de.bluecolored.bluemap.api.renderer.RenderAPI;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -105,7 +106,13 @@ public abstract class BlueMapAPI {
 	 * @throws IOException If an {@link IOException} is thrown while writing the image
 	 */
 	public abstract String createImage(BufferedImage image, String path) throws IOException;
-	
+
+	/**
+	 * Getter for the configured web-root folder
+	 * @return The {@link Path} of the web-root folder
+	 */
+	public abstract Path getWebRoot();
+
 	/**
 	 * Getter for the installed BlueMap version
 	 * @return the version-string
