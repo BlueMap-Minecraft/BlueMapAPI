@@ -24,6 +24,7 @@
  */
 package de.bluecolored.bluemap.api;
 
+import com.flowpowered.math.vector.Vector2i;
 import de.bluecolored.bluemap.api.marker.Marker;
 import de.bluecolored.bluemap.api.marker.MarkerAPI;
 import de.bluecolored.bluemap.api.renderer.RenderAPI;
@@ -102,10 +103,23 @@ public abstract class BlueMapAPI {
 	 * 
 	 * @param image the image to create
 	 * @param path the path/name of this image, the separator-char is '/'
-	 * @return the relative address of the image in the web-app
+	 * @return the relative address of the image in the web-app,
+	 * which can be used as it is e.g. in the {@link de.bluecolored.bluemap.api.marker.POIMarker#setIcon(String, Vector2i)} method
 	 * @throws IOException If an {@link IOException} is thrown while writing the image
 	 */
 	public abstract String createImage(BufferedImage image, String path) throws IOException;
+
+	/**
+	 * Lists all images that are available. This includes all images previously created with the {@link #createImage(BufferedImage, String)}
+	 * function, but might include more.
+	 * @return A map of available images where:
+	 * <ul>
+	 * <li>the <b>key</b> is the image path how it would be used in the "path" parameter of the {@link #createImage(BufferedImage, String)} method</li>
+	 * <li>and the <b>value</b> is the relative address of the image. The same ones that are returned from the {@link #createImage(BufferedImage, String)} method</li>
+	 * </ul>
+	 * @throws IOException If an {@link IOException} is thrown while reading the images
+	 */
+	public abstract Map<String, String> availableImages() throws IOException;
 
 	/**
 	 * Getter for the configured web-root folder
