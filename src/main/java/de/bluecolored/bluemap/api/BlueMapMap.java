@@ -69,7 +69,7 @@ public interface BlueMapMap {
 	Vector2i getTileOffset();
 
 	/**
-	 * <p></p>Sets a filter that determines if a specific (hires) tile of this map should be updated or not.
+	 * <p>Sets a filter that determines if a specific (hires) tile of this map should be updated or not.
 	 * If this filter returns false for a tile, the "render"-process of this tile will be cancelled and the tile will be left untouched.</p>
 	 * <p><b>Warning:</b> Using this method will harm the integrity of the map! Since BlueMap will still assume that the tile got updated properly.</p>
 	 * <p>Any previously set filters will get overwritten with the new one. You can get the current filter using {@link #getTileFilter()} and combine them if you wish.</p>
