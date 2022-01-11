@@ -28,52 +28,52 @@ import java.awt.*;
 
 public interface LineMarker extends ObjectMarker, DistanceRangedMarker {
 
-	/**
-	 * Getter for {@link Line} of this {@link LineMarker}.
-	 * @return the {@link Line}
-	 */
-	Line getLine();
-	
-	/**
-	 * Sets the {@link Line} of this {@link LineMarker}.
-	 * @param line the new {@link Line}
-	 */
-	void setLine(Line line);
+    /**
+     * Getter for {@link Line} of this {@link LineMarker}.
+     * @return the {@link Line}
+     */
+    Line getLine();
 
-	/**
-	 * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
-	 * @return <code>true</code> if the depthTest is enabled
-	 */
-	boolean isDepthTestEnabled();
-	
-	/**
-	 * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
-	 * @param enabled if the depth-test should be enabled for this {@link LineMarker}
-	 */
-	void setDepthTestEnabled(boolean enabled);
+    /**
+     * Sets the {@link Line} of this {@link LineMarker}.
+     * @param line the new {@link Line}
+     */
+    void setLine(Line line);
 
-	/**
-	 * Getter for the width of the lines of this {@link LineMarker}.
-	 * @return the width of the lines in pixels
-	 */
-	int getLineWidth();
+    /**
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * @return <code>true</code> if the depthTest is enabled
+     */
+    boolean isDepthTestEnabled();
 
-	/**
-	 * Sets the width of the lines for this {@link LineMarker}.
-	 * @param width the new width in pixels
-	 */
-	void setLineWidth(int width);
+    /**
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * @param enabled if the depth-test should be enabled for this {@link LineMarker}
+     */
+    void setDepthTestEnabled(boolean enabled);
 
-	/**
-	 * Getter for the {@link Color} of the border-line of the shape.
-	 * @return the line-color
-	 */
-	Color getLineColor();
+    /**
+     * Getter for the width of the lines of this {@link LineMarker}.
+     * @return the width of the lines in pixels
+     */
+    int getLineWidth();
 
-	/**
-	 * Sets the {@link Color} of the border-line of the shape.
-	 * @param color the new line-color
-	 */
-	void setLineColor(Color color);
-	
+    /**
+     * Sets the width of the lines for this {@link LineMarker}.
+     * @param width the new width in pixels
+     */
+    void setLineWidth(int width);
+
+    /**
+     * Getter for the {@link Color} of the border-line of the shape.
+     * @return the line-color
+     */
+    Color getLineColor();
+
+    /**
+     * Sets the {@link Color} of the border-line of the shape.
+     * @param color the new line-color
+     */
+    void setLineColor(Color color);
+
 }

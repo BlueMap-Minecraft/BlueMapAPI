@@ -33,64 +33,64 @@ import java.util.Arrays;
  */
 public class Line {
 
-	private final Vector3d[] points;
-	private Vector3d min = null;
-	private Vector3d max = null;
+    private final Vector3d[] points;
+    private Vector3d min = null;
+    private Vector3d max = null;
 
-	public Line(Vector3d... points) {
-		if (points.length < 2) throw new IllegalArgumentException("A line has to have at least 2 points!");
-		this.points = points;
-	}
-	
-	/**
-	 * Getter for the amount of points in this line.
-	 * @return the amount of points
-	 */
-	public int getPointCount() {
-		return points.length;
-	}
-	
-	public Vector3d getPoint(int i) {
-		return points[i];
-	}
-	
-	/**
-	 * Getter for <b>a copy</b> of the points array.<br> 
-	 * <i>(A line is immutable once created)</i>
-	 * @return the points of this line
-	 */
-	public Vector3d[] getPoints() {
-		return Arrays.copyOf(points, points.length);
-	}
-	
-	/**
-	 * Calculates and returns the minimum corner of the axis-aligned-bounding-box of this line.
-	 * @return the min of the AABB of this line
-	 */
-	public Vector3d getMin() {
-		if (this.min == null) {
-			Vector3d min = points[0];
-			for (int i = 1; i < points.length; i++) {
-				min = min.min(points[i]);
-			}
-			this.min = min;
-		}
-		return this.min;
-	}
-	
-	/**
-	 * Calculates and returns the maximum corner of the axis-aligned-bounding-box of this line.
-	 * @return the max of the AABB of this line
-	 */
-	public Vector3d getMax() {
-		if (this.max == null) {
-			Vector3d max = points[0];
-			for (int i = 1; i < points.length; i++) {
-				max = max.max(points[i]);
-			}
-			this.max = max;
-		}
-		return this.max;
-	}
-	
+    public Line(Vector3d... points) {
+        if (points.length < 2) throw new IllegalArgumentException("A line has to have at least 2 points!");
+        this.points = points;
+    }
+
+    /**
+     * Getter for the amount of points in this line.
+     * @return the amount of points
+     */
+    public int getPointCount() {
+        return points.length;
+    }
+
+    public Vector3d getPoint(int i) {
+        return points[i];
+    }
+
+    /**
+     * Getter for <b>a copy</b> of the points array.<br>
+     * <i>(A line is immutable once created)</i>
+     * @return the points of this line
+     */
+    public Vector3d[] getPoints() {
+        return Arrays.copyOf(points, points.length);
+    }
+
+    /**
+     * Calculates and returns the minimum corner of the axis-aligned-bounding-box of this line.
+     * @return the min of the AABB of this line
+     */
+    public Vector3d getMin() {
+        if (this.min == null) {
+            Vector3d min = points[0];
+            for (int i = 1; i < points.length; i++) {
+                min = min.min(points[i]);
+            }
+            this.min = min;
+        }
+        return this.min;
+    }
+
+    /**
+     * Calculates and returns the maximum corner of the axis-aligned-bounding-box of this line.
+     * @return the max of the AABB of this line
+     */
+    public Vector3d getMax() {
+        if (this.max == null) {
+            Vector3d max = points[0];
+            for (int i = 1; i < points.length; i++) {
+                max = max.max(points[i]);
+            }
+            this.max = max;
+        }
+        return this.max;
+    }
+
 }

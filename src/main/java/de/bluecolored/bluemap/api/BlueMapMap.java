@@ -37,99 +37,99 @@ import java.util.function.Predicate;
  */
 public interface BlueMapMap {
 
-	/**
-	 * Returns this maps id, this is equal to the id configured in bluemap's config for this map.
-	 * @return the id of this map
-	 */
-	String getId();
+    /**
+     * Returns this maps id, this is equal to the id configured in bluemap's config for this map.
+     * @return the id of this map
+     */
+    String getId();
 
-	/**
-	 * Returns this maps display-name, this is equal to the name configured in bluemap's config for this map.
-	 * @return the name of this map
-	 */
-	String getName();
-	
-	/**
-	 * Getter for the {@link BlueMapWorld} of this map.
-	 * @return the {@link BlueMapWorld} of this map
-	 */
-	BlueMapWorld getWorld();
+    /**
+     * Returns this maps display-name, this is equal to the name configured in bluemap's config for this map.
+     * @return the name of this map
+     */
+    String getName();
 
-	/**
-	 * Getter for the size of all tiles on this map in blocks.
-	 * @return the tile-size in blocks
-	 */
-	Vector2i getTileSize();
-	
-	/**
-	 * Getter for the offset of the tile-grid on this map.<br>
-	 * E.g. an offset of (2|-1) would mean that the tile (0|0) has block (2|0|-1) at it's min-corner.
-	 * @return the tile-offset in blocks
-	 */
-	Vector2i getTileOffset();
+    /**
+     * Getter for the {@link BlueMapWorld} of this map.
+     * @return the {@link BlueMapWorld} of this map
+     */
+    BlueMapWorld getWorld();
 
-	/**
-	 * <p>Sets a filter that determines if a specific (hires) tile of this map should be updated or not.
-	 * If this filter returns false for a tile, the "render"-process of this tile will be cancelled and the tile will be left untouched.</p>
-	 * <p><b>Warning:</b> Using this method will harm the integrity of the map! Since BlueMap will still assume that the tile got updated properly.</p>
-	 * <p>Any previously set filters will get overwritten with the new one. You can get the current filter using {@link #getTileFilter()} and combine them if you wish.</p>
-	 * @param filter The filter that will be used from now on.
-	 */
-	void setTileFilter(Predicate<Vector2i> filter);
+    /**
+     * Getter for the size of all tiles on this map in blocks.
+     * @return the tile-size in blocks
+     */
+    Vector2i getTileSize();
 
-	/**
-	 * Freezes or unfreezes the map in the same way the `/bluemap freeze` command does.
-	 * BlueMap will no longer attempt to update this map if it is frozen.
-	 * @param frozen Whether the map will be frozen or not
-	 */
-	void setFrozen(boolean frozen);
+    /**
+     * Getter for the offset of the tile-grid on this map.<br>
+     * E.g. an offset of (2|-1) would mean that the tile (0|0) has block (2|0|-1) at it's min-corner.
+     * @return the tile-offset in blocks
+     */
+    Vector2i getTileOffset();
 
-	/**
-	 * Checks if the map is currently frozen
-	 * @return true if the map is frozen, false otherwise
-	 */
-	boolean isFrozen();
+    /**
+     * <p>Sets a filter that determines if a specific (hires) tile of this map should be updated or not.
+     * If this filter returns false for a tile, the "render"-process of this tile will be cancelled and the tile will be left untouched.</p>
+     * <p><b>Warning:</b> Using this method will harm the integrity of the map! Since BlueMap will still assume that the tile got updated properly.</p>
+     * <p>Any previously set filters will get overwritten with the new one. You can get the current filter using {@link #getTileFilter()} and combine them if you wish.</p>
+     * @param filter The filter that will be used from now on.
+     */
+    void setTileFilter(Predicate<Vector2i> filter);
 
-	/**
-	 * Returns the currently set TileFilter. The default TileFilter is equivalent to <code>t -> true</code>.
-	 */
-	Predicate<Vector2i> getTileFilter();
+    /**
+     * Freezes or unfreezes the map in the same way the `/bluemap freeze` command does.
+     * BlueMap will no longer attempt to update this map if it is frozen.
+     * @param frozen Whether the map will be frozen or not
+     */
+    void setFrozen(boolean frozen);
 
-	/**
-	 * Converts a block-position to a map-tile-coordinate for this map
-	 * 
-	 * @param blockX the x-position of the block
-	 * @param blockZ the z-position of the block
-	 * @return the tile position
-	 */
-	default Vector2i posToTile(double blockX, double blockZ){
-		Vector2i offset = getTileOffset();
-		Vector2i size = getTileSize();
-		
-		return Vector2i.from(
-				(int) Math.floor((blockX - offset.getX()) / size.getX()),
-				(int) Math.floor((blockZ - offset.getY()) / size.getY())  
-			);
-	}
-	
-	/**
-	 * Converts a block-position to a map-tile-coordinate for this map
-	 * 
-	 * @param pos the position of the block
-	 * @return the tile position
-	 */
-	default Vector2i posToTile(Vector3i pos){
-		return posToTile(pos.getX(), pos.getZ());
-	}
+    /**
+     * Checks if the map is currently frozen
+     * @return true if the map is frozen, false otherwise
+     */
+    boolean isFrozen();
 
-	/**
-	 * Converts a block-position to a map-tile-coordinate for this map
-	 * 
-	 * @param pos the position of the block
-	 * @return the tile position
-	 */
-	default Vector2i posToTile(Vector3d pos){
-		return posToTile(pos.getX(), pos.getZ()); 
-	}
-	
+    /**
+     * Returns the currently set TileFilter. The default TileFilter is equivalent to <code>t -> true</code>.
+     */
+    Predicate<Vector2i> getTileFilter();
+
+    /**
+     * Converts a block-position to a map-tile-coordinate for this map
+     *
+     * @param blockX the x-position of the block
+     * @param blockZ the z-position of the block
+     * @return the tile position
+     */
+    default Vector2i posToTile(double blockX, double blockZ){
+        Vector2i offset = getTileOffset();
+        Vector2i size = getTileSize();
+
+        return Vector2i.from(
+                (int) Math.floor((blockX - offset.getX()) / size.getX()),
+                (int) Math.floor((blockZ - offset.getY()) / size.getY())
+            );
+    }
+
+    /**
+     * Converts a block-position to a map-tile-coordinate for this map
+     *
+     * @param pos the position of the block
+     * @return the tile position
+     */
+    default Vector2i posToTile(Vector3i pos){
+        return posToTile(pos.getX(), pos.getZ());
+    }
+
+    /**
+     * Converts a block-position to a map-tile-coordinate for this map
+     *
+     * @param pos the position of the block
+     * @return the tile position
+     */
+    default Vector2i posToTile(Vector3d pos){
+        return posToTile(pos.getX(), pos.getZ());
+    }
+
 }

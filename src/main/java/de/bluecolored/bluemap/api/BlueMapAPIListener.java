@@ -33,20 +33,20 @@ import java.util.function.Consumer;
 @Deprecated
 public interface BlueMapAPIListener {
 
-	/**
-	 * Called when BlueMap has been loaded and started and the API is ready to use.<br>
-	 * If {@link BlueMapAPI} is already enabled when this listener is registered this method will be called immediately <i>(on the same thread)</i>!
-	 * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
-	 * @param blueMapApi the {@link BlueMapAPI}
-	 */
-	default void onEnable(BlueMapAPI blueMapApi) {}
-	
-	/**
-	 * Called <b>before</b> BlueMap is being unloaded and stopped, after this method returns the API is no longer usable!<br>
-	 * Unlike {@link BlueMapAPIListener#onEnable(BlueMapAPI)}, if {@link BlueMapAPI} is not enabled when this listener is registered this method will <b>not</b> be called immediately.
-	 * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
-	 * @param blueMapApi the {@link BlueMapAPI}
-	 */
-	default void onDisable(BlueMapAPI blueMapApi) {}
-	
+    /**
+     * Called when BlueMap has been loaded and started and the API is ready to use.<br>
+     * If {@link BlueMapAPI} is already enabled when this listener is registered this method will be called immediately <i>(on the same thread)</i>!
+     * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
+     * @param blueMapApi the {@link BlueMapAPI}
+     */
+    default void onEnable(BlueMapAPI blueMapApi) {}
+
+    /**
+     * Called <b>before</b> BlueMap is being unloaded and stopped, after this method returns the API is no longer usable!<br>
+     * Unlike {@link BlueMapAPIListener#onEnable(BlueMapAPI)}, if {@link BlueMapAPI} is not enabled when this listener is registered this method will <b>not</b> be called immediately.
+     * <p><i>(Note: This method will likely be called asynchronously, <b>not</b> on the server-thread!</i></p>
+     * @param blueMapApi the {@link BlueMapAPI}
+     */
+    default void onDisable(BlueMapAPI blueMapApi) {}
+
 }

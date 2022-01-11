@@ -36,69 +36,69 @@ import de.bluecolored.bluemap.api.BlueMapAPI;
  * 	<b>Important:</b><br>
  * 	If you made changes to any {@link MarkerSet} or {@link Marker} including creations and deletions, you need to finally save your changes by calling {@link #save()}!<br>
  * </p>
- * <p>To avoid any concurrent modifications to the <code>markers.json</code>, make sure your {@link MarkerAPI} is always loaded before making any changes, and saved right after the changes.</p> 
- * 
+ * <p>To avoid any concurrent modifications to the <code>markers.json</code>, make sure your {@link MarkerAPI} is always loaded before making any changes, and saved right after the changes.</p>
+ *
  * @see BlueMapAPI#getMarkerAPI()
  */
 public interface MarkerAPI {
 
-	/**
-	 * Getter for an <i>unmodifiable</i> {@link Collection} containing all {@link MarkerSet}s that are currently loaded with BlueMap.
-	 * 
-	 * @return a {@link Collection} with all loaded {@link MarkerSet}s
-	 */
-	Collection<MarkerSet> getMarkerSets();
-	
-	/**
-	 * Getter for a loaded {@link MarkerSet} with the given id.<br>
-	 * Returns an empty {@link Optional} if no {@link MarkerSet} with that id is loaded.  
-	 * 
-	 * @param id the id of the {@link MarkerSet}
-	 * @return an {@link Optional}&lt;{@link MarkerSet}&gt; with the given id 
-	 */
-	Optional<MarkerSet> getMarkerSet(String id);
-	
-	/**
-	 * Created a new {@link MarkerSet} with the given id.<br>
-	 * If there is already a {@link MarkerSet} with that id loaded, no new {@link MarkerSet} is created and the existing one is returned.
-	 * 
-	 * @param id the id of the {@link MarkerSet}
-	 * @return a {@link MarkerSet} with the given id
-	 */
-	MarkerSet createMarkerSet(String id);
-	
-	/**
-	 * Removes the given {@link MarkerSet}.<br>
-	 * This is equivalent to calling <code>removeMarkerSet(markerSet.getId())</code>.
-	 * 
-	 * @param markerSet the {@link MarkerSet} to be removed
-	 * @return <code>true</code> if the {@link MarkerSet} was removed, <code>false</code> if that {@link MarkerSet} didn't exist
-	 */
-	default boolean removeMarkerSet(MarkerSet markerSet) {
-		return removeMarkerSet(markerSet.getId());
-	}
-	
-	/**
-	 * Removes the {@link MarkerSet} with the given id.
-	 * 
-	 * @param id the id of the {@link MarkerSet} to be removed
-	 * @return <code>true</code> if the {@link MarkerSet} was removed, <code>false</code> if there was no {@link MarkerSet} with that id
-	 */
-	boolean removeMarkerSet(String id);
-	
-	/**
-	 * Loads changes made by others, changes could be from other plugin's using the API or external changes to the <code>markers.json</code>.<br>
-	 * Calling this will <b>override all unsaved changes</b> you made with this instance!
-	 *  
-	 * @throws IOException if an {@link IOException} occurred while loading the <code>markers.json</code>
-	 */
-	void load() throws IOException;
-	
-	/**
-	 * Saves all changes made with this instance to the <code>markers.json</code>.<br> 
-	 * 
-	 * @throws IOException if an {@link IOException} occurred while saving the <code>markers.json</code>
-	 */
-	void save() throws IOException;
-	
+    /**
+     * Getter for an <i>unmodifiable</i> {@link Collection} containing all {@link MarkerSet}s that are currently loaded with BlueMap.
+     *
+     * @return a {@link Collection} with all loaded {@link MarkerSet}s
+     */
+    Collection<MarkerSet> getMarkerSets();
+
+    /**
+     * Getter for a loaded {@link MarkerSet} with the given id.<br>
+     * Returns an empty {@link Optional} if no {@link MarkerSet} with that id is loaded.
+     *
+     * @param id the id of the {@link MarkerSet}
+     * @return an {@link Optional}&lt;{@link MarkerSet}&gt; with the given id
+     */
+    Optional<MarkerSet> getMarkerSet(String id);
+
+    /**
+     * Created a new {@link MarkerSet} with the given id.<br>
+     * If there is already a {@link MarkerSet} with that id loaded, no new {@link MarkerSet} is created and the existing one is returned.
+     *
+     * @param id the id of the {@link MarkerSet}
+     * @return a {@link MarkerSet} with the given id
+     */
+    MarkerSet createMarkerSet(String id);
+
+    /**
+     * Removes the given {@link MarkerSet}.<br>
+     * This is equivalent to calling <code>removeMarkerSet(markerSet.getId())</code>.
+     *
+     * @param markerSet the {@link MarkerSet} to be removed
+     * @return <code>true</code> if the {@link MarkerSet} was removed, <code>false</code> if that {@link MarkerSet} didn't exist
+     */
+    default boolean removeMarkerSet(MarkerSet markerSet) {
+        return removeMarkerSet(markerSet.getId());
+    }
+
+    /**
+     * Removes the {@link MarkerSet} with the given id.
+     *
+     * @param id the id of the {@link MarkerSet} to be removed
+     * @return <code>true</code> if the {@link MarkerSet} was removed, <code>false</code> if there was no {@link MarkerSet} with that id
+     */
+    boolean removeMarkerSet(String id);
+
+    /**
+     * Loads changes made by others, changes could be from other plugin's using the API or external changes to the <code>markers.json</code>.<br>
+     * Calling this will <b>override all unsaved changes</b> you made with this instance!
+     *
+     * @throws IOException if an {@link IOException} occurred while loading the <code>markers.json</code>
+     */
+    void load() throws IOException;
+
+    /**
+     * Saves all changes made with this instance to the <code>markers.json</code>.<br>
+     *
+     * @throws IOException if an {@link IOException} occurred while saving the <code>markers.json</code>
+     */
+    void save() throws IOException;
+
 }
