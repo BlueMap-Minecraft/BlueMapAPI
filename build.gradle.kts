@@ -46,11 +46,11 @@ tasks.withType(AbstractArchiveTask::class).configureEach {
 
 tasks.javadoc {
 	options {
-		this as StandardJavadocDocletOptions
-
-		links(
-			"https://docs.oracle.com/javase/8/docs/api/",
-			"https://javadoc.io/doc/com.flowpowered/flow-math/1.0.3/"
-		)
+		(this as? StandardJavadocDocletOptions)?.apply {
+			links(
+				"https://docs.oracle.com/javase/8/docs/api/",
+				"https://javadoc.io/doc/com.flowpowered/flow-math/1.0.3/"
+			)
+		}
 	}
 }
