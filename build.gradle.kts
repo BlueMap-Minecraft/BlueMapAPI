@@ -9,7 +9,7 @@ group = "de.bluecolored.bluemap.api"
 val apiVersion: String by project
 version = apiVersion
 
-val javaTarget = 8
+val javaTarget = 11
 java {
 	sourceCompatibility = JavaVersion.toVersion(javaTarget)
 	targetCompatibility = JavaVersion.toVersion(javaTarget)
