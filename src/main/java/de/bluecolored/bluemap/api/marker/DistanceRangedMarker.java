@@ -24,7 +24,17 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-public interface DistanceRangedMarker extends Marker {
+import com.flowpowered.math.vector.Vector3d;
+
+public abstract class DistanceRangedMarker extends Marker {
+
+    private double minDistance, maxDistance;
+
+    public DistanceRangedMarker(String type, String label, Vector3d position) {
+        super(type, label, position);
+        this.minDistance = 0.0;
+        this.maxDistance = 10000000.0;
+    }
 
     /**
      * Getter for the minimum distance of the camera to the position for this {@link Marker} to be displayed.<br>
@@ -32,7 +42,9 @@ public interface DistanceRangedMarker extends Marker {
      *
      * @return the minimum distance for this {@link Marker} to be displayed
      */
-    double getMinDistance();
+    public double getMinDistance() {
+        return minDistance;
+    }
 
     /**
      * Sets the minimum distance of the camera to the position of the {@link Marker} for it to be displayed.<br>
@@ -40,7 +52,9 @@ public interface DistanceRangedMarker extends Marker {
      *
      * @param minDistance the new minimum distance
      */
-    void setMinDistance(double minDistance);
+    public void setMinDistance(double minDistance) {
+        this.minDistance = minDistance;
+    }
 
     /**
      * Getter for the maximum distance of the camera to the position of the {@link Marker} for it to be displayed.<br>
@@ -48,7 +62,9 @@ public interface DistanceRangedMarker extends Marker {
      *
      * @return the maximum distance for this {@link Marker} to be displayed
      */
-    double getMaxDistance();
+    public double getMaxDistance() {
+        return maxDistance;
+    }
 
     /**
      * Sets the maximum distance of the camera to the position of the {@link Marker} for it to be displayed.<br>
@@ -56,6 +72,8 @@ public interface DistanceRangedMarker extends Marker {
      *
      * @param maxDistance the new maximum distance
      */
-    void setMaxDistance(double maxDistance);
+    public void setMaxDistance(double maxDistance) {
+        this.maxDistance = maxDistance;
+    }
 
 }

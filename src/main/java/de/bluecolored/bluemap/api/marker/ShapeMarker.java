@@ -24,105 +24,157 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import java.awt.Color;
 
-public interface ShapeMarker extends ObjectMarker, DistanceRangedMarker {
+import com.flowpowered.math.vector.Vector2d;
+import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.math.Color;
+
+import java.util.Objects;
+
+public class ShapeMarker extends ObjectMarker {
+
+    private Shape shape;
+    private float shapeY;
+    private boolean depthTest = true;
+    private int lineWidth = 2;
+    private Color lineColor = new Color(255, 0, 0, 1f);
+    private Color fillColor = new Color(200, 0, 0, 0.3f);
+
+    /**
+     * Creates a new {@link ShapeMarker}.
+     * <p><i>(The position of the marker will be the center of the shape (it's bounding box))</i></p>
+     *
+     * @param label the label of the marker
+     * @param shape the {@link Shape} of the marker
+     * @param shapeY the y-position of the shape
+     *
+     * @see #setLabel(String)
+     * @see #setShape(Shape, float)
+     */
+    public ShapeMarker(String label, Shape shape, float shapeY) {
+        this(label, calculateShapeCenter(Objects.requireNonNull(shape, "shape must not be null"), shapeY), shape, shapeY);
+    }
+
+    /**
+     * Creates a new {@link ShapeMarker}.
+     * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+     *
+     * @param label the label of the marker
+     * @param position the coordinates of the marker
+     * @param shape the shape of the marker
+     * @param shapeY the y-position of the shape
+     *
+     * @see #setLabel(String)
+     * @see #setPosition(Vector3d)
+     * @see #setShape(Shape, float)
+     */
+    public ShapeMarker(String label, Vector3d position, Shape shape, float shapeY) {
+        super("shape", label, position);
+        this.shape = Objects.requireNonNull(shape, "shape must not be null");
+        this.shapeY = shapeY;
+    }
 
     /**
      * Getter for {@link Shape} of this {@link ShapeMarker}.
      * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points are the z-coordinates in the map.</p>
      * @return the {@link Shape}
      */
-    Shape getShape();
-
-    /**
-     * Getter for the height (y-coordinate) of where the shape is displayed on the map.
-     * @return the height of the shape on the map
-     * @deprecated Use {@link #getShapeY()} instead
-     */
-    default float getHeight() {
-        return getShapeY();
+    public Shape getShape() {
+        return shape;
     }
 
     /**
      * Getter for the height (y-coordinate) of where the shape is displayed on the map.
      * @return the height of the shape on the map
      */
-    float getShapeY();
+    public float getShapeY() {
+        return shapeY;
+    }
 
     /**
      * Sets the {@link Shape} of this {@link ShapeMarker}.
      * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be the z-coordinates in the map.</p>
      * @param shape the new {@link Shape}
      * @param y the new height (y-coordinate) of the shape on the map
+     *
+     * @see #centerPosition()
      */
-    void setShape(Shape shape, float y);
+    public void setShape(Shape shape, float y) {
+        this.shape = Objects.requireNonNull(shape, "shape must not be null");
+        this.shapeY = y;
+    }
+
+    /**
+     * Sets the position of this {@link ShapeMarker} to the center of the {@link Shape} (it's bounding box).
+     * <p><i>(Invoke this after changing the {@link Shape} to make sure the markers position gets updated as well)</i></p>
+     */
+    public void centerPosition() {
+        setPosition(calculateShapeCenter(shape, shapeY));
+    }
 
     /**
      * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
      * @return <code>true</code> if the depthTest is enabled
      */
-    boolean isDepthTestEnabled();
+    public boolean isDepthTestEnabled() {
+        return depthTest;
+    }
 
     /**
      * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
      * @param enabled if the depth-test should be enabled for this {@link ShapeMarker}
      */
-    void setDepthTestEnabled(boolean enabled);
+    public void setDepthTestEnabled(boolean enabled) {
+        this.depthTest = enabled;
+    }
 
     /**
      * Getter for the width of the border-line of this {@link ShapeMarker}.
      * @return the width of the line in pixels
      */
-    int getLineWidth();
+    public int getLineWidth() {
+        return lineWidth;
+    }
 
     /**
      * Sets the width of the border-line for this {@link ShapeMarker}.
      * @param width the new width in pixels
      */
-    void setLineWidth(int width);
-
-    /**
-     * Getter for the {@link Color} of the border of the shape.
-     * @return the border-color
-     * @deprecated Use {@link #getLineColor()} instead
-     */
-    default Color getBorderColor() {
-        return getLineColor();
-    }
-
-    /**
-     * Sets the {@link Color} of the border of the shape.
-     * @param color the new border-color
-     * @deprecated Use {@link #setLineColor(Color)} instead
-     */
-    default void setBorderColor(Color color){
-        setLineColor(color);
+    public void setLineWidth(int width) {
+        this.lineWidth = width;
     }
 
     /**
      * Getter for the {@link Color} of the border-line of the shape.
      * @return the line-color
      */
-    Color getLineColor();
+    public Color getLineColor() {
+        return lineColor;
+    }
 
     /**
      * Sets the {@link Color} of the border-line of the shape.
      * @param color the new line-color
      */
-    void setLineColor(Color color);
+    public void setLineColor(Color color) {
+        this.lineColor = Objects.requireNonNull(color, "color must not be null");
+    }
 
     /**
      * Getter for the fill-{@link Color} of the shape.
      * @return the fill-color
      */
-    Color getFillColor();
+    public Color getFillColor() {
+        return fillColor;
+    }
 
     /**
      * Sets the fill-{@link Color} of the shape.
      * @param color the new fill-color
      */
-    void setFillColor(Color color);
+    public void setFillColor(Color color) {
+        this.fillColor = Objects.requireNonNull(color, "color must not be null");
+    }
 
     /**
      * Sets the border- and fill- color.
@@ -131,9 +183,14 @@ public interface ShapeMarker extends ObjectMarker, DistanceRangedMarker {
      * @see #setLineColor(Color)
      * @see #setFillColor(Color)
      */
-    default void setColors(Color lineColor, Color fillColor) {
+    public void setColors(Color lineColor, Color fillColor) {
         setLineColor(lineColor);
         setFillColor(fillColor);
+    }
+
+    private static Vector3d calculateShapeCenter(Shape shape, float shapeY) {
+        Vector2d center = shape.getMin().add(shape.getMax()).mul(0.5);
+        return new Vector3d(center.getX(), shapeY, center.getY());
     }
 
 }

@@ -27,8 +27,9 @@ package de.bluecolored.bluemap.api;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
+import de.bluecolored.bluemap.api.marker.MarkerSet;
 
-import java.util.Optional;
+import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -54,6 +55,13 @@ public interface BlueMapMap {
      * @return the {@link BlueMapWorld} of this map
      */
     BlueMapWorld getWorld();
+
+    /**
+     * Getter for a (modifiable) {@link Map} of {@link MarkerSet}s with the key being the {@link MarkerSet}'s id.
+     * Changing this map will change the {@link MarkerSet}s and markers displayed on the web-app for this map.
+     * @return a {@link Map} of {@link MarkerSet}s.
+     */
+    Map<String, MarkerSet> getMarkerSets();
 
     /**
      * Getter for the size of all tiles on this map in blocks.
@@ -106,7 +114,7 @@ public interface BlueMapMap {
         Vector2i offset = getTileOffset();
         Vector2i size = getTileSize();
 
-        return Vector2i.from(
+        return new Vector2i(
                 (int) Math.floor((blockX - offset.getX()) / size.getX()),
                 (int) Math.floor((blockZ - offset.getY()) / size.getY())
             );

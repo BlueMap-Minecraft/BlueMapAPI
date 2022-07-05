@@ -24,29 +24,76 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import com.flowpowered.math.vector.Vector2i;
-import de.bluecolored.bluemap.api.BlueMapAPI;
 
-public interface HtmlMarker extends Marker, DistanceRangedMarker {
+import com.flowpowered.math.vector.Vector2i;
+import com.flowpowered.math.vector.Vector3d;
+
+import java.util.Objects;
+
+/**
+ * A marker that is a html-element placed somewhere on the map.
+ */
+public class HtmlMarker extends DistanceRangedMarker {
+
+    private Vector2i anchor;
+    private String html;
+
+    /**
+     * Creates a new {@link HtmlMarker}.
+     *
+     * @param label the label of the marker
+     * @param position the coordinates of the marker
+     * @param html the html-content of the marker
+     *
+     * @see #setLabel(String)
+     * @see #setPosition(Vector3d)
+     * @see #setHtml(String)
+     */
+    public HtmlMarker(String label, Vector3d position, String html) {
+        this(label, position, html, new Vector2i(0, 0));
+    }
+
+    /**
+     * Creates a new {@link HtmlMarker}.
+     *
+     * @param label the label of the marker
+     * @param position the coordinates of the marker
+     * @param html the html-content of the marker
+     * @param anchor the anchor-point of the html-content
+     *
+     * @see #setLabel(String)
+     * @see #setPosition(Vector3d)
+     * @see #setHtml(String)
+     * @see #setAnchor(Vector2i)
+     */
+    public HtmlMarker(String label, Vector3d position, String html, Vector2i anchor) {
+        super("html", label, position);
+        this.html = Objects.requireNonNull(html, "html must not be null");
+        this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+    }
 
     /**
      * Getter for the position (in pixels) where the html-element is anchored to the map.
      * @return the anchor-position in pixels
      */
-    Vector2i getAnchor();
+    public Vector2i getAnchor() {
+        return anchor;
+    }
 
     /**
      * Sets the position (in pixels) where the html-element is anchored to the map.
      * @param anchor the anchor-position in pixels
      */
-    void setAnchor(Vector2i anchor);
+    public void setAnchor(Vector2i anchor) {
+        this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+    }
 
     /**
      * Sets the position (in pixels) where the html-element is anchored to the map.
      * @param x the anchor-x-position in pixels
      * @param y the anchor-y-position in pixels
      */
-    default void setAnchor(int x, int y) {
+    public void setAnchor(int x, int y) {
         setAnchor(new Vector2i(x, y));
     }
 
@@ -54,7 +101,9 @@ public interface HtmlMarker extends Marker, DistanceRangedMarker {
      * Getter for the html-code of this HTML marker
      * @return the html-code
      */
-    String getHtml();
+    public String getHtml() {
+        return html;
+    }
 
     /**
      * Sets the html for this {@link HtmlMarker}.
@@ -66,6 +115,8 @@ public interface HtmlMarker extends Marker, DistanceRangedMarker {
      *
      * @param html the html that will be inserted as the marker.
      */
-    void setHtml(String html);
+    public void setHtml(String html) {
+        this.html = Objects.requireNonNull(html, "html must not be null");
+    }
 
 }

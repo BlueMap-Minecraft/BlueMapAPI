@@ -25,135 +25,84 @@
 package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.BlueMapMap;
 
-import java.util.Optional;
+import java.util.Objects;
 
 /**
- * A marker that is displayed on one of the maps in the web-app.
- * <p>Each marker has an id that is unique in the {@link MarkerSet} that it is in.</p>
+ * The Base-Class for all markers that can be displayed in the web-app.
+ *
+ * @see HtmlMarker
+ * @see POIMarker
+ * @see ShapeMarker
+ * @see ExtrudeMarker
+ * @see LineMarker
  */
-public interface Marker {
+public abstract class Marker {
+
+    private final String type;
+    private String label;
+    private Vector3d position;
+
+    public Marker(String type, String label, Vector3d position) {
+        this.type = Objects.requireNonNull(type, "type cannot be null");
+        this.label = Objects.requireNonNull(label, "label cannot be null");
+        this.position = Objects.requireNonNull(position, "position cannot be null");
+    }
 
     /**
-     * Getter for the id of this {@link Marker}.
-     * <p>The id is unique in the {@link MarkerSet} that this marker is in.</p>
-     * @return the id of this {@link Marker}
+     * Returns the type of the marker.
+     * @return the type-id of the marker.
      */
-    String getId();
-
-    /**
-     * Getter for the {@link BlueMapMap} this {@link Marker} lives in.
-     * @return the {@link BlueMapMap} this {@link Marker} lives in
-     */
-    BlueMapMap getMap();
-
-    /**
-     * Sets the {@link BlueMapMap} this {@link Marker} lives in
-     * @param map the new {@link BlueMapMap}
-     */
-    void setMap(BlueMapMap map);
-
-    /**
-     * Getter for the position of where this {@link Marker} lives on the map.
-     * @return the position of this {@link Marker}
-     */
-    Vector3d getPosition();
-
-    /**
-     * Sets the position of where this {@link Marker} lives on the map.
-     * @param position the new position
-     */
-    void setPosition(Vector3d position);
+    public String getType() {
+        return type;
+    }
 
     /**
      * Getter for the label of this marker.
      * @return the label of this {@link Marker}
      */
-    String getLabel();
+    public String getLabel() {
+        return label;
+    }
 
     /**
      * Sets the label of this {@link Marker}.
-     * <p>
-     * 	<b>Using html-tags in the label is possible but deprecated!</b>
-     * </p>
-     * <p>
-     * 	<b>Important:</b><br>
-     * 	Html-tags in the label will not be escaped, so you can use them to style the {@link Marker}-labels.<br>
-     * 	Make sure you escape all html-tags from possible user inputs to prevent possible <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
-     * </p>
+     * <p><i>(HTML-Tags will be escaped.)</i></p>
      *
      * @param label the new label for this {@link Marker}
      */
-    void setLabel(String label);
+    public void setLabel(String label) {
+        //escape html-tags
+        this.label = label
+                .replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
 
     /**
-     * Getter for the minimum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-     * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
-     *
-     * @return the minimum distance for this {@link Marker} to be displayed
-     * @deprecated Not all marker-types support this
+     * Getter for the position of where this {@link Marker} lives on the map.
+     * @return the position of this {@link Marker}
      */
-    double getMinDistance();
+    public Vector3d getPosition() {
+        return position;
+    }
 
     /**
-     * Sets the minimum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-     * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
-     *
-     * @param minDistance the new minimum distance
-     * @deprecated Not all marker-types support this
+     * Sets the position of where this {@link Marker} lives on the map.
+     * @param position the new position
      */
-    void setMinDistance(double minDistance);
+    public void setPosition(Vector3d position) {
+        this.position = position;
+    }
 
     /**
-     * Getter for the maximum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-     * If the camera is further to this {@link Marker} than this distance, it will be hidden!
-     *
-     * @return the maximum distance for this {@link Marker} to be displayed
-     * @deprecated Not all marker-types support this
+     * Sets the position of where this {@link Marker} lives on the map.
+     * @param x the x-coordinate of the new position
+     * @param y the y-coordinate of the new position
+     * @param z the z-coordinate of the new position
      */
-    double getMaxDistance();
-
-    /**
-     * Sets the maximum distance of the camera to the position ({@link #getPosition()} of the {@link Marker} for it to be displayed.<br>
-     * If the camera is further to this {@link Marker} than this distance, it will be hidden!
-     *
-     * @param maxDistance the new maximum distance
-     * @deprecated Not all marker-types support this
-     */
-    void setMaxDistance(double maxDistance);
-
-    /**
-     * Gets the link-address of this {@link Marker}.<br>
-     * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
-     *
-     * @return the {@link Optional} link
-     * @deprecated Not all marker-types support this
-     */
-    Optional<String> getLink();
-
-    /**
-     * If this is <code>true</code> the link ({@link #getLink()}) will be opened in a new tab.
-     * @return whether the link will be opened in a new tab
-     * @see #getLink()
-     * @deprecated Not all marker-types support this
-     */
-    boolean isNewTab();
-
-    /**
-     * Sets the link-address of this {@link Marker}.<br>
-     * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
-     *
-     * @param link the link, or <code>null</code> to disable the link
-     * @param newTab whether the link should be opened in a new tab
-     * @deprecated Not all marker-types support this
-     */
-    void setLink(String link, boolean newTab);
-
-    /**
-     * Removes the link of this {@link Marker}.
-     * @deprecated Not all marker-types support this
-     */
-    void removeLink();
+    public void setPosition(int x, int y, int z) {
+        setPosition(new Vector3d(x, y, z));
+    }
 
 }

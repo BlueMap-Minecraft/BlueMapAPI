@@ -22,93 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.bluecolored.bluemap.api.renderer;
+package de.bluecolored.bluemap.api;
 
 import com.flowpowered.math.vector.Vector2i;
-import com.flowpowered.math.vector.Vector3i;
-import de.bluecolored.bluemap.api.BlueMapMap;
-import de.bluecolored.bluemap.api.BlueMapWorld;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
- * The {@link RenderAPI} is used to schedule tile-renders and process them on a number of different threads.
+ * The {@link RenderManager} is used to schedule tile-renders and process them on a number of different threads.
  */
-public interface RenderAPI {
-
-    /**
-     * Schedules the render of the map-tile at this block position for all maps of this world.<br>
-     * If there already is a render scheduled for one of the tiles, a second one will <b>not</b> be created.
-     *
-     * @param world the {@link UUID} of the {@link BlueMapWorld} to render
-     * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tiles will be rendered not only that block)
-     *
-     * @throws IllegalArgumentException if there is no world loaded with the provided {@link UUID}
-     */
-    @Deprecated
-    void render(UUID world, Vector3i blockPosition);
-
-    /**
-     * Schedules the render of the map-tile at this block position for all maps of this world.<br>
-     * If there already is a render scheduled for one of the tiles, a second one will <b>not</b> be created.
-     *
-     * @param world the {@link BlueMapWorld} to render
-     * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tiles will be rendered not only that block)
-     */
-    @Deprecated
-    default void render(BlueMapWorld world, Vector3i blockPosition) {
-        for (BlueMapMap map : world.getMaps()) {
-            render(map, blockPosition);
-        }
-    }
-
-    /**
-     * Schedules the render of the map-tile at this block position.<br>
-     * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
-     *
-     * @param mapId the id of the {@link BlueMapMap} to render
-     * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tile will be rendered not only that block)
-     *
-     * @throws IllegalArgumentException if there is no map loaded with the provided mapId
-     */
-    @Deprecated
-    void render(String mapId, Vector3i blockPosition);
-
-    /**
-     * Schedules the render of map-tile at this block position and returns the created render-ticket.<br>
-     * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
-     *
-     * @param map the {@link BlueMapMap}
-     * @param blockPosition a {@link Vector3i} for the block-position to render (the whole map-tile will be rendered not only that block)
-     */
-    @Deprecated
-    default void render(BlueMapMap map, Vector3i blockPosition) {
-        render(map, map.posToTile(blockPosition));
-    }
-
-    /**
-     * Schedules the render of the map-tile.<br>
-     * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
-     *
-     * @param mapId the id of the {@link BlueMapMap} to render
-     * @param tile a {@link Vector2i} for the tile-position to render
-     *
-     * @throws IllegalArgumentException if there is no map loaded with the provided mapId
-     */
-    @Deprecated
-    void render(String mapId, Vector2i tile);
-
-    /**
-     * Schedules the render of the map-tile.<br>
-     * If there already is a render scheduled for the tile, a second one will <b>not</b> be created.
-     *
-     * @param map the {@link BlueMapMap}
-     * @param tile a {@link Vector2i} for the tile-position to render
-     */
-    @Deprecated
-    void render(BlueMapMap map, Vector2i tile);
+public interface RenderManager {
 
     /**
      * Schedules a task to update the given map.
@@ -153,25 +77,34 @@ public interface RenderAPI {
     int renderQueueSize();
 
     /**
-     * Getter for the count of render threads.
+     * Getter for the current count of render threads.
      * @return the count of render threads
      */
     int renderThreadCount();
 
     /**
-     * Whether this {@link RenderAPI} is currently running or paused.
+     * Whether this {@link RenderManager} is currently running or stopped.
      * @return <code>true</code> if this renderer is running
      */
     boolean isRunning();
 
     /**
      * Starts the renderer if it is not already running.
+     * The renderer will be started with the configured number of render threads.
      */
     void start();
 
     /**
-     * Pauses the renderer if it currently is running.
+     * Starts the renderer if it is not already running.
+     * The renderer will be started with the given number of render threads.
+     * @param threadCount the number of render threads to use,
+     *                    must be greater than 0 and should be less than or equal to the number of available cpu-cores.
      */
-    void pause();
+    void start(int threadCount);
+
+    /**
+     * Stops the renderer if it currently is running.
+     */
+    void stop();
 
 }

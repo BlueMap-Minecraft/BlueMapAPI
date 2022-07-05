@@ -25,47 +25,83 @@
 package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector2i;
+import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.WebApp;
 
-import de.bluecolored.bluemap.api.BlueMapAPI;
+import java.util.Objects;
 
-public interface POIMarker extends Marker, DistanceRangedMarker {
+public class POIMarker extends DistanceRangedMarker {
+
+    private String icon;
+    private Vector2i anchor;
+
+    /**
+     * Creates a new {@link POIMarker} with the standard icon.
+     *
+     * @param label the label of the marker
+     * @param position the coordinates of the marker
+     *
+     * @see #setLabel(String)
+     * @see #setPosition(Vector3d)
+     */
+    public POIMarker(String label, Vector3d position) {
+        this(label, position, "assets/poi.svg", new Vector2i(25, 45));
+    }
+
+    /**
+     * Creates a new {@link POIMarker}.
+     *
+     * @param label the label of the marker
+     * @param position the coordinates of the marker
+     * @param iconAddress the html-content of the marker
+     * @param anchor the anchor-point of the html-content
+     *
+     * @see #setLabel(String)
+     * @see #setPosition(Vector3d)
+     * @see #setIcon(String, Vector2i)
+     */
+    public POIMarker(String label, Vector3d position, String iconAddress, Vector2i anchor) {
+        super("poi", label, position);
+        this.icon = Objects.requireNonNull(iconAddress, "iconAddress must not be null");
+        this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+    }
 
     /**
      * Getter for the relative address of the icon used to display this {@link POIMarker}
      * @return the relative web-address of the icon
      */
-    String getIconAddress();
-
-    /**
-     * Getter for the position (in pixels) where the icon is anchored to the map.
-     * @return the anchor-position in pixels
-     * @deprecated Use {@link #getAnchor()} instead
-     */
-    default Vector2i getIconAnchor() {
-        return getAnchor();
+    public String getIconAddress() {
+        return icon;
     }
 
     /**
      * Getter for the position (in pixels) where the icon is anchored to the map.
      * @return the anchor-position in pixels
      */
-    Vector2i getAnchor();
+    public Vector2i getAnchor() {
+        return anchor;
+    }
 
     /**
      * Sets the icon for this {@link POIMarker}.
-     * @param iconAddress the web-address of the icon-image. Can be an absolute or relative. You can also use an address returned by {@link BlueMapAPI#createImage(java.awt.image.BufferedImage, String)}.
+     * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
+     *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
      * @param anchorX the x-position of the position (in pixels) where the icon is anchored to the map
      * @param anchorY the y-position of the position (in pixels) where the icon is anchored to the map
      */
-    default void setIcon(String iconAddress, int anchorX, int anchorY) {
+    public void setIcon(String iconAddress, int anchorX, int anchorY) {
         setIcon(iconAddress, new Vector2i(anchorX, anchorY));
     }
 
     /**
      * Sets the icon for this {@link POIMarker}.
-     * @param iconAddress the web-address of the icon-image. Can be an absolute or relative. You can also use an address returned by {@link BlueMapAPI#createImage(java.awt.image.BufferedImage, String)}.
+     * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
+     *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
      * @param anchor the position of the position (in pixels) where the icon is anchored to the map
      */
-    void setIcon(String iconAddress, Vector2i anchor);
+    public void setIcon(String iconAddress, Vector2i anchor) {
+        this.icon = Objects.requireNonNull(iconAddress, "iconAddress must not be null");
+        this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+    }
 
 }

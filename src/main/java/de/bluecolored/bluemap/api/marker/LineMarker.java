@@ -24,56 +24,125 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import java.awt.*;
+import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.math.Color;
 
-public interface LineMarker extends ObjectMarker, DistanceRangedMarker {
+import java.util.Objects;
+
+public class LineMarker extends ObjectMarker {
+
+    private Line line;
+    private boolean depthTest = true;
+    private int lineWidth = 2;
+    private Color lineColor = new Color(255, 0, 0, 1f);
+
+    /**
+     * Creates a new {@link LineMarker}.
+     * <p><i>(The position of the marker will be the center of the line (it's bounding box))</i></p>
+     *
+     * @param label the label of the marker
+     * @param line the {@link Line} of the marker
+     *
+     * @see #setLabel(String)
+     * @see #setLine(Line)
+     */
+    public LineMarker(String label, Line line) {
+        this(label, calculateLineCenter(Objects.requireNonNull(line, "shape must not be null")), line);
+    }
+
+    /**
+     * Creates a new {@link LineMarker}.
+     * <p><i>(Since the line has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+     *
+     * @param label the label of the marker
+     * @param position the coordinates of the marker
+     * @param line the {@link Line} of the marker
+     *
+     * @see #setLabel(String)
+     * @see #setPosition(Vector3d)
+     * @see #setLine(Line)
+     */
+    public LineMarker(String label, Vector3d position, Line line) {
+        super("extrude", label, position);
+        this.line = Objects.requireNonNull(line, "line must not be null");
+    }
 
     /**
      * Getter for {@link Line} of this {@link LineMarker}.
      * @return the {@link Line}
      */
-    Line getLine();
+    public Line getLine() {
+        return line;
+    }
 
     /**
      * Sets the {@link Line} of this {@link LineMarker}.
      * @param line the new {@link Line}
+     *
+     * @see #centerPosition()
      */
-    void setLine(Line line);
+    public void setLine(Line line) {
+        this.line = Objects.requireNonNull(line, "line must not be null");
+    }
+
+    /**
+     * Sets the position of this {@link LineMarker} to the center of the {@link Line} (it's bounding box).
+     * <p><i>(Invoke this after changing the {@link Line} to make sure the markers position gets updated as well)</i></p>
+     */
+    public void centerPosition() {
+        setPosition(calculateLineCenter(line));
+    }
 
     /**
      * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
      * @return <code>true</code> if the depthTest is enabled
      */
-    boolean isDepthTestEnabled();
+    public boolean isDepthTestEnabled() {
+        return depthTest;
+    }
 
     /**
      * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
      * @param enabled if the depth-test should be enabled for this {@link LineMarker}
      */
-    void setDepthTestEnabled(boolean enabled);
+    public void setDepthTestEnabled(boolean enabled) {
+        this.depthTest = enabled;
+    }
 
     /**
      * Getter for the width of the lines of this {@link LineMarker}.
      * @return the width of the lines in pixels
      */
-    int getLineWidth();
+    public int getLineWidth() {
+        return lineWidth;
+    }
 
     /**
      * Sets the width of the lines for this {@link LineMarker}.
      * @param width the new width in pixels
      */
-    void setLineWidth(int width);
+    public void setLineWidth(int width) {
+        this.lineWidth = width;
+    }
 
     /**
      * Getter for the {@link Color} of the border-line of the shape.
      * @return the line-color
      */
-    Color getLineColor();
+    public Color getLineColor() {
+        return lineColor;
+    }
 
     /**
      * Sets the {@link Color} of the border-line of the shape.
      * @param color the new line-color
      */
-    void setLineColor(Color color);
+    public void setLineColor(Color color) {
+        this.lineColor = Objects.requireNonNull(color, "color must not be null");
+    }
+
+    private static Vector3d calculateLineCenter(Line line) {
+        return line.getMin().add(line.getMax()).mul(0.5);
+    }
 
 }

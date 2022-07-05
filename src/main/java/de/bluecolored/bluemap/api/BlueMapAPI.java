@@ -24,13 +24,9 @@
  */
 package de.bluecolored.bluemap.api;
 
-import com.flowpowered.math.vector.Vector2i;
-import de.bluecolored.bluemap.api.marker.Marker;
-import de.bluecolored.bluemap.api.marker.MarkerAPI;
-import de.bluecolored.bluemap.api.renderer.RenderAPI;
-
-import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -41,27 +37,48 @@ import java.util.function.Consumer;
  * <p>This API is thread-save, so you <b>can</b> use it async, off the main-server-thread, to save performance!</p>
  */
 public abstract class BlueMapAPI {
-    private static BlueMapAPI instance;
 
-    @Deprecated
-    private static final Collection<BlueMapAPIListener> listener = new HashSet<>(2);
+    @SuppressWarnings("unused")
+    private static final String VERSION, GIT_HASH, GIT_CLEAN;
+    static {
+        String version = "DEV", gitHash = "DEV", gitClean = "DEV";
+        URL url = BlueMapAPI.class.getResource("/de/bluecolored/bluemap/api/version");
+        if (url != null) {
+            try (InputStream in = url.openStream(); Scanner scanner = new Scanner(in)) {
+                version = scanner.nextLine();
+                gitHash = scanner.nextLine();
+                gitClean = scanner.nextLine();
+            } catch (IOException ex) {
+                System.err.println("Failed to load version from resources!");
+                ex.printStackTrace();
+            }
+        }
+
+        if (version.equals("${version}")) version = "DEV";
+        if (gitHash.equals("${gitHash}")) version = "DEV";
+        if (gitClean.equals("${gitClean}")) version = "DEV";
+
+        VERSION = version;
+        GIT_HASH = gitHash;
+        GIT_CLEAN = gitClean;
+    }
+
+    private static BlueMapAPI instance;
 
     private static final Collection<Consumer<BlueMapAPI>> onEnableConsumers = new HashSet<>(2);
     private static final Collection<Consumer<BlueMapAPI>> onDisableConsumers = new HashSet<>(2);
 
     /**
-     * Getter for the {@link RenderAPI}.
-     * @return the {@link RenderAPI}
+     * Getter for the {@link RenderManager}.
+     * @return the {@link RenderManager}
      */
-    public abstract RenderAPI getRenderAPI();
+    public abstract RenderManager getRenderManager();
 
     /**
-     * Getter for the {@link MarkerAPI}.<br>
-     * Calling this gives you a fresh loaded {@link MarkerAPI}, so you don't have to call {@link MarkerAPI#load()} right away!
-     * @return the {@link MarkerAPI}
-     * @throws IOException if there was an IOException loading the marker.json
+     * Getter for the {@link WebApp}.
+     * @return the {@link WebApp}
      */
-    public abstract MarkerAPI getMarkerAPI() throws IOException;
+    public abstract WebApp getWebApp();
 
     /**
      * Getter for all {@link BlueMapMap}s loaded by BlueMap.
@@ -76,17 +93,23 @@ public abstract class BlueMapAPI {
     public abstract Collection<BlueMapWorld> getWorlds();
 
     /**
-     * Getter for a {@link BlueMapWorld} loaded by BlueMap with the given {@link UUID}.
+     * Getter for a {@link BlueMapWorld} loaded by BlueMap.
      *
-     * <p><i>See the documentation of {@link BlueMapWorld#getUuid()} for more information about the nature of the worlds {@link UUID}s!</i></p>
-     *
-     * @see BlueMapWorld#getUuid()
-     *
-     * @param uuid the {@link UUID} of the world
-     *
+     * @param world Any object that BlueMap can use to identify a world.
+     *              <p>
+     *              <b>This could be:</b>
+     *              <ul>
+     *                  <li>A {@link String} that is the id of the world</li>
+     *                  <li>A {@link Path} that is the path to the world-folder</li>
+     *                  <li>A Resource-Key object, {@link UUID} or anything that your platform uses to identify worlds</li>
+     *                  <li>The actual world-object, any object directly representing the a world on your platform</li>
+     *              </ul>
+     *              <i>("Platform" here stands for the mod/plugin-loader or server-implementation you are using,
+     *              e.g. Spigot, Forge, Fabric or Sponge)</i>
+     *              </p>
      * @return an {@link Optional} with the {@link BlueMapWorld} if it exists
      */
-    public abstract Optional<BlueMapWorld> getWorld(UUID uuid);
+    public abstract Optional<BlueMapWorld> getWorld(Object world);
 
     /**
      * Getter for a {@link BlueMapMap} loaded by BlueMap with the given id.
@@ -96,68 +119,17 @@ public abstract class BlueMapAPI {
     public abstract Optional<BlueMapMap> getMap(String id);
 
     /**
-     * Creates an image-file with the given {@link BufferedImage} somewhere in the web-root, so it can be used in the web-app (e.g. for {@link Marker}-icons).
-     *
-     * <p>The given <code>path</code> is used as file-name and (separated with '/') optional folders to organize the image-files. Do NOT include the file-ending! (e.g. <code>"someFolder/somePOIIcon"</code> will result in a file "somePOIIcon.png" in a folder "someFolder").</p>
-     * <p>If the image file with the given path already exists, it will be replaced.</p>
-     *
-     * @param image the image to create
-     * @param path the path/name of this image, the separator-char is '/'
-     * @return the relative address of the image in the web-app,
-     * which can be used as it is e.g. in the {@link de.bluecolored.bluemap.api.marker.POIMarker#setIcon(String, Vector2i)} method
-     * @throws IOException If an {@link IOException} is thrown while writing the image
-     */
-    public abstract String createImage(BufferedImage image, String path) throws IOException;
-
-    /**
-     * Lists all images that are available. This includes all images previously created with the {@link #createImage(BufferedImage, String)}
-     * function, but might include more.
-     * @return A map of available images where:
-     * <ul>
-     * <li>the <b>key</b> is the image path how it would be used in the "path" parameter of the {@link #createImage(BufferedImage, String)} method</li>
-     * <li>and the <b>value</b> is the relative address of the image. The same ones that are returned from the {@link #createImage(BufferedImage, String)} method</li>
-     * </ul>
-     * @throws IOException If an {@link IOException} is thrown while reading the images
-     */
-    public abstract Map<String, String> availableImages() throws IOException;
-
-    /**
-     * Getter for the configured web-root folder
-     * @return The {@link Path} of the web-root folder
-     */
-    public abstract Path getWebRoot();
-
-    /**
      * Getter for the installed BlueMap version
      * @return the version-string
      */
     public abstract String getBlueMapVersion();
 
     /**
-     * Register a listener that will be called when the API enables/disables
-     * @param listener the {@link BlueMapAPIListener}
-     *
-     * @deprecated Implementing {@link BlueMapAPIListener} can cause a ClassNotFoundException when you soft-depend on BlueMap and your plugin/mod gets used without BlueMap.
-     * Use {@link BlueMapAPI#onEnable(Consumer)} and {@link BlueMapAPI#onDisable(Consumer)} instead.
+     * Getter for the installed BlueMapAPI version
+     * @return the version-string
      */
-    @Deprecated
-    public static synchronized void registerListener(BlueMapAPIListener listener) {
-        BlueMapAPI.listener.add(listener);
-        if (BlueMapAPI.instance != null) listener.onEnable(BlueMapAPI.instance);
-    }
-
-    /**
-     * Removes/Unregisters a previously registered listener
-     * @param listener the {@link BlueMapAPIListener} instance that has been registered previously
-     *
-     * @return <code>true</code> if a listener was removed as a result of this call
-     *
-     * @deprecated Implementing {@link BlueMapAPIListener} can cause a ClassNotFoundException when you soft-depend on BlueMap and your plugin/mod gets used without BlueMap.
-     * Use {@link BlueMapAPI#onEnable(Consumer)} and {@link BlueMapAPI#onDisable(Consumer)} instead.
-     */
-    @Deprecated
-    public static synchronized boolean unregisterListener(BlueMapAPIListener listener) {
-        return BlueMapAPI.listener.remove(listener);
+    public String getAPIVersion() {
+        return VERSION;
     }
 
     /**
@@ -206,9 +178,8 @@ public abstract class BlueMapAPI {
      * Used by BlueMap to register the API and call the listeners properly.
      * @param instance the {@link BlueMapAPI}-instance
      * @return <code>true</code> if the instance has been registered, <code>false</code> if there already was an instance registered
-     * @throws ExecutionException if a {@link BlueMapAPIListener} threw an exception during the registration
+     * @throws ExecutionException if a listener threw an exception during the registration
      */
-    @SuppressWarnings("deprecation")
     protected static synchronized boolean registerInstance(BlueMapAPI instance) throws ExecutionException {
         if (BlueMapAPI.instance != null) return false;
 
@@ -219,15 +190,6 @@ public abstract class BlueMapAPI {
         for (Consumer<BlueMapAPI> listener : BlueMapAPI.onEnableConsumers) {
             try {
                 listener.accept(BlueMapAPI.instance);
-            } catch (Throwable ex) {
-                thrownExceptions.add(ex);
-            }
-        }
-
-        // backwards compatibility
-        for (BlueMapAPIListener listener : BlueMapAPI.listener) {
-            try {
-                listener.onEnable(BlueMapAPI.instance);
             } catch (Throwable ex) {
                 thrownExceptions.add(ex);
             }
@@ -248,9 +210,8 @@ public abstract class BlueMapAPI {
      * Used by BlueMap to unregister the API and call the listeners properly.
      * @param instance the {@link BlueMapAPI} instance
      * @return <code>true</code> if the instance was unregistered, <code>false</code> if there was no or an other instance registered
-     * @throws ExecutionException if a {@link BlueMapAPIListener} threw an exception during the un-registration
+     * @throws ExecutionException if a listener threw an exception during the un-registration
      */
-    @SuppressWarnings("deprecation")
     protected static synchronized boolean unregisterInstance(BlueMapAPI instance) throws ExecutionException {
         if (BlueMapAPI.instance != instance) return false;
 
@@ -259,15 +220,6 @@ public abstract class BlueMapAPI {
         for (Consumer<BlueMapAPI> listener : BlueMapAPI.onDisableConsumers) {
             try {
                 listener.accept(BlueMapAPI.instance);
-            } catch (Exception ex) {
-                thrownExceptions.add(ex);
-            }
-        }
-
-        // backwards compatibility
-        for (BlueMapAPIListener listener : BlueMapAPI.listener) {
-            try {
-                listener.onDisable(BlueMapAPI.instance);
             } catch (Exception ex) {
                 thrownExceptions.add(ex);
             }

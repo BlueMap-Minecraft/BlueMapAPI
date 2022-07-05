@@ -26,7 +26,6 @@ package de.bluecolored.bluemap.api;
 
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.UUID;
 
 /**
  * This class represents a world loaded by BlueMap.
@@ -34,25 +33,10 @@ import java.util.UUID;
 public interface BlueMapWorld {
 
     /**
-     * <p>Getter for the {@link UUID} of the world.</p>
-     * <p>
-     * 	The {@link UUID}s of this worlds are <b>not</b> guaranteed to be consistent across reloads/restarts!
-     * </p>
-     * <p>
-     * 	<b>Implementation notes:</b><br>
-     * 	The used UUID highly depends on the implementation
-     * </p>
-     * 	<table>
-     * 		<caption>Implementations</caption>
-     *  	<tr><th>Sponge</th><td>The UUID is equal to the returned UUID by world-instances of the Sponge-API, so you can just use <code>spongeWorld.getUniqueId()</code></td></tr>
-     *  	<tr><th>Bukkit</th><td>The UUID is equal to the returned UUID by world-instances of the Bukkit-API, so you can just use <code>bukkitWorld.getUID()</code></td></tr>
-     *  	<tr><th>Forge</th><td>The UUID is randomly generated, and changes on each reload/restart</td></tr>
-     *  	<tr><th>CLI</th><td>The UUID is randomly generated, and changes on each reload/restart</td></tr>
-     *  </table>
-     *
-     * @return the {@link UUID} of the world
+     * Getter for the id of this world.
+     * @return the id of this world
      */
-    UUID getUuid();
+    String getId();
 
     /**
      * Getter for the {@link Path} of this world's save-files (folder). This matches the folder configured in bluemap's config for this map ( <code>world:</code> ).

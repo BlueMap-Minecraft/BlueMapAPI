@@ -25,6 +25,7 @@
 package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector3d;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -34,8 +35,9 @@ import java.util.Arrays;
 public class Line {
 
     private final Vector3d[] points;
-    private Vector3d min = null;
-    private Vector3d max = null;
+
+    @Nullable
+    private Vector3d min = null, max = null;
 
     public Line(Vector3d... points) {
         if (points.length < 2) throw new IllegalArgumentException("A line has to have at least 2 points!");

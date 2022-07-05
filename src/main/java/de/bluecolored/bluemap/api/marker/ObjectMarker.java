@@ -24,13 +24,34 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-public interface ObjectMarker extends Marker, LinkMarker {
+import com.flowpowered.math.vector.Vector3d;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.Optional;
+
+public abstract class ObjectMarker extends DistanceRangedMarker {
+
+    private String detail;
+
+    @Nullable
+    private String link;
+    private boolean newTab;
+
+    public ObjectMarker(String type, String label, Vector3d position) {
+        super(type, label, position);
+        this.detail = Objects.requireNonNull(label, "label must not be null");
+        this.link = null;
+        this.newTab = false;
+    }
 
     /**
      * Getter for the detail of this marker. The label can include html-tags.
      * @return the detail of this {@link ObjectMarker}
      */
-    String getDetail();
+    public String getDetail() {
+        return detail;
+    }
 
     /**
      * Sets the detail of this {@link ObjectMarker}. The detail can include html-tags.<br>
@@ -43,6 +64,47 @@ public interface ObjectMarker extends Marker, LinkMarker {
      *
      * @param detail the new detail for this {@link ObjectMarker}
      */
-    void setDetail(String detail);
+    public void setDetail(String detail) {
+        this.detail = Objects.requireNonNull(detail);
+    }
+
+    /**
+     * Gets the link-address of this {@link Marker}.<br>
+     * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
+     *
+     * @return the {@link Optional} link
+     */
+    public Optional<String> getLink() {
+        return Optional.ofNullable(link);
+    }
+
+    /**
+     * If this is <code>true</code> the link ({@link #getLink()}) will be opened in a new tab.
+     * @return whether the link will be opened in a new tab
+     * @see #getLink()
+     */
+    public boolean isNewTab() {
+        return newTab;
+    }
+
+    /**
+     * Sets the link-address of this {@link Marker}.<br>
+     * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
+     *
+     * @param link the link, or <code>null</code> to disable the link
+     * @param newTab whether the link should be opened in a new tab
+     */
+    public void setLink(String link, boolean newTab) {
+        this.link = Objects.requireNonNull(link, "link must not be null");
+        this.newTab = newTab;
+    }
+
+    /**
+     * Removes the link of this {@link Marker}.
+     */
+    public void removeLink() {
+        this.link = null;
+        this.newTab = false;
+    }
 
 }

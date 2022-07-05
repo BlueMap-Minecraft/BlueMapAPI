@@ -24,30 +24,84 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
-import java.awt.*;
+import com.flowpowered.math.vector.Vector2d;
+import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.math.Color;
 
-public interface ExtrudeMarker extends ObjectMarker, DistanceRangedMarker {
+import java.util.Objects;
+
+public class ExtrudeMarker extends ObjectMarker {
+
+    private Shape shape;
+    private float shapeMinY, shapeMaxY;
+    private boolean depthTest = true;
+    private int lineWidth = 2;
+    private Color lineColor = new Color(255, 0, 0, 1f);
+    private Color fillColor = new Color(200, 0, 0, 0.3f);
+
+    /**
+     * Creates a new {@link ExtrudeMarker}.
+     * <p><i>(The position of the marker will be the center of the shape (it's bounding box))</i></p>
+     *
+     * @param label the label of the marker
+     * @param shape the {@link Shape} of the marker
+     * @param shapeMinY the minimum y-position of the extruded shape
+     * @param shapeMaxY the maximum y-position of the extruded shape
+     *
+     * @see #setLabel(String)
+     * @see #setShape(Shape, float, float)
+     */
+    public ExtrudeMarker(String label, Shape shape, float shapeMinY, float shapeMaxY) {
+        this(label, calculateShapeCenter(Objects.requireNonNull(shape, "shape must not be null"), shapeMinY, shapeMaxY), shape, shapeMinY, shapeMaxY);
+    }
+
+    /**
+     * Creates a new {@link ExtrudeMarker}.
+     * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+     *
+     * @param label the label of the marker
+     * @param position the coordinates of the marker
+     * @param shape the shape of the marker
+     * @param shapeMinY the minimum y-position of the extruded shape
+     * @param shapeMaxY the maximum y-position of the extruded shape
+     *
+     * @see #setLabel(String)
+     * @see #setPosition(Vector3d)
+     * @see #setShape(Shape, float, float)
+     */
+    public ExtrudeMarker(String label, Vector3d position, Shape shape, float shapeMinY, float shapeMaxY) {
+        super("extrude", label, position);
+        this.shape = Objects.requireNonNull(shape, "shape must not be null");
+        this.shapeMinY = shapeMinY;
+        this.shapeMaxY = shapeMaxY;
+    }
 
     /**
      * Getter for {@link Shape} of this {@link ExtrudeMarker}.
      * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points are the z-coordinates in the map.</p>
      * @return the {@link Shape}
      */
-    Shape getShape();
+    public Shape getShape() {
+        return shape;
+    }
 
     /**
      * Getter for the minimum height (y-coordinate) of where the shape is displayed on the map.<br>
      * <i>(The shape will be extruded from this value to {@link #getShapeMaxY()} on the map)</i>
      * @return the min-height of the shape on the map
      */
-    float getShapeMinY();
+    public float getShapeMinY() {
+        return shapeMinY;
+    }
 
     /**
      * Getter for the maximum height (y-coordinate) of where the shape is displayed on the map.
      * <i>(The shape will be extruded from {@link #getShapeMinY()} to this value on the map)</i>
      * @return the max-height of the shape on the map
      */
-    float getShapeMaxY();
+    public float getShapeMaxY() {
+        return shapeMaxY;
+    }
 
     /**
      * Sets the {@link Shape} of this {@link ExtrudeMarker}.
@@ -56,56 +110,86 @@ public interface ExtrudeMarker extends ObjectMarker, DistanceRangedMarker {
      * @param shape the new {@link Shape}
      * @param minY the new min-height (y-coordinate) of the shape on the map
      * @param maxY the new max-height (y-coordinate) of the shape on the map
+     *
+     * @see #centerPosition()
      */
-    void setShape(Shape shape, float minY, float maxY);
+    public void setShape(Shape shape, float minY, float maxY) {
+        this.shape = Objects.requireNonNull(shape, "shape must not be null");
+        this.shapeMinY = minY;
+        this.shapeMaxY = maxY;
+    }
+
+    /**
+     * Sets the position of this {@link ExtrudeMarker} to the center of the {@link Shape} (it's bounding box).
+     * <p><i>(Invoke this after changing the {@link Shape} to make sure the markers position gets updated as well)</i></p>
+     */
+    public void centerPosition() {
+        setPosition(calculateShapeCenter(shape, shapeMinY, shapeMaxY));
+    }
 
     /**
      * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
      * @return <code>true</code> if the depthTest is enabled
      */
-    boolean isDepthTestEnabled();
+    public boolean isDepthTestEnabled() {
+        return depthTest;
+    }
 
     /**
      * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
      * @param enabled if the depth-test should be enabled for this {@link ExtrudeMarker}
      */
-    void setDepthTestEnabled(boolean enabled);
+    public void setDepthTestEnabled(boolean enabled) {
+        this.depthTest = enabled;
+    }
 
     /**
      * Getter for the width of the lines of this {@link ExtrudeMarker}.
      * @return the width of the lines in pixels
      */
-    int getLineWidth();
+    public int getLineWidth() {
+        return lineWidth;
+    }
 
     /**
      * Sets the width of the lines for this {@link ExtrudeMarker}.
      * @param width the new width in pixels
      */
-    void setLineWidth(int width);
+    public void setLineWidth(int width) {
+        this.lineWidth = width;
+    }
 
     /**
      * Getter for the {@link Color} of the border-line of the shape.
      * @return the line-color
      */
-    Color getLineColor();
+    public Color getLineColor() {
+        return lineColor;
+    }
 
     /**
      * Sets the {@link Color} of the border-line of the shape.
      * @param color the new line-color
      */
-    void setLineColor(Color color);
+    public void setLineColor(Color color) {
+        this.lineColor = Objects.requireNonNull(color, "color must not be null");
+    }
 
     /**
      * Getter for the fill-{@link Color} of the shape.
      * @return the fill-color
      */
-    Color getFillColor();
+    public Color getFillColor() {
+        return fillColor;
+    }
 
     /**
      * Sets the fill-{@link Color} of the shape.
      * @param color the new fill-color
      */
-    void setFillColor(Color color);
+    public void setFillColor(Color color) {
+        this.fillColor = Objects.requireNonNull(color, "color must not be null");
+    }
 
     /**
      * Sets the border- and fill- color.
@@ -114,9 +198,15 @@ public interface ExtrudeMarker extends ObjectMarker, DistanceRangedMarker {
      * @see #setLineColor(Color)
      * @see #setFillColor(Color)
      */
-    default void setColors(Color lineColor, Color fillColor) {
+    public void setColors(Color lineColor, Color fillColor) {
         setLineColor(lineColor);
         setFillColor(fillColor);
+    }
+
+    private static Vector3d calculateShapeCenter(Shape shape, float shapeMinY, float shapeMaxY) {
+        Vector2d center = shape.getMin().add(shape.getMax()).mul(0.5);
+        float centerY = (shapeMinY + shapeMaxY) * 0.5f;
+        return new Vector3d(center.getX(), centerY, center.getY());
     }
 
 }
