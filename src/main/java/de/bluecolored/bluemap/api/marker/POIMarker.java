@@ -27,13 +27,23 @@ package de.bluecolored.bluemap.api.marker;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.WebApp;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 
 import java.util.Objects;
 
+@DebugDump
 public class POIMarker extends DistanceRangedMarker {
 
     private String icon;
     private Vector2i anchor;
+
+    /**
+     * Empty constructor for deserialization.
+     */
+    @SuppressWarnings("unused")
+    private POIMarker() {
+        this("", Vector3d.ZERO);
+    }
 
     /**
      * Creates a new {@link POIMarker} with the standard icon.

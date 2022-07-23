@@ -22,9 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.bluecolored.bluemap.api.marker;
+package de.bluecolored.bluemap.api.math;
 
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 /**
  * A line consisting of 2 or more {@link Vector3d}-points.
  */
+@DebugDump
 public class Line {
 
     private final Vector3d[] points;

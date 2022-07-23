@@ -21,7 +21,8 @@ repositories {
 
 dependencies {
     api ("com.flowpowered:flow-math:1.0.3")
-    implementation ("com.google.code.gson:gson:2.8.0")
+    api ("com.google.code.gson:gson:2.8.0")
+
     compileOnly ("org.jetbrains:annotations:23.0.0")
 }
 

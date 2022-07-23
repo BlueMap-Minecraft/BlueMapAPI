@@ -25,16 +25,28 @@
 package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 import de.bluecolored.bluemap.api.math.Color;
+import de.bluecolored.bluemap.api.math.Line;
 
 import java.util.Objects;
 
+@DebugDump
 public class LineMarker extends ObjectMarker {
+    private static final Line DEFAULT_LINE = new Line(Vector3d.ZERO, Vector3d.ONE);
 
     private Line line;
     private boolean depthTest = true;
     private int lineWidth = 2;
     private Color lineColor = new Color(255, 0, 0, 1f);
+
+    /**
+     * Empty constructor for deserialization.
+     */
+    @SuppressWarnings("unused")
+    private LineMarker() {
+        this("", DEFAULT_LINE);
+    }
 
     /**
      * Creates a new {@link LineMarker}.

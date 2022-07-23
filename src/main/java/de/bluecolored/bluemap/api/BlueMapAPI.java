@@ -24,6 +24,8 @@
  */
 package de.bluecolored.bluemap.api;
 
+import de.bluecolored.bluemap.api.debug.DebugDump;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -72,24 +74,28 @@ public abstract class BlueMapAPI {
      * Getter for the {@link RenderManager}.
      * @return the {@link RenderManager}
      */
+    @DebugDump
     public abstract RenderManager getRenderManager();
 
     /**
      * Getter for the {@link WebApp}.
      * @return the {@link WebApp}
      */
+    @DebugDump
     public abstract WebApp getWebApp();
 
     /**
      * Getter for all {@link BlueMapMap}s loaded by BlueMap.
      * @return an unmodifiable collection of all loaded {@link BlueMapMap}s
      */
+    @DebugDump
     public abstract Collection<BlueMapMap> getMaps();
 
     /**
      * Getter for all {@link BlueMapWorld}s loaded by BlueMap.
      * @return an unmodifiable collection of all loaded {@link BlueMapWorld}s
      */
+    @DebugDump
     public abstract Collection<BlueMapWorld> getWorlds();
 
     /**
@@ -122,12 +128,14 @@ public abstract class BlueMapAPI {
      * Getter for the installed BlueMap version
      * @return the version-string
      */
+    @DebugDump
     public abstract String getBlueMapVersion();
 
     /**
      * Getter for the installed BlueMapAPI version
      * @return the version-string
      */
+    @DebugDump
     public String getAPIVersion() {
         return VERSION;
     }

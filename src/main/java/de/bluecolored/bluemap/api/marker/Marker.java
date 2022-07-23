@@ -25,6 +25,7 @@
 package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 
 import java.util.Objects;
 
@@ -37,6 +38,7 @@ import java.util.Objects;
  * @see ExtrudeMarker
  * @see LineMarker
  */
+@DebugDump
 public abstract class Marker {
 
     private final String type;

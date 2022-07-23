@@ -27,16 +27,26 @@ package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 
 import java.util.Objects;
 
 /**
  * A marker that is a html-element placed somewhere on the map.
  */
+@DebugDump
 public class HtmlMarker extends DistanceRangedMarker {
 
     private Vector2i anchor;
     private String html;
+
+    /**
+     * Empty constructor for deserialization.
+     */
+    @SuppressWarnings("unused")
+    private HtmlMarker() {
+        this("", Vector3d.ZERO, "");
+    }
 
     /**
      * Creates a new {@link HtmlMarker}.

@@ -27,6 +27,7 @@ package de.bluecolored.bluemap.api;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 import de.bluecolored.bluemap.api.marker.MarkerSet;
 
 import java.util.Map;
@@ -42,18 +43,21 @@ public interface BlueMapMap {
      * Returns this maps id, this is equal to the id configured in bluemap's config for this map.
      * @return the id of this map
      */
+    @DebugDump
     String getId();
 
     /**
      * Returns this maps display-name, this is equal to the name configured in bluemap's config for this map.
      * @return the name of this map
      */
+    @DebugDump
     String getName();
 
     /**
      * Getter for the {@link BlueMapWorld} of this map.
      * @return the {@link BlueMapWorld} of this map
      */
+    @DebugDump
     BlueMapWorld getWorld();
 
     /**
@@ -61,12 +65,14 @@ public interface BlueMapMap {
      * Changing this map will change the {@link MarkerSet}s and markers displayed on the web-app for this map.
      * @return a {@link Map} of {@link MarkerSet}s.
      */
+    @DebugDump
     Map<String, MarkerSet> getMarkerSets();
 
     /**
      * Getter for the size of all tiles on this map in blocks.
      * @return the tile-size in blocks
      */
+    @DebugDump
     Vector2i getTileSize();
 
     /**
@@ -74,6 +80,7 @@ public interface BlueMapMap {
      * E.g. an offset of (2|-1) would mean that the tile (0|0) has block (2|0|-1) at it's min-corner.
      * @return the tile-offset in blocks
      */
+    @DebugDump
     Vector2i getTileOffset();
 
     /**

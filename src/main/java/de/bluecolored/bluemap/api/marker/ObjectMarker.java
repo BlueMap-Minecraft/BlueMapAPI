@@ -25,11 +25,13 @@
 package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Optional;
 
+@DebugDump
 public abstract class ObjectMarker extends DistanceRangedMarker {
 
     private String detail;
@@ -41,8 +43,6 @@ public abstract class ObjectMarker extends DistanceRangedMarker {
     public ObjectMarker(String type, String label, Vector3d position) {
         super(type, label, position);
         this.detail = Objects.requireNonNull(label, "label must not be null");
-        this.link = null;
-        this.newTab = false;
     }
 
     /**

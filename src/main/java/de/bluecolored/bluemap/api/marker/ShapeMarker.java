@@ -27,11 +27,15 @@ package de.bluecolored.bluemap.api.marker;
 
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector3d;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 import de.bluecolored.bluemap.api.math.Color;
+import de.bluecolored.bluemap.api.math.Shape;
 
 import java.util.Objects;
 
+@DebugDump
 public class ShapeMarker extends ObjectMarker {
+    private static final Shape DEFAULT_SHAPE = Shape.createRect(0, 0, 1, 1);
 
     private Shape shape;
     private float shapeY;
@@ -39,6 +43,14 @@ public class ShapeMarker extends ObjectMarker {
     private int lineWidth = 2;
     private Color lineColor = new Color(255, 0, 0, 1f);
     private Color fillColor = new Color(200, 0, 0, 0.3f);
+
+    /**
+     * Empty constructor for deserialization.
+     */
+    @SuppressWarnings("unused")
+    private ShapeMarker() {
+        this("shape", DEFAULT_SHAPE, 0);
+    }
 
     /**
      * Creates a new {@link ShapeMarker}.

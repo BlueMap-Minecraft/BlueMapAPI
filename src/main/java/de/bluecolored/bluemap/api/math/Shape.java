@@ -22,20 +22,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.bluecolored.bluemap.api.marker;
+package de.bluecolored.bluemap.api.math;
 
 import com.flowpowered.math.vector.Vector2d;
+import de.bluecolored.bluemap.api.debug.DebugDump;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
 /**
  * A shape consisting of 3 or more {@link Vector2d}-points on a plane.
  */
+@DebugDump
 public class Shape {
 
     private final Vector2d[] points;
-    private Vector2d min = null;
-    private Vector2d max = null;
+
+    @Nullable
+    private Vector2d min = null, max = null;
 
     public Shape(Vector2d... points) {
         if (points.length < 3) throw new IllegalArgumentException("A shape has to have at least 3 points!");

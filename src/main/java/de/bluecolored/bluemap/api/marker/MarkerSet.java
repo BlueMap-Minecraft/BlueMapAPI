@@ -24,17 +24,28 @@
  */
 package de.bluecolored.bluemap.api.marker;
 
+import de.bluecolored.bluemap.api.debug.DebugDump;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A set of {@link Marker}s that are displayed on the maps in the web-app.
  */
+@DebugDump
 public class MarkerSet {
 
     private String label;
     private boolean toggleable, defaultHidden;
     private final Map<String, Marker> markers;
+
+    /**
+     * Empty constructor for deserialization.
+     */
+    @SuppressWarnings("unused")
+    private MarkerSet() {
+        this("");
+    }
 
     /**
      * Creates a new {@link MarkerSet}.

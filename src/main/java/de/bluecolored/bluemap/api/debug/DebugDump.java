@@ -22,37 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package de.bluecolored.bluemap.api;
+package de.bluecolored.bluemap.api.debug;
 
-import de.bluecolored.bluemap.api.debug.DebugDump;
-
-import java.nio.file.Path;
-import java.util.Collection;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * This class represents a world loaded by BlueMap.
+ * Marks a class, field or method to be included in detail in a possible state-dump.
+ * E.g. triggered by <code>/bluemap debug dump</code>
  */
-public interface BlueMapWorld {
+@Retention(RetentionPolicy.RUNTIME)
+@Target({
+        ElementType.METHOD,
+        ElementType.FIELD,
+        ElementType.TYPE
+})
+public @interface DebugDump {
 
-    /**
-     * Getter for the id of this world.
-     * @return the id of this world
-     */
-    @DebugDump
-    String getId();
-
-    /**
-     * Getter for the {@link Path} of this world's save-files (folder). This matches the folder configured in bluemap's config for this map ( <code>world:</code> ).
-     * @return the save-folder of this world.
-     */
-    @DebugDump
-    Path getSaveFolder();
-
-    /**
-     * Getter for all {@link BlueMapMap}s for this world
-     * @return an unmodifiable {@link Collection} of all {@link BlueMapMap}s for this world
-     */
-    @DebugDump
-    Collection<BlueMapMap> getMaps();
+    String value() default "";
 
 }

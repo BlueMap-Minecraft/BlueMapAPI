@@ -25,6 +25,7 @@
 package de.bluecolored.bluemap.api;
 
 import com.flowpowered.math.vector.Vector2i;
+import de.bluecolored.bluemap.api.debug.DebugDump;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -74,18 +75,21 @@ public interface RenderManager {
      * Getter for the current size of the render-queue.
      * @return the current size of the render-queue
      */
+    @DebugDump
     int renderQueueSize();
 
     /**
      * Getter for the current count of render threads.
      * @return the count of render threads
      */
+    @DebugDump
     int renderThreadCount();
 
     /**
      * Whether this {@link RenderManager} is currently running or stopped.
      * @return <code>true</code> if this renderer is running
      */
+    @DebugDump
     boolean isRunning();
 
     /**
