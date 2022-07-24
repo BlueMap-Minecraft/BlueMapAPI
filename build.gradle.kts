@@ -2,7 +2,11 @@ plugins {
     java
     `java-library`
     id("com.diffplug.spotless") version "6.1.2"
+    id ("com.palantir.git-version") version "0.12.3"
 }
+
+val versionDetails: groovy.lang.Closure<com.palantir.gradle.gitversion.VersionDetails> by extra
+val git = versionDetails()
 
 group = "de.bluecolored.bluemap.api"
 
@@ -54,5 +58,18 @@ tasks.javadoc {
                 "https://docs.oracle.com/javase/8/docs/api/"
             )
         }
+    }
+}
+
+tasks.processResources {
+    from("src/main/resources") {
+        include("de/bluecolored/bluemap/api/version.json")
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        expand (
+            "version" to project.version,
+            "gitHash" to git.gitHashFull,
+            "gitClean" to git.isCleanTag
+        )
     }
 }

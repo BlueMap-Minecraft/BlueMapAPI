@@ -24,10 +24,14 @@
  */
 package de.bluecolored.bluemap.api;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import de.bluecolored.bluemap.api.debug.DebugDump;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
@@ -44,13 +48,15 @@ public abstract class BlueMapAPI {
     private static final String VERSION, GIT_HASH, GIT_CLEAN;
     static {
         String version = "DEV", gitHash = "DEV", gitClean = "DEV";
-        URL url = BlueMapAPI.class.getResource("/de/bluecolored/bluemap/api/version");
+        URL url = BlueMapAPI.class.getResource("/de/bluecolored/bluemap/api/version.json");
         if (url != null) {
-            try (InputStream in = url.openStream(); Scanner scanner = new Scanner(in)) {
-                version = scanner.nextLine();
-                gitHash = scanner.nextLine();
-                gitClean = scanner.nextLine();
-            } catch (IOException ex) {
+            Gson gson = new Gson();
+            try (InputStream in = url.openStream(); Reader reader = new InputStreamReader(in)) {
+                JsonObject element = gson.fromJson(reader, JsonElement.class).getAsJsonObject();
+                version = element.get("version").getAsString();
+                gitHash = element.get("git-hash").getAsString();
+                gitClean = element.get("git-clean").getAsString();
+            } catch (Exception ex) {
                 System.err.println("Failed to load version from resources!");
                 ex.printStackTrace();
             }

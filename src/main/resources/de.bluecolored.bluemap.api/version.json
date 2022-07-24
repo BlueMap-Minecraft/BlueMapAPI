@@ -1,0 +1,5 @@
+{
+	"version": "${version}",
+	"git-hash": "${gitHash}",
+	"git-clean": "${gitClean}"
+}
