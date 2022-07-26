@@ -45,9 +45,9 @@ import java.util.function.Consumer;
 public abstract class BlueMapAPI {
 
     @SuppressWarnings("unused")
-    private static final String VERSION, GIT_HASH, GIT_CLEAN;
+    private static final String VERSION, GIT_HASH;
     static {
-        String version = "DEV", gitHash = "DEV", gitClean = "DEV";
+        String version = "DEV", gitHash = "DEV";
         URL url = BlueMapAPI.class.getResource("/de/bluecolored/bluemap/api/version.json");
         if (url != null) {
             Gson gson = new Gson();
@@ -55,7 +55,6 @@ public abstract class BlueMapAPI {
                 JsonObject element = gson.fromJson(reader, JsonElement.class).getAsJsonObject();
                 version = element.get("version").getAsString();
                 gitHash = element.get("git-hash").getAsString();
-                gitClean = element.get("git-clean").getAsString();
             } catch (Exception ex) {
                 System.err.println("Failed to load version from resources!");
                 ex.printStackTrace();
@@ -64,11 +63,9 @@ public abstract class BlueMapAPI {
 
         if (version.equals("${version}")) version = "DEV";
         if (gitHash.equals("${gitHash}")) version = "DEV";
-        if (gitClean.equals("${gitClean}")) version = "DEV";
 
         VERSION = version;
         GIT_HASH = gitHash;
-        GIT_CLEAN = gitClean;
     }
 
     private static BlueMapAPI instance;
