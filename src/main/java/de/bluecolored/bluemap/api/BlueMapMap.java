@@ -28,7 +28,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import de.bluecolored.bluemap.api.debug.DebugDump;
-import de.bluecolored.bluemap.api.marker.MarkerSet;
+import de.bluecolored.bluemap.api.markers.MarkerSet;
 
 import java.util.Map;
 import java.util.function.Predicate;

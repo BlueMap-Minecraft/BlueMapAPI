@@ -25,8 +25,8 @@
 package de.bluecolored.bluemap.api;
 
 import de.bluecolored.bluemap.api.debug.DebugDump;
-import de.bluecolored.bluemap.api.marker.Marker;
-import de.bluecolored.bluemap.api.marker.POIMarker;
+import de.bluecolored.bluemap.api.markers.Marker;
+import de.bluecolored.bluemap.api.markers.POIMarker;
 import com.flowpowered.math.vector.Vector2i;
 
 import java.awt.image.BufferedImage;
