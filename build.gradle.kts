@@ -3,6 +3,7 @@ import java.io.IOException
 plugins {
     java
     `java-library`
+    `maven-publish`
     id("com.diffplug.spotless") version "6.1.2"
 }
 
@@ -86,5 +87,25 @@ tasks.processResources {
             "version" to project.version,
             "gitHash" to gitHash + if (clean) "" else " (dirty)"
         )
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/BlueMap-Minecraft/BlueMapAPI")
+            credentials {
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+
+    publications {
+        register<MavenPublication>("gpr") {
+            from(components["java"])
+            artifactId = "BlueMapAPI"
+        }
     }
 }

@@ -1,6 +1,8 @@
 name: Java CI
 
-on: [push]
+on:
+  release:
+    types: [ published ]
 
 jobs:
   build:
@@ -14,8 +16,7 @@ jobs:
       with:
         java-version: 11
     - name: Build with Gradle
-      run: ./gradlew clean build test
-    - uses: actions/upload-artifact@v2-preview
-      with:
-        name: artifact
-        path: build/libs/*
+      env:
+        GITHUB_USERNAME: ${{ secrets.github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: ./gradlew clean build test publish
