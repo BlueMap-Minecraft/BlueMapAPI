@@ -104,8 +104,7 @@ public abstract class BlueMapAPI {
     /**
      * Getter for a {@link BlueMapWorld} loaded by BlueMap.
      *
-     * @param world Any object that BlueMap can use to identify a world.
-     *              <p>
+     * @param world Any object that BlueMap can use to identify a world.<br>
      *              <b>This could be:</b>
      *              <ul>
      *                  <li>A {@link String} that is the id of the world</li>
@@ -115,7 +114,6 @@ public abstract class BlueMapAPI {
      *              </ul>
      *              <i>("Platform" here stands for the mod/plugin-loader or server-implementation you are using,
      *              e.g. Spigot, Forge, Fabric or Sponge)</i>
-     *              </p>
      * @return an {@link Optional} with the {@link BlueMapWorld} if it exists
      */
     public abstract Optional<BlueMapWorld> getWorld(Object world);
