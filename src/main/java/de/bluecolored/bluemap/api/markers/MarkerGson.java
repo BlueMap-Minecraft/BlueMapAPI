@@ -44,21 +44,25 @@ import java.util.Map;
 
 public final class MarkerGson {
 
-    public static final Gson INSTANCE = new GsonBuilder()
+    public static final Gson INSTANCE = addAdapters(new GsonBuilder())
+            .setLenient()
+            .create();
+
+    /* This class can not be instantiated. */
+    private MarkerGson() {}
+
+    public static GsonBuilder addAdapters(GsonBuilder builder) {
+        return builder
             .registerTypeAdapter(Marker.class, new MarkerDeserializer())
+            .registerTypeAdapter(Marker.class, new MarkerSerializer())
             .registerTypeAdapter(Line.class, new LineAdapter())
             .registerTypeAdapter(Shape.class, new ShapeAdapter())
             .registerTypeAdapter(Color.class, new ColorAdapter())
             .registerTypeAdapter(Vector2d.class, new Vector2dAdapter())
             .registerTypeAdapter(Vector3d.class, new Vector3dAdapter())
             .registerTypeAdapter(Vector2i.class, new Vector2iAdapter())
-            .registerTypeAdapter(Vector3i.class, new Vector3iAdapter())
-            .setLenient()
-            .disableHtmlEscaping()
-            .create();
-
-    /* This class can not be instantiated. */
-    private MarkerGson() {}
+            .registerTypeAdapter(Vector3i.class, new Vector3iAdapter());
+    }
 
     static class MarkerDeserializer implements JsonDeserializer<Marker> {
 
@@ -71,11 +75,20 @@ public final class MarkerGson {
         );
 
         @Override
-        public Marker deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        public Marker deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
             String markerType = jsonElement.getAsJsonObject().get("type").getAsString();
             Class<? extends Marker> markerClass = MARKER_TYPES.get(markerType);
             if (markerClass == null) throw new JsonParseException("Unknown marker type: " + markerType);
-            return jsonDeserializationContext.deserialize(jsonElement, markerClass);
+            return context.deserialize(jsonElement, markerClass);
+        }
+
+    }
+
+    static class MarkerSerializer implements JsonSerializer<Marker> {
+
+        @Override
+        public JsonElement serialize(Marker src, Type typeOfSrc, JsonSerializationContext context) {
+            return context.serialize(src, src.getClass()); // serialize the actual marker-subclass
         }
 
     }

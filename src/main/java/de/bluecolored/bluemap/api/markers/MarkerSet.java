@@ -37,7 +37,7 @@ public class MarkerSet {
 
     private String label;
     private boolean toggleable, defaultHidden;
-    private final Map<String, Marker> markers;
+    private final ConcurrentHashMap<String, Marker> markers;
 
     /**
      * Empty constructor for deserialization.
