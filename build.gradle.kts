@@ -7,11 +7,6 @@ plugins {
     id("com.diffplug.spotless") version "6.1.2"
 }
 
-group = "de.bluecolored.bluemap.api"
-
-val apiVersion: String by project
-version = apiVersion
-
 fun String.runCommand(): String = ProcessBuilder(split("\\s(?=(?:[^'\"`]*(['\"`])[^'\"`]*\\1)*[^'\"`]*$)".toRegex()))
     .directory(projectDir)
     .redirectOutput(ProcessBuilder.Redirect.PIPE)
@@ -28,7 +23,17 @@ fun String.runCommand(): String = ProcessBuilder(split("\\s(?=(?:[^'\"`]*(['\"`]
 
 val gitHash = "git rev-parse --verify HEAD".runCommand()
 val clean = "git status --porcelain".runCommand().isEmpty()
+val lastTag = "git describe --tags --abbrev=0".runCommand()
+val lastVersion = lastTag.substring(1) // remove the leading 'v'
+val commits = "git rev-list --count $lastTag..HEAD".runCommand()
 println("Git hash: $gitHash" + if (clean) "" else " (dirty)")
+
+group = "de.bluecolored.bluemap.api"
+version = lastVersion +
+        (if (commits == "0") "" else "-$commits") +
+        (if (clean) "" else "-dirty")
+
+println("Version: $version")
 
 val javaTarget = 11
 java {
@@ -105,7 +110,7 @@ publishing {
     publications {
         register<MavenPublication>("gpr") {
             from(components["java"])
-            artifactId = "BlueMapAPI"
+            artifactId = "bluemap_api"
         }
     }
 }
