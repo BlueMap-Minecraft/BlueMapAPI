@@ -1,1 +1,1 @@
-rootProject.name = "bluemap_api"
+rootProject.name = "BlueMapAPI"
