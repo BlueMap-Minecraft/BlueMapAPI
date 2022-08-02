@@ -134,7 +134,7 @@ public final class MarkerGson {
     }
 
     static class ShapeAdapter extends TypeAdapter<Shape> {
-        private static final Vector2dAdapter VEC2D_ADAPTER = new Vector2dAdapter();
+        private static final Vector2dAdapter VEC2D_ADAPTER = new Vector2dAdapter(true);
 
         @Override
         public void write(JsonWriter out, Shape value) throws IOException {
@@ -217,6 +217,16 @@ public final class MarkerGson {
 
     static class Vector2dAdapter extends TypeAdapter<Vector2d> {
 
+        private final boolean useZ;
+
+        public Vector2dAdapter() {
+            this.useZ = false;
+        }
+
+        public Vector2dAdapter(boolean useZ) {
+            this.useZ = useZ;
+        }
+
         @Override
         public void write(JsonWriter out, Vector2d value) throws IOException {
             if (value == null) {
@@ -226,7 +236,7 @@ public final class MarkerGson {
 
             out.beginObject();
             out.name("x"); out.value(value.getX());
-            out.name("y"); out.value(value.getY());
+            out.name(useZ ? "z" : "y"); out.value(value.getY());
             out.endObject();
         }
 
@@ -242,7 +252,8 @@ public final class MarkerGson {
             while (in.peek() != JsonToken.END_OBJECT) {
                 switch (in.nextName()) {
                     case "x" : x = in.nextDouble(); break;
-                    case "y" : y = in.nextDouble(); break;
+                    case "y" : if (!useZ) y = in.nextDouble(); else in.skipValue(); break;
+                    case "z" : if (useZ) y = in.nextDouble(); else in.skipValue(); break;
                     default : in.skipValue(); break;
                 }
             }
