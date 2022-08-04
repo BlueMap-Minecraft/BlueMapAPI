@@ -153,6 +153,30 @@ public class LineMarker extends ObjectMarker {
         this.lineColor = Objects.requireNonNull(color, "color must not be null");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        LineMarker that = (LineMarker) o;
+
+        if (depthTest != that.depthTest) return false;
+        if (lineWidth != that.lineWidth) return false;
+        if (!line.equals(that.line)) return false;
+        return lineColor.equals(that.lineColor);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + line.hashCode();
+        result = 31 * result + (depthTest ? 1 : 0);
+        result = 31 * result + lineWidth;
+        result = 31 * result + lineColor.hashCode();
+        return result;
+    }
+
     private static Vector3d calculateLineCenter(Line line) {
         return line.getMin().add(line.getMax()).mul(0.5);
     }

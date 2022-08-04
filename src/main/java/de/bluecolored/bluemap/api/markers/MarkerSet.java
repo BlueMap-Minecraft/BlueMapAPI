@@ -27,6 +27,7 @@ package de.bluecolored.bluemap.api.markers;
 import de.bluecolored.bluemap.api.debug.DebugDump;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -55,7 +56,7 @@ public class MarkerSet {
      * @see #setLabel(String)
      */
     public MarkerSet(String label) {
-        this.label = label;
+        this.label = Objects.requireNonNull(label);
         this.toggleable = true;
         this.defaultHidden = false;
         this.markers = new ConcurrentHashMap<>();
@@ -73,7 +74,7 @@ public class MarkerSet {
      * @see #setDefaultHidden(boolean)
      */
     public MarkerSet(String label, boolean toggleable, boolean defaultHidden) {
-        this.label = label;
+        this.label = Objects.requireNonNull(label);
         this.toggleable = toggleable;
         this.defaultHidden = defaultHidden;
         this.markers = new ConcurrentHashMap<>();
@@ -93,7 +94,7 @@ public class MarkerSet {
      * @param label the new label
      */
     public void setLabel(String label) {
-        this.label = label;
+        this.label = Objects.requireNonNull(label);
     }
 
     /**
@@ -144,6 +145,28 @@ public class MarkerSet {
      */
     public Map<String, Marker> getMarkers() {
         return markers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MarkerSet markerSet = (MarkerSet) o;
+
+        if (toggleable != markerSet.toggleable) return false;
+        if (defaultHidden != markerSet.defaultHidden) return false;
+        if (!label.equals(markerSet.label)) return false;
+        return markers.equals(markerSet.markers);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = label.hashCode();
+        result = 31 * result + (toggleable ? 1 : 0);
+        result = 31 * result + (defaultHidden ? 1 : 0);
+        result = 31 * result + markers.hashCode();
+        return result;
     }
 
 }

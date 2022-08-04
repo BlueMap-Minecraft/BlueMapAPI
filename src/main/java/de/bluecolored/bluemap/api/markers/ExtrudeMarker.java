@@ -215,6 +215,36 @@ public class ExtrudeMarker extends ObjectMarker {
         setFillColor(fillColor);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ExtrudeMarker that = (ExtrudeMarker) o;
+
+        if (Float.compare(that.shapeMinY, shapeMinY) != 0) return false;
+        if (Float.compare(that.shapeMaxY, shapeMaxY) != 0) return false;
+        if (depthTest != that.depthTest) return false;
+        if (lineWidth != that.lineWidth) return false;
+        if (!shape.equals(that.shape)) return false;
+        if (!lineColor.equals(that.lineColor)) return false;
+        return fillColor.equals(that.fillColor);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + shape.hashCode();
+        result = 31 * result + (shapeMinY != 0.0f ? Float.floatToIntBits(shapeMinY) : 0);
+        result = 31 * result + (shapeMaxY != 0.0f ? Float.floatToIntBits(shapeMaxY) : 0);
+        result = 31 * result + (depthTest ? 1 : 0);
+        result = 31 * result + lineWidth;
+        result = 31 * result + lineColor.hashCode();
+        result = 31 * result + fillColor.hashCode();
+        return result;
+    }
+
     private static Vector3d calculateShapeCenter(Shape shape, float shapeMinY, float shapeMaxY) {
         Vector2d center = shape.getMin().add(shape.getMax()).mul(0.5);
         float centerY = (shapeMinY + shapeMaxY) * 0.5f;

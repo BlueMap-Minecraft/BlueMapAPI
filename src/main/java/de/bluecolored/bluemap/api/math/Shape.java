@@ -98,6 +98,21 @@ public class Shape {
         return this.max;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Shape shape = (Shape) o;
+
+        return Arrays.equals(points, shape.points);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(points);
+    }
+
     /**
      * Creates a {@link Shape} representing a rectangle spanning over pos1 and pos2
      * @param pos1 one corner of the rectangle

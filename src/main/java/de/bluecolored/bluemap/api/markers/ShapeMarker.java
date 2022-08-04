@@ -200,6 +200,34 @@ public class ShapeMarker extends ObjectMarker {
         setFillColor(fillColor);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ShapeMarker that = (ShapeMarker) o;
+
+        if (Float.compare(that.shapeY, shapeY) != 0) return false;
+        if (depthTest != that.depthTest) return false;
+        if (lineWidth != that.lineWidth) return false;
+        if (!shape.equals(that.shape)) return false;
+        if (!lineColor.equals(that.lineColor)) return false;
+        return fillColor.equals(that.fillColor);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + shape.hashCode();
+        result = 31 * result + (shapeY != 0.0f ? Float.floatToIntBits(shapeY) : 0);
+        result = 31 * result + (depthTest ? 1 : 0);
+        result = 31 * result + lineWidth;
+        result = 31 * result + lineColor.hashCode();
+        result = 31 * result + fillColor.hashCode();
+        return result;
+    }
+
     private static Vector3d calculateShapeCenter(Shape shape, float shapeY) {
         Vector2d center = shape.getMin().add(shape.getMax()).mul(0.5);
         return new Vector3d(center.getX(), shapeY, center.getY());

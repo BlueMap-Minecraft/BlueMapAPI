@@ -107,4 +107,24 @@ public abstract class Marker {
         setPosition(new Vector3d(x, y, z));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Marker marker = (Marker) o;
+
+        if (!type.equals(marker.type)) return false;
+        if (!label.equals(marker.label)) return false;
+        return position.equals(marker.position);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + label.hashCode();
+        result = 31 * result + position.hashCode();
+        return result;
+    }
+
 }

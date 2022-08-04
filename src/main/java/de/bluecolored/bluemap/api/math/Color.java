@@ -107,4 +107,26 @@ public class Color {
         return Integer.parseInt(val);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Color color = (Color) o;
+
+        if (r != color.r) return false;
+        if (g != color.g) return false;
+        if (b != color.b) return false;
+        return Float.compare(color.a, a) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = r;
+        result = 31 * result + g;
+        result = 31 * result + b;
+        result = 31 * result + (a != +0.0f ? Float.floatToIntBits(a) : 0);
+        return result;
+    }
+
 }

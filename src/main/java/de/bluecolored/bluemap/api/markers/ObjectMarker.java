@@ -107,4 +107,26 @@ public abstract class ObjectMarker extends DistanceRangedMarker {
         this.newTab = false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ObjectMarker that = (ObjectMarker) o;
+
+        if (newTab != that.newTab) return false;
+        if (!detail.equals(that.detail)) return false;
+        return Objects.equals(link, that.link);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + detail.hashCode();
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + (newTab ? 1 : 0);
+        return result;
+    }
+
 }

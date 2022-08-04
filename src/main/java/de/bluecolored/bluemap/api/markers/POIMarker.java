@@ -114,4 +114,24 @@ public class POIMarker extends DistanceRangedMarker {
         this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        POIMarker poiMarker = (POIMarker) o;
+
+        if (!icon.equals(poiMarker.icon)) return false;
+        return anchor.equals(poiMarker.anchor);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + icon.hashCode();
+        result = 31 * result + anchor.hashCode();
+        return result;
+    }
+
 }

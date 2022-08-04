@@ -78,4 +78,27 @@ public abstract class DistanceRangedMarker extends Marker {
         this.maxDistance = maxDistance;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        DistanceRangedMarker that = (DistanceRangedMarker) o;
+
+        if (Double.compare(that.minDistance, minDistance) != 0) return false;
+        return Double.compare(that.maxDistance, maxDistance) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        long temp;
+        temp = Double.doubleToLongBits(minDistance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(maxDistance);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
 }

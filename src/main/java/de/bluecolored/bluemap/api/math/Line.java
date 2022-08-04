@@ -97,4 +97,19 @@ public class Line {
         return this.max;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Line line = (Line) o;
+
+        return Arrays.equals(points, line.points);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(points);
+    }
+
 }
