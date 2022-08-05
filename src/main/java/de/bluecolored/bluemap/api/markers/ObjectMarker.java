@@ -47,19 +47,20 @@ public abstract class ObjectMarker extends DistanceRangedMarker {
 
     /**
      * Getter for the detail of this marker. The label can include html-tags.
-     * @return the detail of this {@link ObjectMarker}
+     * @return the detail of this {@link Marker}
      */
     public String getDetail() {
         return detail;
     }
 
     /**
-     * Sets the detail of this {@link ObjectMarker}. The detail can include html-tags.<br>
+     * Sets the detail of this {@link Marker}. The detail can include html-tags.<br>
      * This is the text that will be displayed on the popup when you click on this marker.
      * <p>
      * 	<b>Important:</b><br>
-     * 	Html-tags in the label will not be escaped, so you can use them to style the {@link ObjectMarker}-detail.<br>
-     * 	Make sure you escape all html-tags from possible user inputs to prevent possible <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
+     * 	Html-tags in the label will not be escaped, so you can use them to style the {@link Marker}-detail.<br>
+     * 	Make sure you escape all html-tags from possible user inputs to prevent possible
+     * 	<a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
      * </p>
      *
      * @param detail the new detail for this {@link ObjectMarker}
@@ -127,6 +128,63 @@ public abstract class ObjectMarker extends DistanceRangedMarker {
         result = 31 * result + (link != null ? link.hashCode() : 0);
         result = 31 * result + (newTab ? 1 : 0);
         return result;
+    }
+
+    public static abstract class Builder<T extends ObjectMarker, B extends ObjectMarker.Builder<T, B>>
+            extends DistanceRangedMarker.Builder<T, B> {
+
+        String detail;
+        String link;
+        boolean newTab;
+
+        /**
+         * Sets the detail of the {@link Marker}. The detail can include html-tags.<br>
+         * This is the text that will be displayed on the popup when you click on the marker.
+         * <p>
+         * 	<b>Important:</b><br>
+         * 	Html-tags in the label will not be escaped, so you can use them to style the {@link Marker}-detail.<br>
+         * 	Make sure you escape all html-tags from possible user inputs to prevent possible
+         * 	<a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
+         * </p>
+         *
+         * @param detail the new detail for the {@link Marker}
+         * @return this builder for chaining
+         */
+        public B detail(String detail) {
+            this.detail = detail;
+            return self();
+        }
+
+        /**
+         * Sets the link-address of the {@link Marker}.<br>
+         * If a link is present, this link will be followed when the user clicks on the marker in the web-app.
+         *
+         * @param link the link, or <code>null</code> to disable the link
+         * @param newTab whether the link should be opened in a new tab
+         * @return this builder for chaining
+         */
+        public B link(String link, boolean newTab) {
+            this.link = link;
+            this.newTab = newTab;
+            return self();
+        }
+
+        /**
+         * The {@link Marker} will have no link. (See: {@link #link(String, boolean)})
+         * @return this builder for chaining
+         */
+        public B noLink() {
+            this.link = null;
+            this.newTab = false;
+            return self();
+        }
+
+        T build(T marker) {
+            if (detail != null) marker.setDetail(detail);
+            if (link != null) marker.setLink(link, newTab);
+            return super.build(marker);
+        }
+
     }
 
 }

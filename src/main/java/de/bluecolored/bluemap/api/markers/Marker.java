@@ -75,7 +75,7 @@ public abstract class Marker {
      */
     public void setLabel(String label) {
         //escape html-tags
-        this.label = label
+        this.label = Objects.requireNonNull(label, "label cannot be null")
                 .replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
@@ -94,7 +94,7 @@ public abstract class Marker {
      * @param position the new position
      */
     public void setPosition(Vector3d position) {
-        this.position = position;
+        this.position = Objects.requireNonNull(position, "position cannot be null");
     }
 
     /**
@@ -125,6 +125,67 @@ public abstract class Marker {
         result = 31 * result + label.hashCode();
         result = 31 * result + position.hashCode();
         return result;
+    }
+
+    public static abstract class Builder<T extends Marker, B extends Marker.Builder<T, B>> {
+
+        String label;
+        Vector3d position;
+
+        /**
+         * Sets the label of the {@link Marker}.
+         * <p><i>(HTML-Tags will be escaped.)</i></p>
+         * @param label the new label for the {@link Marker}
+         * @return this builder for chaining
+         */
+        public B label(String label) {
+            this.label = label;
+            return self();
+        }
+
+        /**
+         * Sets the position of where the {@link Marker} lives on the map.
+         * @param position the new position
+         * @return this builder for chaining
+         */
+        public B position(Vector3d position) {
+            this.position = position;
+            return self();
+        }
+
+        /**
+         * Sets the position of where the {@link Marker} lives on the map.
+         * @param x the x-coordinate of the new position
+         * @param y the y-coordinate of the new position
+         * @param z the z-coordinate of the new position
+         * @return this builder for chaining
+         */
+        public B position(int x, int y, int z) {
+            return position(new Vector3d(x, y, z));
+        }
+
+        /**
+         * Creates a new {@link Marker} with the current builder-settings
+         * @return The new {@link Marker}-instance
+         */
+        public abstract T build();
+
+        T build(T marker) {
+            if (label != null) marker.setLabel(label);
+            if (position != null) marker.setPosition(position);
+            return marker;
+        }
+
+        @SuppressWarnings("unchecked")
+        B self() {
+            return (B) this;
+        }
+
+        <O> O checkNotNull(O object, String name) {
+            if (object == null) throw new IllegalStateException(name + " has to be set and cannot be null");
+            return object;
+        }
+
     }
 
 }

@@ -120,7 +120,8 @@ public class HtmlMarker extends DistanceRangedMarker {
      *
      * <p>
      * 	<b>Important:</b><br>
-     * 	Make sure you escape all html-tags from possible user inputs to prevent possible <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
+     * 	Make sure you escape all html-tags from possible user inputs to prevent possible
+     * 	<a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
      * </p>
      *
      * @param html the html that will be inserted as the marker.
@@ -147,6 +148,79 @@ public class HtmlMarker extends DistanceRangedMarker {
         result = 31 * result + anchor.hashCode();
         result = 31 * result + html.hashCode();
         return result;
+    }
+
+    /**
+     * Creates a Builder for {@link HtmlMarker}s.
+     * @return a new Builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder extends DistanceRangedMarker.Builder<HtmlMarker, Builder> {
+
+        Vector2i anchor;
+        String html;
+
+        /**
+         * Sets the position (in pixels) where the html-element is anchored to the map.
+         * @param anchor the anchor-position in pixels
+         * @return this builder for chaining
+         */
+        public Builder anchor(Vector2i anchor) {
+            this.anchor = anchor;
+            return this;
+        }
+
+        /**
+         * Sets the position (in pixels) where the html-element is anchored to the map.
+         * @param x the anchor-x-position in pixels
+         * @param y the anchor-y-position in pixels
+         * @return this builder for chaining
+         */
+        public Builder anchor(int x, int y) {
+            this.anchor = new Vector2i(x, y);
+            return this;
+        }
+
+        /**
+         * Sets the html for the {@link HtmlMarker}.
+         *
+         * <p>
+         * 	<b>Important:</b><br>
+         * 	Make sure you escape all html-tags from possible user inputs to prevent possible <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
+         * </p>
+         *
+         * @param html the html that will be inserted as the marker.
+         * @return this builder for chaining
+         */
+        public Builder html(String html) {
+            this.html = html;
+            return this;
+        }
+
+        /**
+         * Creates a new {@link HtmlMarker} with the current builder-settings.<br>
+         * The minimum required settings to build this marker are:
+         * <ul>
+         *     <li>{@link #setLabel(String)}</li>
+         *     <li>{@link #setPosition(Vector3d)}</li>
+         *     <li>{@link #setHtml(String)}</li>
+         * </ul>
+         * @return The new {@link HtmlMarker}-instance
+         */
+        @Override
+        public HtmlMarker build() {
+            HtmlMarker marker = new HtmlMarker(
+                    checkNotNull(label, "label"),
+                    checkNotNull(position, "position"),
+                    checkNotNull(html, "html")
+            );
+            if (anchor != null) marker.setAnchor(anchor);
+            return build(marker);
+        }
+
     }
 
 }

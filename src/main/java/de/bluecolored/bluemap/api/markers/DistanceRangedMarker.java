@@ -101,4 +101,42 @@ public abstract class DistanceRangedMarker extends Marker {
         return result;
     }
 
+    public static abstract class Builder<T extends DistanceRangedMarker, B extends DistanceRangedMarker.Builder<T, B>>
+            extends Marker.Builder<T, B> {
+
+        Double minDistance, maxDistance;
+
+        /**
+         * Sets the minimum distance of the camera to the position of the {@link Marker} for it to be displayed.<br>
+         * If the camera is closer to this {@link Marker} than this distance, it will be hidden!
+         *
+         * @param minDistance the new minimum distance
+         * @return this builder for chaining
+         */
+        public B minDistance(double minDistance) {
+            this.minDistance = minDistance;
+            return self();
+        }
+
+        /**
+         * Sets the maximum distance of the camera to the position of the {@link Marker} for it to be displayed.<br>
+         * If the camera is further to this {@link Marker} than this distance, it will be hidden!
+         *
+         * @param maxDistance the new maximum distance
+         * @return this builder for chaining
+         */
+        public B maxDistance(double maxDistance) {
+            this.maxDistance = maxDistance;
+            return self();
+        }
+
+        @Override
+        T build(T marker) {
+            if (minDistance != null) marker.setMinDistance(minDistance);
+            if (maxDistance != null) marker.setMaxDistance(maxDistance);
+            return super.build(marker);
+        }
+
+    }
+
 }

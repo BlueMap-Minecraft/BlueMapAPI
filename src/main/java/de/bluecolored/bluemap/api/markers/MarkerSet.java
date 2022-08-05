@@ -82,15 +82,20 @@ public class MarkerSet {
 
     /**
      * Getter for the label of this {@link MarkerSet}.
-     * <p>The label is used in the web-app to name the toggle-button of this {@link MarkerSet} if it is toggleable. ({@link #isToggleable()})</p>
+     * <p>The label is used in the web-app to name the toggle-button of this {@link MarkerSet} if it is toggleable.
+     * ({@link #isToggleable()})</p>
+     *
      * @return the label of this {@link MarkerSet}
      */
     public String getLabel() {
         return label;
     }
+
     /**
      * Sets the label of this {@link MarkerSet}.
-     * <p>The label is used in the web-app to name the toggle-button of this {@link MarkerSet} if it is toggleable. ({@link #isToggleable()})</p>
+     * <p>The label is used in the web-app to name the toggle-button of this {@link MarkerSet} if it is toggleable.
+     * ({@link #isToggleable()})</p>
+     *
      * @param label the new label
      */
     public void setLabel(String label) {
@@ -99,7 +104,9 @@ public class MarkerSet {
 
     /**
      * Checks if the {@link MarkerSet} is toggleable.
-     * <p>If this is <code>true</code>, the web-app will display a toggle-button for this {@link MarkerSet} so the user can choose to enable/disable all markers of this set.</p>
+     * <p>If this is <code>true</code>, the web-app will display a toggle-button for this {@link MarkerSet} so the user
+     * can choose to enable/disable all markers of this set.</p>
+     *
      * @return whether this {@link MarkerSet} is toggleable
      */
     public boolean isToggleable() {
@@ -108,7 +115,9 @@ public class MarkerSet {
 
     /**
      * Changes if this {@link MarkerSet} is toggleable.
-     * <p>If this is <code>true</code>, the web-app will display a toggle-button for this {@link MarkerSet} so the user can choose to enable/disable all markers of this set.</p>
+     * <p>If this is <code>true</code>, the web-app will display a toggle-button for this {@link MarkerSet} so the user
+     * can choose to enable/disable all markers of this set.</p>
+     *
      * @param toggleable whether this {@link MarkerSet} should be toggleable
      */
     public void setToggleable(boolean toggleable) {
@@ -117,7 +126,9 @@ public class MarkerSet {
 
     /**
      * Checks if this {@link MarkerSet} is hidden by default.
-     * <p>This is basically the default-state of the toggle-button from {@link #isToggleable()}. If this is <code>true</code> the markers of this marker set will initially be hidden and can be displayed using the toggle-button.</p>
+     * <p>This is basically the default-state of the toggle-button from {@link #isToggleable()}.
+     * If this is <code>true</code> the markers of this marker set will initially be hidden and can be displayed
+     * using the toggle-button.</p>
      *
      * @return whether this {@link MarkerSet} is hidden by default
      * @see #isToggleable()
@@ -128,13 +139,14 @@ public class MarkerSet {
 
     /**
      * Sets if this {@link MarkerSet} is hidden by default.
-     * <p>This is basically the default-state of the toggle-button from {@link #isToggleable()}. If this is <code>true</code> the markers of this marker set will initially be hidden and can be displayed using the toggle-button.</p>
+     * <p>This is basically the default-state of the toggle-button from {@link #isToggleable()}. If this is
+     * <code>true</code> the markers of this marker set will initially be hidden and can be displayed using the toggle-button.</p>
      *
-     * @param defaultHide whether this {@link MarkerSet} should be hidden by default
+     * @param defaultHidden whether this {@link MarkerSet} should be hidden by default
      * @see #isToggleable()
      */
-    public void setDefaultHidden(boolean defaultHide) {
-        this.defaultHidden = defaultHide;
+    public void setDefaultHidden(boolean defaultHidden) {
+        this.defaultHidden = defaultHidden;
     }
 
     /**
@@ -167,6 +179,85 @@ public class MarkerSet {
         result = 31 * result + (defaultHidden ? 1 : 0);
         result = 31 * result + markers.hashCode();
         return result;
+    }
+
+    /**
+     * Creates a Builder for {@link MarkerSet}s.
+     * @return a new Builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private String label;
+        private Boolean toggleable, defaultHidden;
+
+        /**
+         * Sets the label of the {@link MarkerSet}.
+         * <p>The label is used in the web-app to name the toggle-button of the {@link MarkerSet} if it is toggleable.
+         * ({@link #toggleable(Boolean)})</p>
+         *
+         * @param label the new label
+         * @return this builder for chaining
+         */
+        public Builder label(String label) {
+            this.label = label;
+            return this;
+        }
+
+        /**
+         * Changes if the {@link MarkerSet} is toggleable.
+         * <p>If this is <code>true</code>, the web-app will display a toggle-button for the {@link MarkerSet}
+         * so the user can choose to enable/disable all markers of this set.</p>
+         *
+         * @param toggleable whether the {@link MarkerSet} should be toggleable
+         * @return this builder for chaining
+         */
+        public Builder toggleable(Boolean toggleable) {
+            this.toggleable = toggleable;
+            return this;
+        }
+
+        /**
+         * Sets if this {@link MarkerSet} is hidden by default.
+         * <p>This is basically the default-state of the toggle-button from {@link #toggleable(Boolean)}.
+         * If this is <code>true</code> the markers of this marker set will initially be hidden and can be displayed
+         * using the toggle-button.</p>
+         *
+         * @param defaultHidden whether this {@link MarkerSet} should be hidden by default
+         * @return this builder for chaining
+         * @see #isToggleable()
+         */
+        public Builder defaultHidden(Boolean defaultHidden) {
+            this.defaultHidden = defaultHidden;
+            return this;
+        }
+
+        /**
+         * Creates a new {@link MarkerSet} with the current builder-settings.<br>
+         * The minimum required settings to build this marker-set are:
+         * <ul>
+         *     <li>{@link #setLabel(String)}</li>
+         * </ul>
+         * @return The new {@link MarkerSet}-instance
+         */
+        public MarkerSet build() {
+            MarkerSet markerSet = new MarkerSet(
+                    checkNotNull(label, "label")
+            );
+            if (toggleable != null) markerSet.setToggleable(toggleable);
+            if (defaultHidden != null) markerSet.setDefaultHidden(defaultHidden);
+            return markerSet;
+        }
+
+        @SuppressWarnings("SameParameterValue")
+        <O> O checkNotNull(O object, String name) {
+            if (object == null) throw new IllegalStateException(name + " has to be set and cannot be null");
+            return object;
+        }
+
     }
 
 }

@@ -134,4 +134,72 @@ public class POIMarker extends DistanceRangedMarker {
         return result;
     }
 
+    /**
+     * Creates a Builder for {@link POIMarker}s.
+     * @return a new Builder
+     */
+    public static Builder toBuilder() {
+        return new Builder();
+    }
+
+    public static class Builder extends DistanceRangedMarker.Builder<POIMarker, Builder> {
+
+        String icon;
+        Vector2i anchor;
+
+        /**
+         * Sets the icon for the {@link POIMarker}.
+         * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
+         *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
+         * @param anchorX the x-position of the position (in pixels) where the icon is anchored to the map
+         * @param anchorY the y-position of the position (in pixels) where the icon is anchored to the map
+         * @return this builder for chaining
+         */
+        public Builder icon(String iconAddress, int anchorX, int anchorY) {
+            return icon(iconAddress, new Vector2i(anchorX, anchorY));
+        }
+
+        /**
+         * Sets the icon for the {@link POIMarker}.
+         * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
+         *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
+         * @param anchor the position of the position (in pixels) where the icon is anchored to the map
+         * @return this builder for chaining
+         */
+        public Builder icon(String iconAddress, Vector2i anchor) {
+            this.icon = Objects.requireNonNull(iconAddress, "iconAddress must not be null");
+            this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+            return this;
+        }
+
+        /**
+         * The {@link POIMarker} will use the default icon. (See: {@link #icon(String, Vector2i)})
+         * @return this builder for chaining
+         */
+        public Builder defaultIcon() {
+            this.icon = null;
+            this.anchor = null;
+            return this;
+        }
+
+        /**
+         * Creates a new {@link POIMarker} with the current builder-settings.<br>
+         * The minimum required settings to build this marker are:
+         * <ul>
+         *     <li>{@link #setLabel(String)}</li>
+         *     <li>{@link #setPosition(Vector3d)}</li>
+         * </ul>
+         * @return The new {@link POIMarker}-instance
+         */
+        public POIMarker build() {
+            POIMarker marker = new POIMarker(
+                    checkNotNull(label, "label"),
+                    checkNotNull(position, "position")
+            );
+            if (icon != null) marker.setIcon(icon, anchor);
+            return build(marker);
+        }
+
+    }
+
 }

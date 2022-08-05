@@ -59,12 +59,13 @@ public class LineMarker extends ObjectMarker {
      * @see #setLine(Line)
      */
     public LineMarker(String label, Line line) {
-        this(label, calculateLineCenter(Objects.requireNonNull(line, "shape must not be null")), line);
+        this(label, calculateLineCenter(Objects.requireNonNull(line, "line must not be null")), line);
     }
 
     /**
      * Creates a new {@link LineMarker}.
-     * <p><i>(Since the line has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+     * <p><i>(Since the line has its own positions, the position is only used to determine
+     * e.g. the distance to the camera)</i></p>
      *
      * @param label the label of the marker
      * @param position the coordinates of the marker
@@ -106,7 +107,8 @@ public class LineMarker extends ObjectMarker {
     }
 
     /**
-     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled,
+     * you'll only see the marker when it is not behind anything.
      * @return <code>true</code> if the depthTest is enabled
      */
     public boolean isDepthTestEnabled() {
@@ -114,7 +116,8 @@ public class LineMarker extends ObjectMarker {
     }
 
     /**
-     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled,
+     * you'll only see the marker when it is not behind anything.
      * @param enabled if the depth-test should be enabled for this {@link LineMarker}
      */
     public void setDepthTestEnabled(boolean enabled) {
@@ -179,6 +182,92 @@ public class LineMarker extends ObjectMarker {
 
     private static Vector3d calculateLineCenter(Line line) {
         return line.getMin().add(line.getMax()).mul(0.5);
+    }
+
+    /**
+     * Creates a Builder for {@link LineMarker}s.
+     * @return a new Builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder extends ObjectMarker.Builder<LineMarker, Builder> {
+
+        Line line;
+        Boolean depthTest;
+        Integer lineWidth;
+        Color lineColor;
+
+        /**
+         * Sets the {@link Line} of the {@link LineMarker}.
+         * @param line the new {@link Line}
+         * @return this builder for chaining
+         */
+        public Builder line(Line line) {
+            this.line = line;
+            return this;
+        }
+
+        /**
+         * Sets the position of the {@link LineMarker} to the center of the {@link Line} (it's bounding box).
+         * @return this builder for chaining
+         */
+        public Builder centerPosition() {
+            position(null);
+            return this;
+        }
+
+        /**
+         * If the depth-test is disabled, you can see the marker fully through all objects on the map.
+         * If it is enabled, you'll only see the marker when it is not behind anything.
+         * @param enabled if the depth-test should be enabled for the {@link LineMarker}
+         * @return this builder for chaining
+         */
+        public Builder depthTestEnabled(boolean enabled) {
+            this.depthTest = enabled;
+            return this;
+        }
+
+        /**
+         * Sets the width of the lines for this {@link LineMarker}.
+         * @param width the new width in pixels
+         * @return this builder for chaining
+         */
+        public Builder lineWidth(int width) {
+            this.lineWidth = width;
+            return this;
+        }
+
+        /**
+         * Sets the {@link Color} of the border-line of the shape.
+         * @param color the new line-color
+         */
+        public Builder lineColor(Color color) {
+            this.lineColor = color;
+            return this;
+        }
+
+        /**
+         * Creates a new {@link LineMarker} with the current builder-settings.<br>
+         * The minimum required settings to build this marker are:
+         * <ul>
+         *  <li>{@link #label(String)}</li>
+         *  <li>{@link #line(Line)}</li>
+         * </ul>
+         * @return The new {@link LineMarker}-instance
+         */
+        public LineMarker build() {
+            LineMarker marker = new LineMarker(
+                    checkNotNull(label, "label"),
+                    checkNotNull(line, "line")
+            );
+            if (depthTest != null) marker.setDepthTestEnabled(depthTest);
+            if (lineWidth != null) marker.setLineWidth(lineWidth);
+            if (lineColor != null) marker.setLineColor(lineColor);
+            return build(marker);
+        }
+
     }
 
 }

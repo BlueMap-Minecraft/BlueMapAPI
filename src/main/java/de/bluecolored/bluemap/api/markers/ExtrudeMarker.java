@@ -64,12 +64,17 @@ public class ExtrudeMarker extends ObjectMarker {
      * @see #setShape(Shape, float, float)
      */
     public ExtrudeMarker(String label, Shape shape, float shapeMinY, float shapeMaxY) {
-        this(label, calculateShapeCenter(Objects.requireNonNull(shape, "shape must not be null"), shapeMinY, shapeMaxY), shape, shapeMinY, shapeMaxY);
+        this(
+                label,
+                calculateShapeCenter(Objects.requireNonNull(shape, "shape must not be null"), shapeMinY, shapeMaxY),
+                shape, shapeMinY, shapeMaxY
+        );
     }
 
     /**
      * Creates a new {@link ExtrudeMarker}.
-     * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+     * <p><i>(Since the shape has its own positions, the position is only used to determine
+     * e.g. the distance to the camera)</i></p>
      *
      * @param label the label of the marker
      * @param position the coordinates of the marker
@@ -90,7 +95,8 @@ public class ExtrudeMarker extends ObjectMarker {
 
     /**
      * Getter for {@link Shape} of this {@link ExtrudeMarker}.
-     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points are the z-coordinates in the map.</p>
+     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points are the
+     * z-coordinates in the map.</p>
      * @return the {@link Shape}
      */
     public Shape getShape() {
@@ -117,7 +123,8 @@ public class ExtrudeMarker extends ObjectMarker {
 
     /**
      * Sets the {@link Shape} of this {@link ExtrudeMarker}.
-     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be the z-coordinates in the map.</p>
+     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be
+     * the z-coordinates in the map.</p>
      * <i>(The shape will be extruded from minY to maxY on the map)</i>
      * @param shape the new {@link Shape}
      * @param minY the new min-height (y-coordinate) of the shape on the map
@@ -140,7 +147,8 @@ public class ExtrudeMarker extends ObjectMarker {
     }
 
     /**
-     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled,
+     * you'll only see the marker when it is not behind anything.
      * @return <code>true</code> if the depthTest is enabled
      */
     public boolean isDepthTestEnabled() {
@@ -148,7 +156,8 @@ public class ExtrudeMarker extends ObjectMarker {
     }
 
     /**
-     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled,
+     * you'll only see the marker when it is not behind anything.
      * @param enabled if the depth-test should be enabled for this {@link ExtrudeMarker}
      */
     public void setDepthTestEnabled(boolean enabled) {
@@ -249,6 +258,116 @@ public class ExtrudeMarker extends ObjectMarker {
         Vector2d center = shape.getMin().add(shape.getMax()).mul(0.5);
         float centerY = (shapeMinY + shapeMaxY) * 0.5f;
         return new Vector3d(center.getX(), centerY, center.getY());
+    }
+
+    /**
+     * Creates a Builder for {@link ExtrudeMarker}s.
+     * @return a new Builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder extends ObjectMarker.Builder<ExtrudeMarker, Builder> {
+
+        Shape shape;
+        float shapeMinY, shapeMaxY;
+        Boolean depthTest;
+        Integer lineWidth;
+        Color lineColor;
+        Color fillColor;
+
+        /**
+         * Sets the {@link Shape} of the {@link ExtrudeMarker}.
+         * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will
+         * be the z-coordinates in the map.</p>
+         * <i>(The shape will be extruded from minY to maxY on the map)</i>
+         * @param shape the new {@link Shape}
+         * @param minY the new min-height (y-coordinate) of the shape on the map
+         * @param maxY the new max-height (y-coordinate) of the shape on the map
+         * @return this builder for chaining
+         */
+        public Builder shape(Shape shape, float minY, float maxY) {
+            this.shape = shape;
+            this.shapeMinY = minY;
+            this.shapeMaxY = maxY;
+            return this;
+        }
+
+        /**
+         * Sets the position of the {@link ExtrudeMarker} to the center of the {@link Shape} (it's bounding box).
+         * @return this builder for chaining
+         */
+        public Builder centerPosition() {
+            position(null);
+            return this;
+        }
+
+        /**
+         * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled,
+         * you'll only see the marker when it is not behind anything.
+         * @param enabled if the depth-test should be enabled for this {@link ExtrudeMarker}
+         * @return this builder for chaining
+         */
+        public Builder depthTestEnabled(boolean enabled) {
+            this.depthTest = enabled;
+            return this;
+        }
+
+        /**
+         * Sets the width of the lines for the {@link ExtrudeMarker}.
+         * @param width the new width in pixels
+         * @return this builder for chaining
+         */
+        public Builder lineWidth(int width) {
+            this.lineWidth = width;
+            return this;
+        }
+
+        /**
+         * Sets the {@link Color} of the border-line of the shape.
+         * @param color the new line-color
+         * @return this builder for chaining
+         */
+        public Builder lineColor(Color color) {
+            this.lineColor = color;
+            return this;
+        }
+
+        /**
+         * Sets the fill-{@link Color} of the shape.
+         * @param color the new fill-color
+         * @return this builder for chaining
+         */
+        public Builder fillColor(Color color) {
+            this.fillColor = color;
+            return this;
+        }
+
+        /**
+         * Creates a new {@link ExtrudeMarker} with the current builder-settings.<br>
+         * The minimum required settings to build this marker are:
+         * <ul>
+         *  <li>{@link #label(String)}</li>
+         *  <li>{@link #shape(Shape, float, float)}</li>
+         * </ul>
+         * @return The new {@link ExtrudeMarker}-instance
+         */
+        @Override
+        public ExtrudeMarker build() {
+            ExtrudeMarker marker = new ExtrudeMarker(
+                    checkNotNull(label, "label"),
+                    checkNotNull(shape, "shape"),
+                    shapeMinY,
+                    shapeMaxY
+            );
+            if (depthTest != null) marker.setDepthTestEnabled(depthTest);
+            if (lineWidth != null) marker.setLineWidth(lineWidth);
+            if (lineColor != null) marker.setLineColor(lineColor);
+            if (fillColor != null) marker.setFillColor(fillColor);
+            return build(marker);
+        }
+
     }
 
 }

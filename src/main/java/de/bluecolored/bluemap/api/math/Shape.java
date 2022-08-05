@@ -28,7 +28,10 @@ import com.flowpowered.math.vector.Vector2d;
 import de.bluecolored.bluemap.api.debug.DebugDump;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A shape consisting of 3 or more {@link Vector2d}-points on a plane.
@@ -43,8 +46,11 @@ public class Shape {
 
     public Shape(Vector2d... points) {
         if (points.length < 3) throw new IllegalArgumentException("A shape has to have at least 3 points!");
-
         this.points = points;
+    }
+
+    public Shape(Collection<Vector2d> points) {
+        this(points.toArray(Vector2d[]::new));
     }
 
     /**
@@ -55,6 +61,11 @@ public class Shape {
         return points.length;
     }
 
+    /**
+     * Getter for the point at the given index.
+     * @param i the index
+     * @return the point at the given index
+     */
     public Vector2d getPoint(int i) {
         return points[i];
     }
@@ -199,6 +210,55 @@ public class Shape {
      */
     public static Shape createCircle(double centerX, double centerY, double radius, int points) {
         return createCircle(new Vector2d(centerX, centerY), radius, points);
+    }
+
+    /**
+     * Creates a builder to build {@link Shape}s.
+     * @return a new builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        List<Vector2d> points;
+
+        public Builder() {
+            this.points = new ArrayList<>();
+        }
+
+        /**
+         * Adds a point to the end of line.
+         * @param point the point to be added.
+         * @return this builder for chaining
+         */
+        public Builder addPoint(Vector2d point) {
+            this.points.add(point);
+            return this;
+        }
+
+        /**
+         * Adds multiple points to the end of line.
+         * @param points the points to be added.
+         * @return this builder for chaining
+         */
+        public Builder addPoints(Vector2d... points) {
+            this.points.addAll(Arrays.asList(points));
+            return this;
+        }
+
+        /**
+         * Builds a new {@link Shape} with the points set in this builder.<br>
+         * There need to be at least 3 points to build a {@link Shape}.
+         * @return the new {@link Shape}
+         * @throws IllegalStateException if there are less than 3 points added to this builder
+         */
+        public Shape build() {
+            if (points.size() < 3) throw new IllegalStateException("A shape has to have at least 3 points!");
+            return new Shape(points);
+        }
+
     }
 
 }

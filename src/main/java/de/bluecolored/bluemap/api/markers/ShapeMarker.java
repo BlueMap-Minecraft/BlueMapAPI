@@ -69,7 +69,8 @@ public class ShapeMarker extends ObjectMarker {
 
     /**
      * Creates a new {@link ShapeMarker}.
-     * <p><i>(Since the shape has its own positions, the position is only used to determine e.g. the distance to the camera)</i></p>
+     * <p><i>(Since the shape has its own positions, the position is only used to determine
+     * e.g. the distance to the camera)</i></p>
      *
      * @param label the label of the marker
      * @param position the coordinates of the marker
@@ -88,7 +89,8 @@ public class ShapeMarker extends ObjectMarker {
 
     /**
      * Getter for {@link Shape} of this {@link ShapeMarker}.
-     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points are the z-coordinates in the map.</p>
+     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points are
+     * the z-coordinates in the map.</p>
      * @return the {@link Shape}
      */
     public Shape getShape() {
@@ -105,7 +107,8 @@ public class ShapeMarker extends ObjectMarker {
 
     /**
      * Sets the {@link Shape} of this {@link ShapeMarker}.
-     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be the z-coordinates in the map.</p>
+     * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points will be
+     * the z-coordinates in the map.</p>
      * @param shape the new {@link Shape}
      * @param y the new height (y-coordinate) of the shape on the map
      *
@@ -125,7 +128,8 @@ public class ShapeMarker extends ObjectMarker {
     }
 
     /**
-     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled,
+     * you'll only see the marker when it is not behind anything.
      * @return <code>true</code> if the depthTest is enabled
      */
     public boolean isDepthTestEnabled() {
@@ -133,7 +137,8 @@ public class ShapeMarker extends ObjectMarker {
     }
 
     /**
-     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled, you'll only see the marker when it is not behind anything.
+     * If the depth-test is disabled, you can see the marker fully through all objects on the map. If it is enabled,
+     * you'll only see the marker when it is not behind anything.
      * @param enabled if the depth-test should be enabled for this {@link ShapeMarker}
      */
     public void setDepthTestEnabled(boolean enabled) {
@@ -231,6 +236,111 @@ public class ShapeMarker extends ObjectMarker {
     private static Vector3d calculateShapeCenter(Shape shape, float shapeY) {
         Vector2d center = shape.getMin().add(shape.getMax()).mul(0.5);
         return new Vector3d(center.getX(), shapeY, center.getY());
+    }
+
+    /**
+     * Creates a Builder for {@link ShapeMarker}s.
+     * @return a new Builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder extends ObjectMarker.Builder<ShapeMarker, Builder> {
+
+        Shape shape;
+        float shapeY;
+        Boolean depthTest;
+        Integer lineWidth;
+        Color lineColor;
+        Color fillColor;
+
+        /**
+         * Sets the {@link Shape} of the {@link ShapeMarker}.
+         * <p>The shape is placed on the xz-plane of the map, so the y-coordinates of the {@link Shape}'s points
+         * will be the z-coordinates in the map.</p>
+         * @param shape the new {@link Shape}
+         * @param y the new height (y-coordinate) of the shape on the map
+         * @return this builder for chaining
+         */
+        public Builder shape(Shape shape, float y) {
+            this.shape = shape;
+            this.shapeY = y;
+            return this;
+        }
+
+        /**
+         * Sets the position of the {@link ShapeMarker} to the center of the {@link Shape} (it's bounding box).
+         * @return this builder for chaining
+         */
+        public Builder centerPosition() {
+            position(null);
+            return this;
+        }
+
+        /**
+         * If the depth-test is disabled, you can see the marker fully through all objects on the map.
+         * If it is enabled, you'll only see the marker when it is not behind anything.
+         * @param enabled if the depth-test should be enabled for the {@link ShapeMarker}
+         * @return this builder for chaining
+         */
+        public Builder depthTestEnabled(boolean enabled) {
+            this.depthTest = enabled;
+            return this;
+        }
+
+        /**
+         * Sets the width of the border-line for the {@link ShapeMarker}.
+         * @param width the new width in pixels
+         * @return this builder for chaining
+         */
+        public Builder lineWidth(int width) {
+            this.lineWidth = width;
+            return this;
+        }
+
+        /**
+         * Sets the {@link Color} of the border-line of the shape.
+         * @param color the new line-color
+         * @return this builder for chaining
+         */
+        public Builder lineColor(Color color) {
+            this.lineColor = color;
+            return this;
+        }
+
+        /**
+         * Sets the fill-{@link Color} of the shape.
+         * @param color the new fill-color
+         * @return this builder for chaining
+         */
+        public Builder fillColor(Color color) {
+            this.fillColor = color;
+            return this;
+        }
+
+        /**
+         * Creates a new {@link ShapeMarker} with the current builder-settings.<br>
+         * The minimum required settings to build this marker are:
+         * <ul>
+         *  <li>{@link #label(String)}</li>
+         *  <li>{@link #shape(Shape, float)}</li>
+         * </ul>
+         * @return The new {@link ShapeMarker}-instance
+         */
+        public ShapeMarker build() {
+            ShapeMarker marker = new ShapeMarker(
+                    checkNotNull(label, "label"),
+                    checkNotNull(shape, "shape"),
+                    shapeY
+            );
+            if (depthTest != null) marker.setDepthTestEnabled(depthTest);
+            if (lineWidth != null) marker.setLineWidth(lineWidth);
+            if (lineColor != null) marker.setLineColor(lineColor);
+            if (fillColor != null) marker.setFillColor(fillColor);
+            return build(marker);
+        }
+
     }
 
 }

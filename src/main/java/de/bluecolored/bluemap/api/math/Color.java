@@ -69,6 +69,15 @@ public class Color {
     }
 
     /**
+     * Creates a new color from the given integer in the format 0xRRGGBB.
+     * @param i the integer to create the color from
+     * @param alpha the alpha value in range 0-1
+     */
+    public Color(int i, float alpha) {
+        this((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF, alpha);
+    }
+
+    /**
      * The value can be an integer in String-Format (see {@link #Color(int)}) or a string in hexadecimal format
      * prefixed with # <i>(css-style: e.g. <code>#f16</code> becomes <code>#ff1166</code>)</i>.
      * @param cssColorString The string to parse to a color
@@ -78,17 +87,34 @@ public class Color {
         this(parseColorString(Objects.requireNonNull(cssColorString)));
     }
 
+    /**
+     * Getter for the red-component of the color.
+     * @return the red-component of the color in range 0-255
+     */
     public int getRed() {
         return r;
     }
+
+    /**
+     * Getter for the green-component of the color.
+     * @return the green-component of the color in range 0-255
+     */
     public int getGreen() {
         return g;
     }
 
+    /**
+     * Getter for the blue-component of the color.
+     * @return the blue-component of the color in range 0-255
+     */
     public int getBlue() {
         return b;
     }
 
+    /**
+     * Getter for the alpha-component of the color.
+     * @return the alpha-component of the color in range 0-1
+     */
     public float getAlpha() {
         return a;
     }
@@ -97,7 +123,9 @@ public class Color {
         if (val.charAt(0) == '#') {
             val = val.substring(1);
             if (val.length() == 3) val = val + "f";
-            if (val.length() == 4) val = "" + val.charAt(0) + val.charAt(0) + val.charAt(1) + val.charAt(1) + val.charAt(2) + val.charAt(2) + val.charAt(3) + val.charAt(3);
+            if (val.length() == 4) val = "" +
+                    val.charAt(0) + val.charAt(0) + val.charAt(1) + val.charAt(1) +
+                    val.charAt(2) + val.charAt(2) + val.charAt(3) + val.charAt(3);
             if (val.length() == 6) val = val + "ff";
             if (val.length() != 8) throw new NumberFormatException("Invalid color format!");
             val = val.substring(6, 8) + val.substring(0, 6); // move alpha to front

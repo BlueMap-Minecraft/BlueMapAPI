@@ -28,7 +28,10 @@ import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.debug.DebugDump;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A line consisting of 2 or more {@link Vector3d}-points.
@@ -46,6 +49,10 @@ public class Line {
         this.points = points;
     }
 
+    public Line(Collection<Vector3d> points) {
+        this(points.toArray(Vector3d[]::new));
+    }
+
     /**
      * Getter for the amount of points in this line.
      * @return the amount of points
@@ -54,6 +61,11 @@ public class Line {
         return points.length;
     }
 
+    /**
+     * Getter for the point at the given index.
+     * @param i the index
+     * @return the point at the given index
+     */
     public Vector3d getPoint(int i) {
         return points[i];
     }
@@ -110,6 +122,55 @@ public class Line {
     @Override
     public int hashCode() {
         return Arrays.hashCode(points);
+    }
+
+    /**
+     * Creates a builder to build {@link Line}s.
+     * @return a new builder
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        List<Vector3d> points;
+
+        public Builder() {
+            this.points = new ArrayList<>();
+        }
+
+        /**
+         * Adds a point to the end of line.
+         * @param point the point to be added.
+         * @return this builder for chaining
+         */
+        public Builder addPoint(Vector3d point) {
+            this.points.add(point);
+            return this;
+        }
+
+        /**
+         * Adds multiple points to the end of line.
+         * @param points the points to be added.
+         * @return this builder for chaining
+         */
+        public Builder addPoints(Vector3d... points) {
+            this.points.addAll(Arrays.asList(points));
+            return this;
+        }
+
+        /**
+         * Builds a new {@link Line} with the points set in this builder.<br>
+         * There need to be at least 2 points to build a {@link Line}.
+         * @return the new {@link Line}
+         * @throws IllegalStateException if there are less than 2 points added to this builder
+         */
+        public Line build() {
+            if (points.size() < 2) throw new IllegalStateException("A line has to have at least 2 points!");
+            return new Line(points);
+        }
+
     }
 
 }
