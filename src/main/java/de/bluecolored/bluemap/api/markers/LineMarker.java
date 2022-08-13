@@ -76,7 +76,7 @@ public class LineMarker extends ObjectMarker {
      * @see #setLine(Line)
      */
     public LineMarker(String label, Vector3d position, Line line) {
-        super("extrude", label, position);
+        super("line", label, position);
         this.line = Objects.requireNonNull(line, "line must not be null");
     }
 
