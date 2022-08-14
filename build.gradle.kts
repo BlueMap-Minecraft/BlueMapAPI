@@ -3,7 +3,7 @@ import java.io.IOException
 plugins {
     java
     `java-library`
-    `maven-publish`
+    //`maven-publish`
     id("com.diffplug.spotless") version "6.1.2"
 }
 
@@ -95,6 +95,7 @@ tasks.processResources {
     }
 }
 
+/*
 publishing {
     repositories {
         maven {
@@ -114,3 +115,4 @@ publishing {
         }
     }
 }
+*/
