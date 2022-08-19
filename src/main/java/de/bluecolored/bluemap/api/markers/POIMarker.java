@@ -138,7 +138,7 @@ public class POIMarker extends DistanceRangedMarker {
      * Creates a Builder for {@link POIMarker}s.
      * @return a new Builder
      */
-    public static Builder toBuilder() {
+    public static Builder builder() {
         return new Builder();
     }
 
