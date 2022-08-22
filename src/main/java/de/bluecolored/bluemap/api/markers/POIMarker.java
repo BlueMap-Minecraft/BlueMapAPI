@@ -202,4 +202,14 @@ public class POIMarker extends DistanceRangedMarker {
 
     }
 
+    // ------
+
+    /**
+     * @deprecated use {@link #builder()} instead.
+     */
+    @Deprecated
+    public static Builder toBuilder() {
+        return new Builder();
+    }
+
 }
