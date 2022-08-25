@@ -52,6 +52,13 @@ public interface WebApp {
     void setPlayerVisibility(UUID player, boolean visible);
 
     /**
+     * Returns <code>true</code> if the given player is currently visible on the web-app.
+     * @see #setPlayerVisibility(UUID, boolean)
+     * @param player the UUID of the player
+     */
+    boolean getPlayerVisibility(UUID player);
+
+    /**
      * Creates an image-file with the given {@link BufferedImage} somewhere in the web-root, so it can be used in the web-app (e.g. for {@link Marker}-icons).
      *
      * <p>The given <code>path</code> is used as file-name and (separated with '/') optional folders to organize the image-files.
