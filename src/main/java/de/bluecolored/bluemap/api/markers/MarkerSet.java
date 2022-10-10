@@ -159,6 +159,33 @@ public class MarkerSet {
         return markers;
     }
 
+    /**
+     * Convenience method to add a {@link Marker} to this {@link MarkerSet}.<br>
+     * Shortcut for: <code>getMarkers().get(String)</code>
+     * @see Map#get(Object)
+     */
+    public Marker get(String key) {
+        return getMarkers().get(key);
+    }
+
+    /**
+     * Convenience method to add a {@link Marker} to this {@link MarkerSet}.<br>
+     * Shortcut for: <code>getMarkers().put(String,Marker)</code>
+     * @see Map#put(Object, Object)
+     */
+    public Marker put(String key, Marker marker) {
+        return getMarkers().put(key, marker);
+    }
+
+    /**
+     * Convenience method to remove a {@link Marker} from this {@link MarkerSet}.<br>
+     * Shortcut for: <code>getMarkers().remove(String)</code>
+     * @see Map#remove(Object)
+     */
+    public Marker remove(String key) {
+        return getMarkers().remove(key);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
