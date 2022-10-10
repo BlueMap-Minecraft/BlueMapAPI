@@ -78,6 +78,15 @@ public class Color {
     }
 
     /**
+     * Creates a new color from the given integer in the format 0xRRGGBB.
+     * @param i the integer to create the color from
+     * @param alpha the alpha value in range 0-255
+     */
+    public Color(int i, int alpha) {
+        this((i >> 16) & 0xFF, (i >> 8) & 0xFF, i & 0xFF, (float) alpha / 255f);
+    }
+
+    /**
      * The value can be an integer in String-Format (see {@link #Color(int)}) or a string in hexadecimal format
      * prefixed with # <i>(css-style: e.g. <code>#f16</code> becomes <code>#ff1166</code>)</i>.
      * @param cssColorString The string to parse to a color
