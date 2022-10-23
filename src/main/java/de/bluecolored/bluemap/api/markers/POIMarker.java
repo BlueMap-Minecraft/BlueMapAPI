@@ -36,6 +36,8 @@ public class POIMarker extends DistanceRangedMarker {
 
     private String icon;
     private Vector2i anchor;
+    private Vector2i scale;
+    private String iconFilter;
 
     /**
      * Empty constructor for deserialization.
@@ -93,6 +95,22 @@ public class POIMarker extends DistanceRangedMarker {
     }
 
     /**
+     * Getter for the size the icon should be scaled to (in pixels)
+     * @return the size in pixels
+     */
+    public Vector2i getScale() {
+        return scale;
+    }
+
+    /**
+     * Getter for the filter to apply to the icon (css filter property)
+     * @return the filter
+     */
+    public String getIconFilter() {
+        return iconFilter;
+    }
+
+    /**
      * Sets the icon for this {@link POIMarker}.
      * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
      *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
@@ -112,6 +130,18 @@ public class POIMarker extends DistanceRangedMarker {
     public void setIcon(String iconAddress, Vector2i anchor) {
         this.icon = Objects.requireNonNull(iconAddress, "iconAddress must not be null");
         this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+    }
+
+    /**
+     * Sets the style for this {@link POIMarker}.
+     * These properties are applied as css styles in the browser.
+     * Set to null to reset to default.
+     * @param scale the size the icon should be scaled to (in pixels, css 'width' and 'height' properties)
+     * @param iconFilter the filter to apply to the icon (css 'filter' property)
+     */
+    public void setStyle(Vector2i scale, String iconFilter) {
+    	this.scale = scale;
+    	this.iconFilter = iconFilter;
     }
 
     @Override
@@ -146,6 +176,9 @@ public class POIMarker extends DistanceRangedMarker {
 
         String icon;
         Vector2i anchor;
+        Vector2i scale;
+        String iconFilter;
+
 
         /**
          * Sets the icon for the {@link POIMarker}.
@@ -183,6 +216,28 @@ public class POIMarker extends DistanceRangedMarker {
         }
 
         /**
+         * Sets the style for the {@link POIMarker}.
+         * These properties are applied as css styles in the browser.
+         * Set to null to use default.
+         * @param scale the size the icon should be scaled to (in pixels, css 'width' and 'height' properties)
+         * @param iconFilter the filter to apply to the icon (css 'filter' property)
+         * @return this builder for chaining
+         */
+        public Builder style(Vector2i scale, String iconFilter) {
+            	this.scale = scale;
+            	this.iconFilter = iconFilter;
+            	return this;
+        }
+
+        /**
+         * The {@link POIMarker} will use the default style. (See: {@link #style(Vector2i, String)})
+         * @return this builder for chaining
+         */
+        public Builder defaultStyle() {
+            return style(null, null);
+        }
+
+        /**
          * Creates a new {@link POIMarker} with the current builder-settings.<br>
          * The minimum required settings to build this marker are:
          * <ul>
@@ -197,6 +252,7 @@ public class POIMarker extends DistanceRangedMarker {
                     checkNotNull(position, "position")
             );
             if (icon != null) marker.setIcon(icon, anchor);
+            marker.setStyle(scale, iconFilter);
             return build(marker);
         }
 
