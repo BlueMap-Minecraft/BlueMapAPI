@@ -61,6 +61,15 @@ public interface BlueMapMap {
     BlueMapWorld getWorld();
 
     /**
+     * Getter for this map's {@link AssetStorage}. <br>
+     * Each map has its own storage for assets. Assets that are stored here will be available to every webapp that
+     * is displaying this map. E.g. these assets are also available in server-networks.
+     * @return the {@link AssetStorage} of this map
+     */
+    @DebugDump
+    AssetStorage getAssetStorage();
+
+    /**
      * Getter for a (modifiable) {@link Map} of {@link MarkerSet}s with the key being the {@link MarkerSet}'s id.
      * Changing this map will change the {@link MarkerSet}s and markers displayed on the web-app for this map.
      * @return a {@link Map} of {@link MarkerSet}s.
