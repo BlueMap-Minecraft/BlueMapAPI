@@ -58,7 +58,8 @@ public interface WebApp {
 
     /**
      * Registers a css-style so the webapp loads it.<br>
-     * This method should only be used inside the {@link Consumer} that got registered to {@link BlueMapAPI#onEnable(Consumer)}.<br>
+     * This method should only be used inside the {@link Consumer} that got registered <i>(before bluemap loaded,
+     * pre server-start!)</i> to {@link BlueMapAPI#onEnable(Consumer)}.<br>
      * Invoking this method at any other time is not supported.<br>
      * Style-registrations are <b>not persistent</b>, register your style each time bluemap enables!
      * <p>
@@ -76,7 +77,8 @@ public interface WebApp {
 
     /**
      * Registers a js-script so the webapp loads it.<br>
-     * This method should only be used inside the {@link Consumer} that got registered to {@link BlueMapAPI#onEnable(Consumer)}.<br>
+     * This method should only be used inside the {@link Consumer} that got registered <i>(before bluemap loaded,
+     * pre server-start!)</i> to {@link BlueMapAPI#onEnable(Consumer)}.<br>
      * Invoking this method at any other time is not supported.<br>
      * Script-registrations are <b>not persistent</b>, register your script each time bluemap enables!
      * <p>
