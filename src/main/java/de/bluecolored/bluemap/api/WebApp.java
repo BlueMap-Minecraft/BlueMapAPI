@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public interface WebApp {
 
@@ -54,6 +55,42 @@ public interface WebApp {
      * @param player the UUID of the player
      */
     boolean getPlayerVisibility(UUID player);
+
+    /**
+     * Registers a css-style so the webapp loads it.<br>
+     * This method should only be used inside the {@link Consumer} that got registered to {@link BlueMapAPI#onEnable(Consumer)}.<br>
+     * Invoking this method at any other time is not supported.<br>
+     * Style-registrations are <b>not persistent</b>, register your style each time bluemap enables!
+     * <p>
+     * Example:
+     * <pre>
+     * BlueMapAPI.onEnable(api -> {
+     *    api.getWebApp().registerStyle("js/my-custom-style.css");
+     * });
+     * </pre>
+     * </p>
+     * @param url The (relative) URL that links to the style.css file. The {@link #getWebRoot()}-method can be used to
+     *            create the custom file in the correct location and make it available to the web-app.
+     */
+    void registerStyle(String url);
+
+    /**
+     * Registers a js-script so the webapp loads it.<br>
+     * This method should only be used inside the {@link Consumer} that got registered to {@link BlueMapAPI#onEnable(Consumer)}.<br>
+     * Invoking this method at any other time is not supported.<br>
+     * Script-registrations are <b>not persistent</b>, register your script each time bluemap enables!
+     * <p>
+     * Example:
+     * <pre>
+     * BlueMapAPI.onEnable(api -> {
+     *    api.getWebApp().registerScript("js/my-custom-script.js");
+     * });
+     * </pre>
+     * </p>
+     * @param url The (relative) URL that links to the script.js file. The {@link #getWebRoot()}-method can be used to
+     *            create the custom file in the correct location and make it available to the web-app.
+     */
+    void registerScript(String url);
 
     /**
      * @deprecated You should use the {@link #getWebRoot()} method to create the image-files you need, or store map/marker
