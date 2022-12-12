@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.bluecolored.bluemap.api.debug.DebugDump;
+import de.bluecolored.bluemap.api.plugin.Plugin;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -86,6 +87,13 @@ public abstract class BlueMapAPI {
      */
     @DebugDump
     public abstract WebApp getWebApp();
+
+    /**
+     * Getter for the {@link Plugin}
+     * @return the {@link Plugin}
+     */
+    @DebugDump
+    public abstract Plugin getPlugin();
 
     /**
      * Getter for all {@link BlueMapMap}s loaded by BlueMap.
