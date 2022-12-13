@@ -31,8 +31,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * @see ShapeMarker
+ * @see ExtrudeMarker
+ * @see LineMarker
+ */
 @DebugDump
-public abstract class ObjectMarker extends DistanceRangedMarker {
+public abstract class ObjectMarker extends DistanceRangedMarker implements DetailMarker {
 
     private String detail;
 
@@ -45,26 +50,12 @@ public abstract class ObjectMarker extends DistanceRangedMarker {
         this.detail = Objects.requireNonNull(label, "label must not be null");
     }
 
-    /**
-     * Getter for the detail of this marker. The label can include html-tags.
-     * @return the detail of this {@link Marker}
-     */
+    @Override
     public String getDetail() {
         return detail;
     }
 
-    /**
-     * Sets the detail of this {@link Marker}. The detail can include html-tags.<br>
-     * This is the text that will be displayed on the popup when you click on this marker.
-     * <p>
-     * 	<b>Important:</b><br>
-     * 	Html-tags in the label will not be escaped, so you can use them to style the {@link Marker}-detail.<br>
-     * 	Make sure you escape all html-tags from possible user inputs to prevent possible
-     * 	<a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
-     * </p>
-     *
-     * @param detail the new detail for this {@link ObjectMarker}
-     */
+    @Override
     public void setDetail(String detail) {
         this.detail = Objects.requireNonNull(detail);
     }
@@ -131,25 +122,14 @@ public abstract class ObjectMarker extends DistanceRangedMarker {
     }
 
     public static abstract class Builder<T extends ObjectMarker, B extends ObjectMarker.Builder<T, B>>
-            extends DistanceRangedMarker.Builder<T, B> {
+            extends DistanceRangedMarker.Builder<T, B>
+            implements DetailMarker.Builder<B> {
 
         String detail;
         String link;
         boolean newTab;
 
-        /**
-         * Sets the detail of the {@link Marker}. The detail can include html-tags.<br>
-         * This is the text that will be displayed on the popup when you click on the marker.
-         * <p>
-         * 	<b>Important:</b><br>
-         * 	Html-tags in the label will not be escaped, so you can use them to style the {@link Marker}-detail.<br>
-         * 	Make sure you escape all html-tags from possible user inputs to prevent possible
-         * 	<a href="https://en.wikipedia.org/wiki/Cross-site_scripting">XSS-Attacks</a> on the web-client!
-         * </p>
-         *
-         * @param detail the new detail for the {@link Marker}
-         * @return this builder for chaining
-         */
+        @Override
         public B detail(String detail) {
             this.detail = detail;
             return self();

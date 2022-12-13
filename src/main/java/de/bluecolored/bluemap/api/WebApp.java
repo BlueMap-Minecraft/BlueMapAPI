@@ -94,6 +94,8 @@ public interface WebApp {
      */
     void registerScript(String url);
 
+    // ------
+
     /**
      * @deprecated You should use the {@link #getWebRoot()} method to create the image-files you need, or store map/marker
      * specific images in the map's storage (See: {@link BlueMapMap#getAssetStorage()})!

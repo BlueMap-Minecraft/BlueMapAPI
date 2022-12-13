@@ -29,13 +29,16 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.debug.DebugDump;
 
-import java.util.Objects;
+import java.util.*;
 
 /**
  * A marker that is a html-element placed somewhere on the map.
  */
+@SuppressWarnings("FieldMayBeFinal")
 @DebugDump
-public class HtmlMarker extends DistanceRangedMarker {
+public class HtmlMarker extends DistanceRangedMarker implements ElementMarker {
+
+    private Set<String> classes = new HashSet<>();
 
     private Vector2i anchor;
     private String html;
@@ -82,29 +85,14 @@ public class HtmlMarker extends DistanceRangedMarker {
         this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
     }
 
-    /**
-     * Getter for the position (in pixels) where the html-element is anchored to the map.
-     * @return the anchor-position in pixels
-     */
+    @Override
     public Vector2i getAnchor() {
         return anchor;
     }
 
-    /**
-     * Sets the position (in pixels) where the html-element is anchored to the map.
-     * @param anchor the anchor-position in pixels
-     */
+    @Override
     public void setAnchor(Vector2i anchor) {
         this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
-    }
-
-    /**
-     * Sets the position (in pixels) where the html-element is anchored to the map.
-     * @param x the anchor-x-position in pixels
-     * @param y the anchor-y-position in pixels
-     */
-    public void setAnchor(int x, int y) {
-        setAnchor(new Vector2i(x, y));
     }
 
     /**
@@ -128,6 +116,28 @@ public class HtmlMarker extends DistanceRangedMarker {
      */
     public void setHtml(String html) {
         this.html = Objects.requireNonNull(html, "html must not be null");
+    }
+
+    @Override
+    public Collection<String> getStyleClasses() {
+        return Collections.unmodifiableCollection(this.classes);
+    }
+
+    @Override
+    public void setStyleClasses(Collection<String> styleClasses) {
+        if (!styleClasses.stream().allMatch(STYLE_CLASS_PATTERN.asMatchPredicate()))
+            throw new IllegalArgumentException("One of the provided style-classes has an invalid format!");
+
+        this.classes.clear();
+        this.classes.addAll(styleClasses);
+    }
+
+    @Override
+    public void addStyleClasses(Collection<String> styleClasses) {
+        if (!styleClasses.stream().allMatch(STYLE_CLASS_PATTERN.asMatchPredicate()))
+            throw new IllegalArgumentException("One of the provided style-classes has an invalid format!");
+
+        this.classes.addAll(styleClasses);
     }
 
     @Override
@@ -158,29 +168,17 @@ public class HtmlMarker extends DistanceRangedMarker {
         return new Builder();
     }
 
-    public static class Builder extends DistanceRangedMarker.Builder<HtmlMarker, Builder> {
+    public static class Builder extends DistanceRangedMarker.Builder<HtmlMarker, Builder>
+        implements ElementMarker.Builder<Builder> {
+
+        Set<String> classes = new HashSet<>();
 
         Vector2i anchor;
         String html;
 
-        /**
-         * Sets the position (in pixels) where the html-element is anchored to the map.
-         * @param anchor the anchor-position in pixels
-         * @return this builder for chaining
-         */
+        @Override
         public Builder anchor(Vector2i anchor) {
             this.anchor = anchor;
-            return this;
-        }
-
-        /**
-         * Sets the position (in pixels) where the html-element is anchored to the map.
-         * @param x the anchor-x-position in pixels
-         * @param y the anchor-y-position in pixels
-         * @return this builder for chaining
-         */
-        public Builder anchor(int x, int y) {
-            this.anchor = new Vector2i(x, y);
             return this;
         }
 
@@ -197,6 +195,22 @@ public class HtmlMarker extends DistanceRangedMarker {
          */
         public Builder html(String html) {
             this.html = html;
+            return this;
+        }
+
+        @Override
+        public Builder styleClasses(String... styleClasses) {
+            Collection<String> styleClassesCollection = Arrays.asList(styleClasses);
+            if (!styleClassesCollection.stream().allMatch(STYLE_CLASS_PATTERN.asMatchPredicate()))
+                throw new IllegalArgumentException("One of the provided style-classes has an invalid format!");
+
+            this.classes.addAll(styleClassesCollection);
+            return this;
+        }
+
+        @Override
+        public Builder clearStyleClasses() {
+            this.classes.clear();
             return this;
         }
 

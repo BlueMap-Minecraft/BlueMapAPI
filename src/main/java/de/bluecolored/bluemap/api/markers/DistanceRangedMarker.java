@@ -27,6 +27,13 @@ package de.bluecolored.bluemap.api.markers;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.debug.DebugDump;
 
+/**
+ * @see HtmlMarker
+ * @see POIMarker
+ * @see ShapeMarker
+ * @see ExtrudeMarker
+ * @see LineMarker
+ */
 @DebugDump
 public abstract class DistanceRangedMarker extends Marker {
 

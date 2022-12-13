@@ -26,13 +26,18 @@ package de.bluecolored.bluemap.api.markers;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.WebApp;
+import de.bluecolored.bluemap.api.BlueMapMap;
 import de.bluecolored.bluemap.api.debug.DebugDump;
 
-import java.util.Objects;
+import java.util.*;
 
+@SuppressWarnings("FieldMayBeFinal")
 @DebugDump
-public class POIMarker extends DistanceRangedMarker {
+public class POIMarker extends DistanceRangedMarker implements DetailMarker, ElementMarker {
+
+    private Set<String> classes = new HashSet<>();
+
+    private String detail;
 
     private String icon;
     private Vector2i anchor;
@@ -72,8 +77,19 @@ public class POIMarker extends DistanceRangedMarker {
      */
     public POIMarker(String label, Vector3d position, String iconAddress, Vector2i anchor) {
         super("poi", label, position);
+        this.detail = Objects.requireNonNull(label, "label must not be null");
         this.icon = Objects.requireNonNull(iconAddress, "iconAddress must not be null");
         this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+    }
+
+    @Override
+    public String getDetail() {
+        return detail;
+    }
+
+    @Override
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     /**
@@ -84,18 +100,20 @@ public class POIMarker extends DistanceRangedMarker {
         return icon;
     }
 
-    /**
-     * Getter for the position (in pixels) where the icon is anchored to the map.
-     * @return the anchor-position in pixels
-     */
+    @Override
     public Vector2i getAnchor() {
         return anchor;
+    }
+
+    @Override
+    public void setAnchor(Vector2i anchor) {
+        this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
     }
 
     /**
      * Sets the icon for this {@link POIMarker}.
      * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
-     *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
+     *                    (See: {@link BlueMapMap#getAssetStorage()})
      * @param anchorX the x-position of the position (in pixels) where the icon is anchored to the map
      * @param anchorY the y-position of the position (in pixels) where the icon is anchored to the map
      */
@@ -106,12 +124,34 @@ public class POIMarker extends DistanceRangedMarker {
     /**
      * Sets the icon for this {@link POIMarker}.
      * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
-     *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
+     *                    (See: {@link BlueMapMap#getAssetStorage()})
      * @param anchor the position of the position (in pixels) where the icon is anchored to the map
      */
     public void setIcon(String iconAddress, Vector2i anchor) {
         this.icon = Objects.requireNonNull(iconAddress, "iconAddress must not be null");
         this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+    }
+
+    @Override
+    public Collection<String> getStyleClasses() {
+        return Collections.unmodifiableCollection(this.classes);
+    }
+
+    @Override
+    public void setStyleClasses(Collection<String> styleClasses) {
+        if (!styleClasses.stream().allMatch(STYLE_CLASS_PATTERN.asMatchPredicate()))
+            throw new IllegalArgumentException("One of the provided style-classes has an invalid format!");
+
+        this.classes.clear();
+        this.classes.addAll(styleClasses);
+    }
+
+    @Override
+    public void addStyleClasses(Collection<String> styleClasses) {
+        if (!styleClasses.stream().allMatch(STYLE_CLASS_PATTERN.asMatchPredicate()))
+            throw new IllegalArgumentException("One of the provided style-classes has an invalid format!");
+
+        this.classes.addAll(styleClasses);
     }
 
     @Override
@@ -142,15 +182,25 @@ public class POIMarker extends DistanceRangedMarker {
         return new Builder();
     }
 
-    public static class Builder extends DistanceRangedMarker.Builder<POIMarker, Builder> {
+    public static class Builder extends DistanceRangedMarker.Builder<POIMarker, Builder>
+        implements DetailMarker.Builder<Builder>, ElementMarker.Builder<Builder> {
 
+        Set<String> classes = new HashSet<>();
+
+        String detail;
         String icon;
         Vector2i anchor;
+
+        @Override
+        public Builder detail(String detail) {
+            this.detail = detail;
+            return this;
+        }
 
         /**
          * Sets the icon for the {@link POIMarker}.
          * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
-         *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
+         *                    (See: {@link BlueMapMap#getAssetStorage()})
          * @param anchorX the x-position of the position (in pixels) where the icon is anchored to the map
          * @param anchorY the y-position of the position (in pixels) where the icon is anchored to the map
          * @return this builder for chaining
@@ -162,12 +212,18 @@ public class POIMarker extends DistanceRangedMarker {
         /**
          * Sets the icon for the {@link POIMarker}.
          * @param iconAddress the web-address of the icon-image. Can be an absolute or relative.
-         *                    You can also use an address returned by {@link WebApp#createImage(java.awt.image.BufferedImage, String)}.
+         *                    (See: {@link BlueMapMap#getAssetStorage()})
          * @param anchor the position of the position (in pixels) where the icon is anchored to the map
          * @return this builder for chaining
          */
         public Builder icon(String iconAddress, Vector2i anchor) {
             this.icon = Objects.requireNonNull(iconAddress, "iconAddress must not be null");
+            this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
+            return this;
+        }
+
+        @Override
+        public Builder anchor(Vector2i anchor) {
             this.anchor = Objects.requireNonNull(anchor, "anchor must not be null");
             return this;
         }
@@ -179,6 +235,22 @@ public class POIMarker extends DistanceRangedMarker {
         public Builder defaultIcon() {
             this.icon = null;
             this.anchor = null;
+            return this;
+        }
+
+        @Override
+        public Builder styleClasses(String... styleClasses) {
+            Collection<String> styleClassesCollection = Arrays.asList(styleClasses);
+            if (!styleClassesCollection.stream().allMatch(STYLE_CLASS_PATTERN.asMatchPredicate()))
+                throw new IllegalArgumentException("One of the provided style-classes has an invalid format!");
+
+            this.classes.addAll(styleClassesCollection);
+            return this;
+        }
+
+        @Override
+        public Builder clearStyleClasses() {
+            this.classes.clear();
             return this;
         }
 
@@ -196,7 +268,9 @@ public class POIMarker extends DistanceRangedMarker {
                     checkNotNull(label, "label"),
                     checkNotNull(position, "position")
             );
+            if (detail != null) marker.setDetail(detail);
             if (icon != null) marker.setIcon(icon, anchor);
+            else if (anchor != null) marker.setAnchor(anchor);
             return build(marker);
         }
 
