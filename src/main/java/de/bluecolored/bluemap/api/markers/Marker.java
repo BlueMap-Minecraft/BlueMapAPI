@@ -103,7 +103,7 @@ public abstract class Marker {
      * @param y the y-coordinate of the new position
      * @param z the z-coordinate of the new position
      */
-    public void setPosition(int x, int y, int z) {
+    public void setPosition(double x, double y, double z) {
         setPosition(new Vector3d(x, y, z));
     }
 
@@ -160,7 +160,7 @@ public abstract class Marker {
          * @param z the z-coordinate of the new position
          * @return this builder for chaining
          */
-        public B position(int x, int y, int z) {
+        public B position(double x, double y, double z) {
             return position(new Vector3d(x, y, z));
         }
 
@@ -186,6 +186,26 @@ public abstract class Marker {
             return object;
         }
 
+        // -----
+
+        /**
+         * @deprecated use {@link #position(double, double, double)} instead
+         */
+        @Deprecated(forRemoval = true)
+        public B position(int x, int y, int z) {
+            return position(new Vector3d(x, y, z));
+        }
+
+    }
+
+    // -----
+
+    /**
+     * @deprecated use {@link #setPosition(double, double, double)} instead
+     */
+    @Deprecated(forRemoval = true)
+    public void setPosition(int x, int y, int z) {
+        setPosition(new Vector3d(x, y, z));
     }
 
 }

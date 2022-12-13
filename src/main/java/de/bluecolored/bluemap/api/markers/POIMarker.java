@@ -281,7 +281,7 @@ public class POIMarker extends DistanceRangedMarker implements DetailMarker, Ele
     /**
      * @deprecated use {@link #builder()} instead.
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public static Builder toBuilder() {
         return new Builder();
     }

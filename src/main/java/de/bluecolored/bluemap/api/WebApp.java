@@ -100,14 +100,14 @@ public interface WebApp {
      * @deprecated You should use the {@link #getWebRoot()} method to create the image-files you need, or store map/marker
      * specific images in the map's storage (See: {@link BlueMapMap#getAssetStorage()})!
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     String createImage(BufferedImage image, String path) throws IOException;
 
     /**
      * @deprecated You should use the {@link #getWebRoot()} method to find the image-files you need, or read map/marker
      * specific images from the map's storage (See: {@link BlueMapMap#getAssetStorage()})!
      */
-    @Deprecated
+    @Deprecated(forRemoval = true)
     Map<String, String> availableImages() throws IOException;
 
 }
