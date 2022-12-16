@@ -271,6 +271,7 @@ public class POIMarker extends DistanceRangedMarker implements DetailMarker, Ele
             if (detail != null) marker.setDetail(detail);
             if (icon != null) marker.setIcon(icon, anchor);
             else if (anchor != null) marker.setAnchor(anchor);
+            marker.setStyleClasses(classes);
             return build(marker);
         }
 

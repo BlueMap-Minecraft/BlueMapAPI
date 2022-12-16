@@ -232,6 +232,7 @@ public class HtmlMarker extends DistanceRangedMarker implements ElementMarker {
                     checkNotNull(html, "html")
             );
             if (anchor != null) marker.setAnchor(anchor);
+            marker.setStyleClasses(classes);
             return build(marker);
         }
 
