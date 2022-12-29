@@ -30,13 +30,18 @@ import de.bluecolored.bluemap.api.debug.DebugDump;
 import de.bluecolored.bluemap.api.math.Color;
 import de.bluecolored.bluemap.api.math.Shape;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
+@SuppressWarnings("FieldMayBeFinal")
 @DebugDump
 public class ExtrudeMarker extends ObjectMarker {
     private static final Shape DEFAULT_SHAPE = Shape.createRect(0, 0, 1, 1);
 
     private Shape shape;
+    private Collection<Shape> holes = new ArrayList<>();
     private float shapeMinY, shapeMaxY;
     private boolean depthTest = true;
     private int lineWidth = 2;
@@ -136,6 +141,15 @@ public class ExtrudeMarker extends ObjectMarker {
         this.shape = Objects.requireNonNull(shape, "shape must not be null");
         this.shapeMinY = minY;
         this.shapeMaxY = maxY;
+    }
+
+    /**
+     * Getter for the <b>mutable</b> collection of holes in this {@link ExtrudeMarker}.
+     * <p>Any shape in this collection will be a hole in the main {@link Shape} of this marker</p>
+     * @return A <b>mutable</b> collection of hole-shapes
+     */
+    public Collection<Shape> getHoles() {
+        return holes;
     }
 
     /**
@@ -272,6 +286,7 @@ public class ExtrudeMarker extends ObjectMarker {
 
         Shape shape;
         float shapeMinY, shapeMaxY;
+        Collection<Shape> holes = new ArrayList<>();
         Boolean depthTest;
         Integer lineWidth;
         Color lineColor;
@@ -291,6 +306,25 @@ public class ExtrudeMarker extends ObjectMarker {
             this.shape = shape;
             this.shapeMinY = minY;
             this.shapeMaxY = maxY;
+            return this;
+        }
+
+        /**
+         * <b>Adds</b> some hole-{@link Shape}s.
+         * @param holes the additional holes
+         * @return this builder for chaining
+         */
+        public Builder holes(Shape... holes) {
+            this.holes.addAll(Arrays.asList(holes));
+            return this;
+        }
+
+        /**
+         * Removes all hole-shapes from this Builder.
+         * @return this builder for chaining
+         */
+        public Builder clearHoles() {
+            this.holes.clear();
             return this;
         }
 
@@ -361,6 +395,7 @@ public class ExtrudeMarker extends ObjectMarker {
                     shapeMinY,
                     shapeMaxY
             );
+            marker.getHoles().addAll(holes);
             if (depthTest != null) marker.setDepthTestEnabled(depthTest);
             if (lineWidth != null) marker.setLineWidth(lineWidth);
             if (lineColor != null) marker.setLineColor(lineColor);
