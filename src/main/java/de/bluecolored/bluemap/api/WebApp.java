@@ -61,15 +61,14 @@ public interface WebApp {
      * This method should only be used inside the {@link Consumer} that got registered <i>(before bluemap loaded,
      * pre server-start!)</i> to {@link BlueMapAPI#onEnable(Consumer)}.<br>
      * Invoking this method at any other time is not supported.<br>
-     * Style-registrations are <b>not persistent</b>, register your style each time bluemap enables!
-     * <p>
+     * Style-registrations are <b>not persistent</b>, register your style each time bluemap enables!<br>
+     * <br>
      * Example:
      * <pre>
      * BlueMapAPI.onEnable(api -> {
      *    api.getWebApp().registerStyle("js/my-custom-style.css");
      * });
      * </pre>
-     * </p>
      * @param url The (relative) URL that links to the style.css file. The {@link #getWebRoot()}-method can be used to
      *            create the custom file in the correct location and make it available to the web-app.
      */
@@ -80,15 +79,14 @@ public interface WebApp {
      * This method should only be used inside the {@link Consumer} that got registered <i>(before bluemap loaded,
      * pre server-start!)</i> to {@link BlueMapAPI#onEnable(Consumer)}.<br>
      * Invoking this method at any other time is not supported.<br>
-     * Script-registrations are <b>not persistent</b>, register your script each time bluemap enables!
-     * <p>
+     * Script-registrations are <b>not persistent</b>, register your script each time bluemap enables!<br>
+     * <br>
      * Example:
      * <pre>
      * BlueMapAPI.onEnable(api -> {
      *    api.getWebApp().registerScript("js/my-custom-script.js");
      * });
      * </pre>
-     * </p>
      * @param url The (relative) URL that links to the script.js file. The {@link #getWebRoot()}-method can be used to
      *            create the custom file in the correct location and make it available to the web-app.
      */

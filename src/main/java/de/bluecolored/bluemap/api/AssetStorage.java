@@ -40,15 +40,14 @@ public interface AssetStorage {
     /**
      * Writes a new asset into this storage, overwriting any existent assets with the same name.<br>
      * Use the returned {@link OutputStream} to write the asset-data. The asset will be added to the storage as soon as that stream
-     * gets closed!
-     * <p>
+     * gets closed!<br>
+     * <br>
      * Example:
      * <pre>
      * try (OutputStream out = assetStorage.writeAsset("image.png")) {
      *     ImageIO.write(image, "png", out);
      * }
      * </pre>
-     * </p>
      * @param name The (unique) name for this asset
      * @return An {@link OutputStream} that should be used to write the asset and closed once!
      * @throws IOException when the underlying storage rises an IOException
@@ -57,8 +56,8 @@ public interface AssetStorage {
 
     /**
      * Reads an asset from this storage.<br>
-     * Use the returned {@link InputStream} to read the asset-data.
-     * <p>
+     * Use the returned {@link InputStream} to read the asset-data.<br>
+     * <br>
      * Example:
      * <pre>
      * Optional&lt;InputStream&gt; optIn = assetStorage.readAsset("image.png");
@@ -68,7 +67,6 @@ public interface AssetStorage {
      *     }
      * }
      * </pre>
-     * </p>
      * @param name The name of the asset that should be read from the storage.
      * @return An {@link Optional} with an {@link InputStream} when the asset is found, from which the asset can be read.
      * Or an empty optional if there is no asset with this name.
