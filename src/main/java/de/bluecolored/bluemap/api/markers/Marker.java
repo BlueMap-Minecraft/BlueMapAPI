@@ -45,12 +45,14 @@ public abstract class Marker {
     private String label;
     private Vector3d position;
     private int sorting;
+    private boolean listed;
 
     public Marker(String type, String label, Vector3d position) {
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.label = Objects.requireNonNull(label, "label cannot be null");
         this.position = Objects.requireNonNull(position, "position cannot be null");
         this.sorting = 0;
+        this.listed = true;
     }
 
     /**
@@ -114,7 +116,7 @@ public abstract class Marker {
      * A lower value makes the marker sorted first (in lists and menus), a higher value makes it sorted later.<br>
      * If multiple markers have the same sorting-value, their order will be arbitrary.<br>
      * This value defaults to 0.
-     * @return This markers sorting-value
+     * @return this markers sorting-value
      */
     public int getSorting() {
         return sorting;
@@ -129,6 +131,24 @@ public abstract class Marker {
      */
     public void setSorting(int sorting) {
         this.sorting = sorting;
+    }
+
+    /**
+     * This value defines whether the marker will be listed (true) in markers and lists by the webapp (additionally to being
+     * displayed on the map) or not (false).
+     * @return whether the marker will be listed or not
+     */
+    public boolean isListed() {
+        return listed;
+    }
+
+    /**
+     * Defines whether the marker will be listed (true) in markers and lists by the webapp (additionally to being
+     * displayed on the map) or not (false).
+     * @param listed whether the marker will be listed or not
+     */
+    public void setListed(boolean listed) {
+        this.listed = listed;
     }
 
     @Override
@@ -156,6 +176,7 @@ public abstract class Marker {
         String label;
         Vector3d position;
         Integer sorting;
+        Boolean listed;
 
         /**
          * Sets the label of the {@link Marker}.
@@ -202,6 +223,16 @@ public abstract class Marker {
         }
 
         /**
+         * Defines whether the marker will be listed (true) in markers and lists by the webapp (additionally to being
+         * displayed on the map) or not (false).
+         * @param listed whether the marker will be listed or not
+         */
+        public B listed(Boolean listed) {
+            this.listed = listed;
+            return self();
+        }
+
+        /**
          * Creates a new {@link Marker} with the current builder-settings
          * @return The new {@link Marker}-instance
          */
@@ -211,6 +242,7 @@ public abstract class Marker {
             if (label != null) marker.setLabel(label);
             if (position != null) marker.setPosition(position);
             if (sorting != null) marker.setSorting(sorting);
+            if (listed != null) marker.setListed(listed);
             return marker;
         }
 
