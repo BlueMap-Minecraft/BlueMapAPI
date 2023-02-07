@@ -241,7 +241,7 @@ public class MarkerSet {
 
         private String label;
         private Boolean toggleable, defaultHidden;
-        Integer sorting;
+        private Integer sorting;
 
         /**
          * Sets the label of the {@link MarkerSet}.
