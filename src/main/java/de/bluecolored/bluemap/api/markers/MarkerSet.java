@@ -38,6 +38,7 @@ public class MarkerSet {
 
     private String label;
     private boolean toggleable, defaultHidden;
+    private int sorting;
     private final ConcurrentHashMap<String, Marker> markers;
 
     /**
@@ -56,10 +57,7 @@ public class MarkerSet {
      * @see #setLabel(String)
      */
     public MarkerSet(String label) {
-        this.label = Objects.requireNonNull(label);
-        this.toggleable = true;
-        this.defaultHidden = false;
-        this.markers = new ConcurrentHashMap<>();
+        this(label, true, false);
     }
 
     /**
@@ -77,6 +75,7 @@ public class MarkerSet {
         this.label = Objects.requireNonNull(label);
         this.toggleable = toggleable;
         this.defaultHidden = defaultHidden;
+        this.sorting = 0;
         this.markers = new ConcurrentHashMap<>();
     }
 
@@ -150,6 +149,28 @@ public class MarkerSet {
     }
 
     /**
+     * Returns the sorting-value that will be used by the webapp to sort the marker-sets.<br>
+     * A lower value makes the marker-set sorted first (in lists and menus), a higher value makes it sorted later.<br>
+     * If multiple marker-sets have the same sorting-value, their order will be arbitrary.<br>
+     * This value defaults to 0.
+     * @return This marker-sets sorting-value
+     */
+    public int getSorting() {
+        return sorting;
+    }
+
+    /**
+     * Sets the sorting-value that will be used by the webapp to sort the marker-sets ("default"-sorting).<br>
+     * A lower value makes the marker-set sorted first (in lists and menus), a higher value makes it sorted later.<br>
+     * If multiple marker-sets have the same sorting-value, their order will be arbitrary.<br>
+     * This value defaults to 0.
+     * @param sorting the new sorting-value for this marker-set
+     */
+    public void setSorting(int sorting) {
+        this.sorting = sorting;
+    }
+
+    /**
      * Getter for a (modifiable) {@link Map} of all {@link Marker}s in this {@link MarkerSet}.
      * The keys of the map are the id's of the {@link Marker}s.
      *
@@ -220,6 +241,7 @@ public class MarkerSet {
 
         private String label;
         private Boolean toggleable, defaultHidden;
+        Integer sorting;
 
         /**
          * Sets the label of the {@link MarkerSet}.
@@ -263,6 +285,18 @@ public class MarkerSet {
         }
 
         /**
+         * Sets the sorting-value that will be used by the webapp to sort the marker-sets ("default"-sorting).<br>
+         * A lower value makes the marker-set sorted first (in lists and menus), a higher value makes it sorted later.<br>
+         * If multiple marker-sets have the same sorting-value, their order will be arbitrary.<br>
+         * This value defaults to 0.
+         * @param sorting the new sorting-value for this marker-set
+         */
+        public Builder sorting(Integer sorting) {
+            this.sorting = sorting;
+            return this;
+        }
+
+        /**
          * Creates a new {@link MarkerSet} with the current builder-settings.<br>
          * The minimum required settings to build this marker-set are:
          * <ul>
@@ -276,6 +310,7 @@ public class MarkerSet {
             );
             if (toggleable != null) markerSet.setToggleable(toggleable);
             if (defaultHidden != null) markerSet.setDefaultHidden(defaultHidden);
+            if (sorting != null) markerSet.setSorting(sorting);
             return markerSet;
         }
 

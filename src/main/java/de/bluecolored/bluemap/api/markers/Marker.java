@@ -44,11 +44,13 @@ public abstract class Marker {
     private final String type;
     private String label;
     private Vector3d position;
+    private int sorting;
 
     public Marker(String type, String label, Vector3d position) {
         this.type = Objects.requireNonNull(type, "type cannot be null");
         this.label = Objects.requireNonNull(label, "label cannot be null");
         this.position = Objects.requireNonNull(position, "position cannot be null");
+        this.sorting = 0;
     }
 
     /**
@@ -107,6 +109,28 @@ public abstract class Marker {
         setPosition(new Vector3d(x, y, z));
     }
 
+    /**
+     * Returns the sorting-value that will be used by the webapp to sort the markers ("default"-sorting).<br>
+     * A lower value makes the marker sorted first (in lists and menus), a higher value makes it sorted later.<br>
+     * If multiple markers have the same sorting-value, their order will be arbitrary.<br>
+     * This value defaults to 0.
+     * @return This markers sorting-value
+     */
+    public int getSorting() {
+        return sorting;
+    }
+
+    /**
+     * Sets the sorting-value that will be used by the webapp to sort the markers ("default"-sorting).<br>
+     * A lower value makes the marker sorted first (in lists and menus), a higher value makes it sorted later.<br>
+     * If multiple markers have the same sorting-value, their order will be arbitrary.<br>
+     * This value defaults to 0.
+     * @param sorting the new sorting-value for this marker
+     */
+    public void setSorting(int sorting) {
+        this.sorting = sorting;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,6 +155,7 @@ public abstract class Marker {
 
         String label;
         Vector3d position;
+        Integer sorting;
 
         /**
          * Sets the label of the {@link Marker}.
@@ -165,6 +190,18 @@ public abstract class Marker {
         }
 
         /**
+         * Sets the sorting-value that will be used by the webapp to sort the markers ("default"-sorting).<br>
+         * A lower value makes the marker sorted first (in lists and menus), a higher value makes it sorted later.<br>
+         * If multiple markers have the same sorting-value, their order will be arbitrary.<br>
+         * This value defaults to 0.
+         * @param sorting the new sorting-value for this marker
+         */
+        public B sorting(Integer sorting) {
+            this.sorting = sorting;
+            return self();
+        }
+
+        /**
          * Creates a new {@link Marker} with the current builder-settings
          * @return The new {@link Marker}-instance
          */
@@ -173,6 +210,7 @@ public abstract class Marker {
         T build(T marker) {
             if (label != null) marker.setLabel(label);
             if (position != null) marker.setPosition(position);
+            if (sorting != null) marker.setSorting(sorting);
             return marker;
         }
 
