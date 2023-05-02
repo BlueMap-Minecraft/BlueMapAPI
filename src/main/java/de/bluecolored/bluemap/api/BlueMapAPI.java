@@ -71,8 +71,8 @@ public abstract class BlueMapAPI {
 
     private static BlueMapAPI instance;
 
-    private static final Collection<Consumer<BlueMapAPI>> onEnableConsumers = new HashSet<>(2);
-    private static final Collection<Consumer<BlueMapAPI>> onDisableConsumers = new HashSet<>(2);
+    private static final LinkedHashSet<Consumer<BlueMapAPI>> onEnableConsumers = new LinkedHashSet<>();
+    private static final LinkedHashSet<Consumer<BlueMapAPI>> onDisableConsumers = new LinkedHashSet<>();
 
     /**
      * Getter for the {@link RenderManager}.
@@ -163,6 +163,7 @@ public abstract class BlueMapAPI {
      * <p><b>The {@link Consumer} can be called multiple times if BlueMap disables and enables again, e.g. if BlueMap gets reloaded!</b></p>
      * <p><i>(Note: The consumer will likely be called asynchronously, <b>not</b> on the server-thread!)</i></p>
      * <p>Remember to unregister the consumer when you no longer need it using {@link #unregisterListener(Consumer)}.</p>
+     * <p>The {@link Consumer}s are guaranteed to be called in the order they were registered in.</p>
      * @param consumer the {@link Consumer}
      */
     public static synchronized void onEnable(Consumer<BlueMapAPI> consumer) {
@@ -176,6 +177,7 @@ public abstract class BlueMapAPI {
      * <p><b>The {@link Consumer} can be called multiple times if BlueMap disables and enables again, e.g. if BlueMap gets reloaded!</b></p>
      * <p><i>(Note: The consumer will likely be called asynchronously, <b>not</b> on the server-thread!)</i></p>
      * <p>Remember to unregister the consumer when you no longer need it using {@link #unregisterListener(Consumer)}.</p>
+     * <p>The {@link Consumer}s are guaranteed to be called in the order they were registered in.</p>
      * @param consumer the {@link Consumer}
      */
     public static synchronized void onDisable(Consumer<BlueMapAPI> consumer) {
