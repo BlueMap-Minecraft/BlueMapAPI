@@ -44,6 +44,9 @@ val javaTarget = 11
 java {
     sourceCompatibility = JavaVersion.toVersion(javaTarget)
     targetCompatibility = JavaVersion.toVersion(javaTarget)
+
+    withSourcesJar()
+    withJavadocJar()
 }
 
 repositories {
