@@ -115,7 +115,7 @@ public interface BlueMapMap {
     boolean isFrozen();
 
     /**
-     * Returns the currently set TileFilter. The default TileFilter is equivalent to <code>t -> true</code>.
+     * Returns the currently set TileFilter. The default TileFilter is equivalent to <code>t -&gt; true</code>.
      */
     Predicate<Vector2i> getTileFilter();
 

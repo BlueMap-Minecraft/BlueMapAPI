@@ -110,7 +110,7 @@ public class ContentTypeRegistry {
     }
 
     /**
-     * Registers a new file-suffix => content-type mapping to this registry.
+     * Registers a new file-suffix =&gt; content-type mapping to this registry.
      * @param fileSuffix The type-suffix of a file-name
      * @param contentType The content-type string
      */

@@ -65,7 +65,7 @@ public interface WebApp {
      * <br>
      * Example:
      * <pre>
-     * BlueMapAPI.onEnable(api -> {
+     * BlueMapAPI.onEnable(api -&gt; {
      *    api.getWebApp().registerStyle("js/my-custom-style.css");
      * });
      * </pre>
@@ -83,7 +83,7 @@ public interface WebApp {
      * <br>
      * Example:
      * <pre>
-     * BlueMapAPI.onEnable(api -> {
+     * BlueMapAPI.onEnable(api -&gt; {
      *    api.getWebApp().registerScript("js/my-custom-script.js");
      * });
      * </pre>
