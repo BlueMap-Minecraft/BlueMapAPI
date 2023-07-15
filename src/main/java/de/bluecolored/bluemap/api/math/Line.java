@@ -161,6 +161,16 @@ public class Line {
         }
 
         /**
+         * Adds multiple points to the end of line.
+         * @param points the points to be added.
+         * @return this builder for chaining
+         */
+        public Builder addPoints(Collection<Vector3d> points) {
+            this.points.addAll(points);
+            return this;
+        }
+
+        /**
          * Builds a new {@link Line} with the points set in this builder.<br>
          * There need to be at least 2 points to build a {@link Line}.
          * @return the new {@link Line}

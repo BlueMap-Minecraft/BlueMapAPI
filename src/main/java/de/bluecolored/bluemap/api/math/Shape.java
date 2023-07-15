@@ -249,6 +249,16 @@ public class Shape {
         }
 
         /**
+         * Adds multiple points to the end of line.
+         * @param points the points to be added.
+         * @return this builder for chaining
+         */
+        public Builder addPoints(Collection<Vector2d> points) {
+            this.points.addAll(points);
+            return this;
+        }
+
+        /**
          * Builds a new {@link Shape} with the points set in this builder.<br>
          * There need to be at least 3 points to build a {@link Shape}.
          * @return the new {@link Shape}
