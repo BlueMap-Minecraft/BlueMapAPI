@@ -54,7 +54,7 @@ public class ShapeMarker extends ObjectMarker {
      */
     @SuppressWarnings("unused")
     private ShapeMarker() {
-        this("shape", DEFAULT_SHAPE, 0);
+        this("", DEFAULT_SHAPE, 0);
     }
 
     /**
