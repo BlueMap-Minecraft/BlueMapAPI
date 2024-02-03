@@ -235,8 +235,8 @@ public final class MarkerGson {
             }
 
             out.beginObject();
-            out.name("x"); out.value(value.getX());
-            out.name(useZ ? "z" : "y"); out.value(value.getY());
+            out.name("x"); writeRounded(out, value.getX());
+            out.name(useZ ? "z" : "y"); writeRounded(out, value.getY());
             out.endObject();
         }
 
@@ -262,6 +262,13 @@ public final class MarkerGson {
             return new Vector2d(x, y);
         }
 
+        private void writeRounded(JsonWriter json, double value) throws IOException {
+            // rounding and remove ".0" to save string space
+            double d = Math.round(value * 10000d) / 10000d;
+            if (d == (long) d) json.value((long) d);
+            else json.value(d);
+        }
+
     }
 
     static class Vector3dAdapter extends TypeAdapter<Vector3d> {
@@ -274,9 +281,9 @@ public final class MarkerGson {
             }
 
             out.beginObject();
-            out.name("x"); out.value(value.getX());
-            out.name("y"); out.value(value.getY());
-            out.name("z"); out.value(value.getZ());
+            out.name("x"); writeRounded(out, value.getX());
+            out.name("y"); writeRounded(out, value.getY());
+            out.name("z"); writeRounded(out, value.getZ());
             out.endObject();
         }
 
@@ -300,6 +307,13 @@ public final class MarkerGson {
             in.endObject();
 
             return new Vector3d(x, y, z);
+        }
+
+        private void writeRounded(JsonWriter json, double value) throws IOException {
+            // rounding and remove ".0" to save string space
+            double d = Math.round(value * 10000d) / 10000d;
+            if (d == (long) d) json.value((long) d);
+            else json.value(d);
         }
 
     }
