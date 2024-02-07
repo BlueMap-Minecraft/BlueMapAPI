@@ -42,8 +42,8 @@ public interface BlueMapWorld {
     String getId();
 
     /**
-     * Getter for the {@link Path} of this world's save-files (folder).
-     * <strike>This matches the folder configured in bluemap's config for this map ( <code>world:</code> )</strike>.
+     * Getter for the {@link Path} of this world's save-files.<br>
+     * (To be exact: the parent-folder of the regions-folder used for rendering)
      * @return the save-folder of this world.
      * @deprecated Getting the save-folder of a world is no longer supported. As it is not guaranteed that every world has a save-folder.
      */
