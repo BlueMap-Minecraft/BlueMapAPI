@@ -85,7 +85,9 @@ tasks.javadoc {
     options {
         (this as? StandardJavadocDocletOptions)?.apply {
             links(
-                "https://docs.oracle.com/javase/8/docs/api/"
+                "https://docs.oracle.com/javase/8/docs/api/",
+                "https://javadoc.io/doc/com.flowpowered/flow-math/1.0.3/",
+                "https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/",
             )
         }
     }
