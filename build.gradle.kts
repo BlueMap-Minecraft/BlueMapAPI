@@ -87,7 +87,7 @@ tasks.javadoc {
             links(
                 "https://docs.oracle.com/javase/8/docs/api/",
                 "https://javadoc.io/doc/com.flowpowered/flow-math/1.0.3/",
-                "https://www.javadoc.io/doc/com.google.code.gson/gson/2.8.0/",
+                "https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/",
             )
         }
     }
