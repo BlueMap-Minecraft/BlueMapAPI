@@ -22,5 +22,5 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew publish
       env:
-        bluecoloredUsername: ${{ secrets.BLUECOLORED_USERNAME }}
-        bluecoloredPassword: ${{ secrets.BLUECOLORED_PASSWORD }}
+        BLUECOLORED_USERNAME: ${{ secrets.BLUECOLORED_USERNAME }}
+        BLUECOLORED_PASSWORD: ${{ secrets.BLUECOLORED_PASSWORD }}

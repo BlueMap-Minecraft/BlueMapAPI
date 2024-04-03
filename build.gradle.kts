@@ -116,9 +116,9 @@ publishing {
             val snapshotsRepoUrl = "https://repo.bluecolored.de/snapshots"
             url = uri(if (version == lastVersion) releasesRepoUrl else snapshotsRepoUrl)
 
-            credentials(PasswordCredentials::class)
-            authentication {
-                create<BasicAuthentication>("basic")
+            credentials {
+                username = project.findProperty("bluecoloredUsername") as String? ?: System.getenv("BLUECOLORED_USERNAME")
+                password = project.findProperty("bluecoloredPassword") as String? ?: System.getenv("BLUECOLORED_PASSWORD")
             }
         }
     }
