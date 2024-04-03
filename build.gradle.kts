@@ -89,6 +89,7 @@ tasks.javadoc {
                 "https://javadoc.io/doc/com.flowpowered/flow-math/1.0.3/",
                 "https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/",
             )
+            addStringOption("Xdoclint:none", "-quiet")
             if (JavaVersion.current().isJava9Compatible)
                 addBooleanOption("html5", true)
         }
