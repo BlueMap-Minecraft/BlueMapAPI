@@ -33,7 +33,7 @@ val lastVersion = lastTag.substring(1) // remove the leading 'v'
 val commits = "git rev-list --count $lastTag..HEAD".runCommand()
 println("Git hash: $gitHash" + if (clean) "" else " (dirty)")
 
-group = "de.bluecolored.bluemap.api"
+group = "de.bluecolored.bluemap"
 version = lastVersion +
         (if (commits == "0") "" else "-$commits") +
         (if (clean) "" else "-dirty")
