@@ -1,6 +1,9 @@
-name: Java CI
+name: Publish
 
-on: [push]
+on:
+  - workflow_dispatch
+  - release:
+      types: [published]
 
 jobs:
   build:
@@ -17,8 +20,7 @@ jobs:
         java-version: 16
         cache: 'gradle'
     - name: Build with Gradle
-      run: ./gradlew clean build test
-    - uses: actions/upload-artifact@v2-preview
-      with:
-        name: artifact
-        path: build/libs/*
+      run: ./gradlew publish
+      env:
+        bluecoloredUsername: ${{ secrets.BLUECOLORED_USERNAME }}
+        bluecoloredPassword: ${{ secrets.BLUECOLORED_PASSWORD }}

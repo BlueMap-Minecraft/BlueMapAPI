@@ -89,6 +89,8 @@ tasks.javadoc {
                 "https://javadoc.io/doc/com.flowpowered/flow-math/1.0.3/",
                 "https://javadoc.io/doc/com.google.code.gson/gson/2.8.0/",
             )
+            if (JavaVersion.current().isJava9Compatible)
+                addBooleanOption("html5", true)
         }
     }
 }
@@ -106,6 +108,20 @@ tasks.processResources {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "bluecolored"
+
+            val releasesRepoUrl = "https://repo.bluecolored.de/releases"
+            val snapshotsRepoUrl = "https://repo.bluecolored.de/snapshots"
+            url = uri(if (version == lastVersion) releasesRepoUrl else snapshotsRepoUrl)
+
+            credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
