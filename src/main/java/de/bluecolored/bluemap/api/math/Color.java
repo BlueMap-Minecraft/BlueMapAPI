@@ -24,11 +24,8 @@
  */
 package de.bluecolored.bluemap.api.math;
 
-import de.bluecolored.bluemap.api.debug.DebugDump;
-
 import java.util.Objects;
 
-@DebugDump
 public class Color {
 
     private final int r, g, b;

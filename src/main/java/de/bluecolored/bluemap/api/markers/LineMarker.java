@@ -25,13 +25,11 @@
 package de.bluecolored.bluemap.api.markers;
 
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 import de.bluecolored.bluemap.api.math.Color;
 import de.bluecolored.bluemap.api.math.Line;
 
 import java.util.Objects;
 
-@DebugDump
 public class LineMarker extends ObjectMarker {
     private static final Line DEFAULT_LINE = new Line(Vector3d.ZERO, Vector3d.ONE);
 

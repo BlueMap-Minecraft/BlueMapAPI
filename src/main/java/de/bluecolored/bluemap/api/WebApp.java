@@ -24,8 +24,6 @@
  */
 package de.bluecolored.bluemap.api;
 
-import de.bluecolored.bluemap.api.debug.DebugDump;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -39,7 +37,6 @@ public interface WebApp {
      * Getter for the configured web-root folder
      * @return The {@link Path} of the web-root folder
      */
-    @DebugDump
     Path getWebRoot();
 
     /**

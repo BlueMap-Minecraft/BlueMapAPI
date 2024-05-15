@@ -24,8 +24,6 @@
  */
 package de.bluecolored.bluemap.api.markers;
 
-import de.bluecolored.bluemap.api.debug.DebugDump;
-
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A set of {@link Marker}s that are displayed on the maps in the web-app.
  */
-@DebugDump
 public class MarkerSet {
 
     private String label;

@@ -30,8 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks a class, field or method to be included in detail in a possible state-dump.
- * E.g. triggered by <code>/bluemap debug dump</code>
+ * @deprecated not implemented, unused
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({
@@ -39,6 +38,7 @@ import java.lang.annotation.Target;
         ElementType.FIELD,
         ElementType.TYPE
 })
+@Deprecated(forRemoval = true)
 public @interface DebugDump {
 
     String value() default "";

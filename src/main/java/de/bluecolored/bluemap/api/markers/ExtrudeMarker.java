@@ -26,7 +26,6 @@ package de.bluecolored.bluemap.api.markers;
 
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 import de.bluecolored.bluemap.api.math.Color;
 import de.bluecolored.bluemap.api.math.Shape;
 
@@ -36,7 +35,6 @@ import java.util.Collection;
 import java.util.Objects;
 
 @SuppressWarnings("FieldMayBeFinal")
-@DebugDump
 public class ExtrudeMarker extends ObjectMarker {
     private static final Shape DEFAULT_SHAPE = Shape.createRect(0, 0, 1, 1);
 

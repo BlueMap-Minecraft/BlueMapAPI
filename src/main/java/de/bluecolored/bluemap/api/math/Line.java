@@ -25,7 +25,6 @@
 package de.bluecolored.bluemap.api.math;
 
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import java.util.List;
 /**
  * A line consisting of 2 or more {@link Vector3d}-points.
  */
-@DebugDump
 public class Line {
 
     private final Vector3d[] points;

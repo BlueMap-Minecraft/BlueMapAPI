@@ -27,12 +27,10 @@ package de.bluecolored.bluemap.api.markers;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import de.bluecolored.bluemap.api.BlueMapMap;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 
 import java.util.*;
 
 @SuppressWarnings("FieldMayBeFinal")
-@DebugDump
 public class POIMarker extends DistanceRangedMarker implements DetailMarker, ElementMarker {
 
     private Set<String> classes = new HashSet<>();

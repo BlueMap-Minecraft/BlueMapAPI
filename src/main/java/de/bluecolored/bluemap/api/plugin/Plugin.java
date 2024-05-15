@@ -24,15 +24,12 @@
  */
 package de.bluecolored.bluemap.api.plugin;
 
-import de.bluecolored.bluemap.api.debug.DebugDump;
-
 public interface Plugin {
 
     /**
      * Get the {@link SkinProvider} that bluemap is using to fetch player-skins
      * @return the {@link SkinProvider} instance bluemap is using
      */
-    @DebugDump
     SkinProvider getSkinProvider();
 
     /**
@@ -46,7 +43,6 @@ public interface Plugin {
      * for the Player-Markers
      * @return The {@link PlayerIconFactory} bluemap uses to convert skins into player-marker icons
      */
-    @DebugDump
     PlayerIconFactory getPlayerMarkerIconFactory();
 
     /**

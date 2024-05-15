@@ -25,7 +25,6 @@
 package de.bluecolored.bluemap.api.markers;
 
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -36,7 +35,6 @@ import java.util.Optional;
  * @see ExtrudeMarker
  * @see LineMarker
  */
-@DebugDump
 public abstract class ObjectMarker extends DistanceRangedMarker implements DetailMarker {
 
     private String detail;

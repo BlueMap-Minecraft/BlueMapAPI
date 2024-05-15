@@ -27,7 +27,6 @@ package de.bluecolored.bluemap.api.markers;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 
 import java.util.*;
 
@@ -35,7 +34,6 @@ import java.util.*;
  * A marker that is a html-element placed somewhere on the map.
  */
 @SuppressWarnings("FieldMayBeFinal")
-@DebugDump
 public class HtmlMarker extends DistanceRangedMarker implements ElementMarker {
 
     private Set<String> classes = new HashSet<>();

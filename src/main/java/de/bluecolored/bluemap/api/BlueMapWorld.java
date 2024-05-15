@@ -24,8 +24,6 @@
  */
 package de.bluecolored.bluemap.api;
 
-import de.bluecolored.bluemap.api.debug.DebugDump;
-
 import java.nio.file.Path;
 import java.util.Collection;
 
@@ -38,7 +36,6 @@ public interface BlueMapWorld {
      * Getter for the id of this world.
      * @return the id of this world
      */
-    @DebugDump
     String getId();
 
     /**
@@ -47,7 +44,6 @@ public interface BlueMapWorld {
      * @return the save-folder of this world.
      * @deprecated Getting the save-folder of a world is no longer supported. As it is not guaranteed that every world has a save-folder.
      */
-    @DebugDump
     @Deprecated
     Path getSaveFolder();
 
@@ -55,7 +51,6 @@ public interface BlueMapWorld {
      * Getter for all {@link BlueMapMap}s for this world
      * @return an unmodifiable {@link Collection} of all {@link BlueMapMap}s for this world
      */
-    @DebugDump
     Collection<BlueMapMap> getMaps();
 
 }

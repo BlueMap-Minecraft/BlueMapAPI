@@ -25,7 +25,6 @@
 package de.bluecolored.bluemap.api.markers;
 
 import com.flowpowered.math.vector.Vector3d;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 
 /**
  * @see HtmlMarker
@@ -34,7 +33,6 @@ import de.bluecolored.bluemap.api.debug.DebugDump;
  * @see ExtrudeMarker
  * @see LineMarker
  */
-@DebugDump
 public abstract class DistanceRangedMarker extends Marker {
 
     private double minDistance, maxDistance;

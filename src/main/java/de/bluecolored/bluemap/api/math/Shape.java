@@ -25,7 +25,6 @@
 package de.bluecolored.bluemap.api.math;
 
 import com.flowpowered.math.vector.Vector2d;
-import de.bluecolored.bluemap.api.debug.DebugDump;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import java.util.List;
 /**
  * A shape consisting of 3 or more {@link Vector2d}-points on a plane.
  */
-@DebugDump
 public class Shape {
 
     private final Vector2d[] points;
