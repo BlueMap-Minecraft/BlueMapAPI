@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import de.bluecolored.bluemap.api.plugin.Plugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,6 +43,7 @@ import java.util.function.Consumer;
  * An API to control the running instance of BlueMap.
  * <p>This API is thread-save, so you <b>can</b> use it async, off the main-server-thread, to save performance!</p>
  */
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public abstract class BlueMapAPI {
 
     @SuppressWarnings("unused")
@@ -57,6 +59,7 @@ public abstract class BlueMapAPI {
                 gitHash = element.get("git-hash").getAsString();
             } catch (Exception ex) {
                 System.err.println("Failed to load version from resources!");
+                //noinspection CallToPrintStackTrace
                 ex.printStackTrace();
             }
         }
@@ -191,39 +194,33 @@ public abstract class BlueMapAPI {
      * @return <code>true</code> if the instance has been registered, <code>false</code> if there already was an instance registered
      * @throws ExecutionException if a listener threw an exception during the registration
      */
-    protected static synchronized boolean registerInstance(BlueMapAPI instance) throws ExecutionException {
+    @ApiStatus.Internal
+    protected static synchronized boolean registerInstance(BlueMapAPI instance) throws Exception {
         if (BlueMapAPI.instance != null) return false;
 
         BlueMapAPI.instance = instance;
 
-        List<Throwable> thrownExceptions = new ArrayList<>(0);
+        List<Exception> thrownExceptions = new ArrayList<>(0);
 
         for (Consumer<BlueMapAPI> listener : BlueMapAPI.onEnableConsumers) {
             try {
                 listener.accept(BlueMapAPI.instance);
-            } catch (Throwable ex) {
+            } catch (Exception ex) {
                 thrownExceptions.add(ex);
             }
         }
 
-        if (!thrownExceptions.isEmpty()) {
-            ExecutionException ex = new ExecutionException(thrownExceptions.get(0));
-            for (int i = 1; i < thrownExceptions.size(); i++) {
-                ex.addSuppressed(thrownExceptions.get(i));
-            }
-            throw ex;
-        }
-
-        return true;
+        return throwAsOne(thrownExceptions);
     }
 
     /**
      * Used by BlueMap to unregister the API and call the listeners properly.
      * @param instance the {@link BlueMapAPI} instance
-     * @return <code>true</code> if the instance was unregistered, <code>false</code> if there was no or an other instance registered
+     * @return <code>true</code> if the instance was unregistered, <code>false</code> if there was no or another instance registered
      * @throws ExecutionException if a listener threw an exception during the un-registration
      */
-    protected static synchronized boolean unregisterInstance(BlueMapAPI instance) throws ExecutionException {
+    @ApiStatus.Internal
+    protected static synchronized boolean unregisterInstance(BlueMapAPI instance) throws Exception {
         if (BlueMapAPI.instance != instance) return false;
 
         List<Exception> thrownExceptions = new ArrayList<>(0);
@@ -238,8 +235,12 @@ public abstract class BlueMapAPI {
 
         BlueMapAPI.instance = null;
 
+        return throwAsOne(thrownExceptions);
+    }
+
+    private static boolean throwAsOne(List<Exception> thrownExceptions) throws Exception {
         if (!thrownExceptions.isEmpty()) {
-            ExecutionException ex = new ExecutionException(thrownExceptions.get(0));
+            Exception ex = thrownExceptions.get(0);
             for (int i = 1; i < thrownExceptions.size(); i++) {
                 ex.addSuppressed(thrownExceptions.get(i));
             }

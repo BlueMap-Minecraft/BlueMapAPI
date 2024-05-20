@@ -24,6 +24,7 @@
  */
 package de.bluecolored.bluemap.api.plugin;
 
+@SuppressWarnings("unused")
 public interface Plugin {
 
     /**

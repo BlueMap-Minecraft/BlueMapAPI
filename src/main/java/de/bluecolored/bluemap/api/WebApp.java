@@ -24,6 +24,8 @@
  */
 package de.bluecolored.bluemap.api;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -31,6 +33,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 public interface WebApp {
 
     /**
@@ -44,6 +47,7 @@ public interface WebApp {
      * @param player the UUID of the player
      * @param visible true if the player-marker should be visible, false if it should be hidden
      */
+    @ApiStatus.Experimental
     void setPlayerVisibility(UUID player, boolean visible);
 
     /**
@@ -51,6 +55,7 @@ public interface WebApp {
      * @see #setPlayerVisibility(UUID, boolean)
      * @param player the UUID of the player
      */
+    @ApiStatus.Experimental
     boolean getPlayerVisibility(UUID player);
 
     /**

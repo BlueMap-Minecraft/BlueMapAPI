@@ -49,8 +49,9 @@ public final class MarkerGson {
             .setLenient()
             .create();
 
-    /* This class can not be instantiated. */
-    private MarkerGson() {}
+    private MarkerGson() {
+        throw new UnsupportedOperationException("Utility class");
+    }
 
     public static GsonBuilder addAdapters(GsonBuilder builder) {
         return builder

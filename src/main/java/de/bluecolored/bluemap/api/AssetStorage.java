@@ -35,6 +35,7 @@ import java.util.Optional;
 /**
  * A storage that is able to hold any "asset"-data for a map. For example images, icons, scripts or json-files.
  */
+@SuppressWarnings("unused")
 public interface AssetStorage {
 
     /**

@@ -28,6 +28,7 @@ import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 import de.bluecolored.bluemap.api.markers.MarkerSet;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 import java.util.function.Predicate;
@@ -36,6 +37,7 @@ import java.util.function.Predicate;
  * This class represents a map that is rendered by BlueMap of a specific world ({@link BlueMapWorld}).
  * Each map belongs to a map configured in BlueMap's configuration file (in the <code>maps: []</code> list).
  */
+@SuppressWarnings("unused")
 public interface BlueMapMap {
 
     /**
@@ -91,6 +93,7 @@ public interface BlueMapMap {
      * <p>Any previously set filters will get overwritten with the new one. You can get the current filter using {@link #getTileFilter()} and combine them if you wish.</p>
      * @param filter The filter that will be used from now on.
      */
+    @ApiStatus.Experimental
     void setTileFilter(Predicate<Vector2i> filter);
 
     /**
@@ -109,6 +112,7 @@ public interface BlueMapMap {
     /**
      * Returns the currently set TileFilter. The default TileFilter is equivalent to <code>t -&gt; true</code>.
      */
+    @ApiStatus.Experimental
     Predicate<Vector2i> getTileFilter();
 
     /**

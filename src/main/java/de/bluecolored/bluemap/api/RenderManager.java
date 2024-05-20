@@ -26,12 +26,12 @@ package de.bluecolored.bluemap.api;
 
 import com.flowpowered.math.vector.Vector2i;
 
-import java.io.IOException;
 import java.util.Collection;
 
 /**
  * The {@link RenderManager} is used to schedule tile-renders and process them on a number of different threads.
  */
+@SuppressWarnings("unused")
 public interface RenderManager {
 
     /**
@@ -66,9 +66,8 @@ public interface RenderManager {
      * An update-task will be scheduled right after the purge, to get the map up-to-date again.
      * @param map the map to be purged
      * @return true if a new task has been scheduled, false if not (usually because there is already an update-task for this map scheduled)
-     * @throws IOException if an IOException occurs while trying to create the task.
      */
-    boolean scheduleMapPurgeTask(BlueMapMap map) throws IOException;
+    boolean scheduleMapPurgeTask(BlueMapMap map);
 
     /**
      * Getter for the current size of the render-queue.
