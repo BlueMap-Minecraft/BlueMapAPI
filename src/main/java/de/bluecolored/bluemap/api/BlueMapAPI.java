@@ -27,6 +27,9 @@ package de.bluecolored.bluemap.api;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import de.bluecolored.bluemap.api.events.APIEvent;
+import de.bluecolored.bluemap.api.events.EventDispatcher;
+import de.bluecolored.bluemap.api.events.Events;
 import de.bluecolored.bluemap.api.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -45,6 +48,9 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings({"unused", "UnusedReturnValue"})
 public abstract class BlueMapAPI {
+
+    private static final EventDispatcher<APIEvent.Enable> ENABLE_DISPATCHER = Events.getDispatcher(APIEvent.Enable.class);
+    private static final EventDispatcher<APIEvent.Disable> DISABLE_DISPATCHER = Events.getDispatcher(APIEvent.Disable.class);
 
     @SuppressWarnings("unused")
     private static final String VERSION, GIT_HASH;
@@ -210,6 +216,12 @@ public abstract class BlueMapAPI {
             }
         }
 
+        try {
+            ENABLE_DISPATCHER.dispatch(new APIEvent.Enable(BlueMapAPI.instance));
+        } catch (Exception ex) {
+            thrownExceptions.add(ex);
+        }
+
         return throwAsOne(thrownExceptions);
     }
 
@@ -231,6 +243,12 @@ public abstract class BlueMapAPI {
             } catch (Exception ex) {
                 thrownExceptions.add(ex);
             }
+        }
+
+        try {
+            DISABLE_DISPATCHER.dispatch(new APIEvent.Disable(BlueMapAPI.instance));
+        } catch (Exception ex) {
+            thrownExceptions.add(ex);
         }
 
         BlueMapAPI.instance = null;
