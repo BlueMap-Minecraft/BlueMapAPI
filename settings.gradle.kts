@@ -1,4 +1,4 @@
-rootProject.name = "bluemap-api"
+rootProject.name = "api"
 
 logger.lifecycle("""
 ## Building BlueMapAPI ...
