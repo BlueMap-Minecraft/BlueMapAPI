@@ -1,4 +1,4 @@
-name: Java CI
+name: Build
 
 on: [push]
 
@@ -14,11 +14,11 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
-        java-version: 16
+        java-version: 21
         cache: 'gradle'
     - name: Build with Gradle
       run: ./gradlew clean build test
-    - uses: actions/upload-artifact@v2-preview
+    - uses: actions/upload-artifact@v4
       with:
         name: artifact
         path: build/libs/*
