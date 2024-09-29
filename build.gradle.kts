@@ -16,7 +16,7 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
-            artifactId = "bluemap-${project.name}"
+            artifactId = project.name
             version = project.version.toString()
 
             from(components["java"])
