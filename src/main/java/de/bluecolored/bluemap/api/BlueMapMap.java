@@ -136,10 +136,15 @@ public interface BlueMapMap {
         return posToTile(pos.getX(), pos.getZ());
     }
 
-
+    /**
+     * @deprecated use the render-mask config or custom masks instead (bluemap-core/bluemap-common)
+     */
     @Deprecated(forRemoval = true)
     void setTileFilter(Predicate<Vector2i> filter);
 
+    /**
+     * @deprecated use the render-mask config or custom masks instead (bluemap-core/bluemap-common)
+     */
     @Deprecated(forRemoval = true)
     Predicate<Vector2i> getTileFilter();
 
