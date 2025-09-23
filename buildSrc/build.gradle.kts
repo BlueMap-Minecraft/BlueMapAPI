@@ -13,5 +13,4 @@ dependencies {
     }
 
     implementation ( plugin( libs.plugins.spotless ) )
-    implementation ( plugin( libs.plugins.shadow ) )
 }

@@ -10,5 +10,4 @@ junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref 
 lombok = { module = "org.projectlombok:lombok", version = "1.18.32" }
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "8.3.9" }
 spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
