@@ -161,9 +161,13 @@ public abstract class BlueMapAPI {
      * <p>The {@link Consumer}s are guaranteed to be called in the order they were registered in.</p>
      * @param consumer the {@link Consumer}
      */
-    public static synchronized void onEnable(Consumer<BlueMapAPI> consumer) {
-        onEnableConsumers.add(consumer);
-        if (BlueMapAPI.instance != null) consumer.accept(BlueMapAPI.instance);
+    public static void onEnable(Consumer<BlueMapAPI> consumer) {
+        BlueMapAPI api;
+        synchronized (BlueMapAPI.class) {
+            onEnableConsumers.add(consumer);
+            api = BlueMapAPI.instance;
+        }
+        if (api != null) consumer.accept(BlueMapAPI.instance);
     }
 
     /**
@@ -192,55 +196,55 @@ public abstract class BlueMapAPI {
      * Used by BlueMap to register the API and call the listeners properly.
      * @param instance the {@link BlueMapAPI}-instance
      * @return <code>true</code> if the instance has been registered, <code>false</code> if there already was an instance registered
-     * @throws ExecutionException if a listener threw an exception during the registration
+     * @throws Exception if a listener threw an exception during the registration
      */
     @ApiStatus.Internal
-    protected static synchronized boolean registerInstance(BlueMapAPI instance) throws Exception {
-        if (BlueMapAPI.instance != null) return false;
+    protected static boolean registerInstance(BlueMapAPI instance) throws Exception {
+        List<Consumer<BlueMapAPI>> consumersToCall;
 
-        BlueMapAPI.instance = instance;
-
-        List<Exception> thrownExceptions = new ArrayList<>(0);
-
-        for (Consumer<BlueMapAPI> listener : BlueMapAPI.onEnableConsumers) {
-            try {
-                listener.accept(BlueMapAPI.instance);
-            } catch (Exception ex) {
-                thrownExceptions.add(ex);
-            }
+        synchronized (BlueMapAPI.class) {
+            if (BlueMapAPI.instance != null) return false;
+            BlueMapAPI.instance = instance;
+            consumersToCall = List.copyOf(onEnableConsumers);
         }
 
-        return throwAsOne(thrownExceptions);
+        return callConsumers(instance, consumersToCall);
     }
 
     /**
      * Used by BlueMap to unregister the API and call the listeners properly.
      * @param instance the {@link BlueMapAPI} instance
      * @return <code>true</code> if the instance was unregistered, <code>false</code> if there was no or another instance registered
-     * @throws ExecutionException if a listener threw an exception during the un-registration
+     * @throws Exception if a listener threw an exception during the un-registration
      */
     @ApiStatus.Internal
-    protected static synchronized boolean unregisterInstance(BlueMapAPI instance) throws Exception {
-        if (BlueMapAPI.instance != instance) return false;
+    protected static boolean unregisterInstance(BlueMapAPI instance) throws Exception {
+        List<Consumer<BlueMapAPI>> consumersToCall;
 
+        synchronized (BlueMapAPI.class) {
+            if (BlueMapAPI.instance != instance) return false;
+            BlueMapAPI.instance = null;
+            consumersToCall = List.copyOf(onEnableConsumers);
+        }
+
+        return callConsumers(instance, consumersToCall);
+    }
+
+    private static boolean callConsumers(BlueMapAPI instance, List<Consumer<BlueMapAPI>> consumers) throws Exception {
         List<Exception> thrownExceptions = new ArrayList<>(0);
-
-        for (Consumer<BlueMapAPI> listener : BlueMapAPI.onDisableConsumers) {
+        for (Consumer<BlueMapAPI> consumer : consumers) {
             try {
-                listener.accept(BlueMapAPI.instance);
+                consumer.accept(instance);
             } catch (Exception ex) {
                 thrownExceptions.add(ex);
             }
         }
-
-        BlueMapAPI.instance = null;
-
         return throwAsOne(thrownExceptions);
     }
 
     private static boolean throwAsOne(List<Exception> thrownExceptions) throws Exception {
         if (!thrownExceptions.isEmpty()) {
-            Exception ex = thrownExceptions.get(0);
+            Exception ex = thrownExceptions.getFirst();
             for (int i = 1; i < thrownExceptions.size(); i++) {
                 ex.addSuppressed(thrownExceptions.get(i));
             }
