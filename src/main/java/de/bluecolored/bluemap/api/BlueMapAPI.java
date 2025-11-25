@@ -224,7 +224,7 @@ public abstract class BlueMapAPI {
         synchronized (BlueMapAPI.class) {
             if (BlueMapAPI.instance != instance) return false;
             BlueMapAPI.instance = null;
-            consumersToCall = List.copyOf(onEnableConsumers);
+            consumersToCall = List.copyOf(onDisableConsumers);
         }
 
         return callConsumers(instance, consumersToCall);
