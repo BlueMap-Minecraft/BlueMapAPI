@@ -235,8 +235,8 @@ public abstract class BlueMapAPI {
         for (Consumer<BlueMapAPI> consumer : consumers) {
             try {
                 consumer.accept(instance);
-            } catch (Exception ex) {
-                thrownExceptions.add(ex);
+            } catch (Throwable t) {
+                thrownExceptions.add(new Exception("Unexpected exception trying to call an API consumer", t));
             }
         }
         return throwAsOne(thrownExceptions);
