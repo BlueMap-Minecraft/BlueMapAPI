@@ -89,7 +89,7 @@ public interface ElementMarker {
      * @param styleClasses the style-classes this element-marker will have
      */
     default void addStyleClasses(String... styleClasses) {
-        this.setStyleClasses(Arrays.asList(styleClasses));
+        this.addStyleClasses(Arrays.asList(styleClasses));
     }
 
     /**
