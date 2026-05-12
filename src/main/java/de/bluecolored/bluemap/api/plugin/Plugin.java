@@ -53,4 +53,8 @@ public interface Plugin {
      */
     void setPlayerMarkerIconFactory(PlayerIconFactory playerMarkerIconFactory);
 
+    PlayerDisplayNameProvider getPlayerDisplayNameProvider();
+
+    void setPlayerDisplayNameProvider(PlayerDisplayNameProvider playerNameProvider);
+
 }
