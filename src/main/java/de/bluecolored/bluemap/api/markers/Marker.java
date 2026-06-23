@@ -44,6 +44,7 @@ public abstract class Marker {
     private Vector3d position;
     private int sorting;
     private boolean listed;
+    private boolean toggleable, defaultHidden;
 
     public Marker(String type, String label, Vector3d position) {
         this.type = Objects.requireNonNull(type, "type cannot be null");
@@ -51,6 +52,8 @@ public abstract class Marker {
         this.position = Objects.requireNonNull(position, "position cannot be null");
         this.sorting = 0;
         this.listed = true;
+        this.toggleable = false;
+        this.defaultHidden = false;
     }
 
     /**
@@ -149,6 +152,44 @@ public abstract class Marker {
         this.listed = listed;
     }
 
+    /**
+     * This value defines whether the web-app will show an individual toggle-switch for this marker (true) so the user
+     * can show/hide just this single marker, or not (false).
+     * @return whether this marker is individually toggleable
+     */
+    public boolean isToggleable() {
+        return toggleable;
+    }
+
+    /**
+     * Defines whether the web-app will show an individual toggle-switch for this marker (true) so the user
+     * can show/hide just this single marker, or not (false).
+     * @param toggleable whether this marker should be individually toggleable
+     */
+    public void setToggleable(boolean toggleable) {
+        this.toggleable = toggleable;
+    }
+
+    /**
+     * This value defines whether this marker is initially hidden in the web-app (true) until the user enables it using
+     * its toggle-switch, or shown by default (false).
+     * <p>This only has an effect if the marker is {@link #isToggleable() toggleable}.</p>
+     * @return whether this marker is hidden by default
+     */
+    public boolean isDefaultHidden() {
+        return defaultHidden;
+    }
+
+    /**
+     * Defines whether this marker is initially hidden in the web-app (true) until the user enables it using its
+     * toggle-switch, or shown by default (false).
+     * <p>This only has an effect if the marker is {@link #isToggleable() toggleable}.</p>
+     * @param defaultHidden whether this marker should be hidden by default
+     */
+    public void setDefaultHidden(boolean defaultHidden) {
+        this.defaultHidden = defaultHidden;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -175,6 +216,8 @@ public abstract class Marker {
         Vector3d position;
         Integer sorting;
         Boolean listed;
+        Boolean toggleable;
+        Boolean defaultHidden;
 
         /**
          * Sets the label of the {@link Marker}.
@@ -231,6 +274,29 @@ public abstract class Marker {
         }
 
         /**
+         * Defines whether the web-app will show an individual toggle-switch for this marker (true) so the user
+         * can show/hide just this single marker, or not (false).
+         * @param toggleable whether this marker should be individually toggleable
+         * @return this builder for chaining
+         */
+        public B toggleable(boolean toggleable) {
+            this.toggleable = toggleable;
+            return self();
+        }
+
+        /**
+         * Defines whether this marker is initially hidden in the web-app (true) until the user enables it using its
+         * toggle-switch, or shown by default (false).
+         * <p>This only has an effect if the marker is {@link #toggleable(boolean) toggleable}.</p>
+         * @param defaultHidden whether this marker should be hidden by default
+         * @return this builder for chaining
+         */
+        public B defaultHidden(boolean defaultHidden) {
+            this.defaultHidden = defaultHidden;
+            return self();
+        }
+
+        /**
          * Creates a new {@link Marker} with the current builder-settings
          * @return The new {@link Marker}-instance
          */
@@ -241,6 +307,8 @@ public abstract class Marker {
             if (position != null) marker.setPosition(position);
             if (sorting != null) marker.setSorting(sorting);
             if (listed != null) marker.setListed(listed);
+            if (toggleable != null) marker.setToggleable(toggleable);
+            if (defaultHidden != null) marker.setDefaultHidden(defaultHidden);
             return marker;
         }
 

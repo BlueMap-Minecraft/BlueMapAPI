@@ -37,6 +37,7 @@ public class MarkerSet {
     private boolean toggleable, defaultHidden;
     private int sorting;
     private final ConcurrentHashMap<String, Marker> markers;
+    private final ConcurrentHashMap<String, MarkerSet> markerSets;
 
     /**
      * Empty constructor for deserialization.
@@ -74,6 +75,7 @@ public class MarkerSet {
         this.defaultHidden = defaultHidden;
         this.sorting = 0;
         this.markers = new ConcurrentHashMap<>();
+        this.markerSets = new ConcurrentHashMap<>();
     }
 
     /**
@@ -178,6 +180,19 @@ public class MarkerSet {
     }
 
     /**
+     * Getter for a (modifiable) {@link Map} of all nested (child) {@link MarkerSet}s in this {@link MarkerSet}.
+     * The keys of the map are the id's of the child {@link MarkerSet}s.
+     *
+     * <p>Nested marker-sets are displayed as a hierarchy in the web-app's marker-menu. Each child marker-set can
+     * have its own toggle-state and can in turn contain its own markers and further nested marker-sets.</p>
+     *
+     * @return a {@link Map} of all child {@link MarkerSet}s of this {@link MarkerSet}.
+     */
+    public Map<String, MarkerSet> getMarkerSets() {
+        return markerSets;
+    }
+
+    /**
      * Convenience method to add a {@link Marker} to this {@link MarkerSet}.<br>
      * Shortcut for: <code>getMarkers().get(String)</code>
      * @see Map#get(Object)
@@ -214,7 +229,8 @@ public class MarkerSet {
         if (toggleable != markerSet.toggleable) return false;
         if (defaultHidden != markerSet.defaultHidden) return false;
         if (!label.equals(markerSet.label)) return false;
-        return markers.equals(markerSet.markers);
+        if (!markers.equals(markerSet.markers)) return false;
+        return markerSets.equals(markerSet.markerSets);
     }
 
     @Override
@@ -223,6 +239,7 @@ public class MarkerSet {
         result = 31 * result + (toggleable ? 1 : 0);
         result = 31 * result + (defaultHidden ? 1 : 0);
         result = 31 * result + markers.hashCode();
+        result = 31 * result + markerSets.hashCode();
         return result;
     }
 
