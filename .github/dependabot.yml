@@ -23,7 +23,7 @@ updates:
 
     ignore:
       - dependency-name: "com.flowpowered:flow-math"
-        versions: ["version-update:semver-major"] # no breaking api change
+        update-types: ["version-update:semver-major"] # no breaking api change
       - dependency-name: "com.google.code.gson:gson"
         versions: [">=2.9.0"] # depends on all implementations
 
