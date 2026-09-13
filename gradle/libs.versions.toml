@@ -1,5 +1,5 @@
 [versions]
-junit = "6.1.0-M1"
+junit = "6.1.3"
 
 [libraries]
 flow-math = { module = "com.flowpowered:flow-math", version = "1.0.3" }
