@@ -18,7 +18,7 @@ jobs:
         cache: 'gradle'
     - name: Build with Gradle
       run: ./gradlew clean build test
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: artifact
         path: build/libs/*
