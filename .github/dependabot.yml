@@ -1,0 +1,33 @@
+version: 2
+
+updates:
+
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+
+      # gradle
+      - dependency-name: "gradle-wrapper"
+
+      # libraries
+      - dependency-name: "com.flowpowered:flow-math"
+      - dependency-name: "com.google.code.gson:gson"
+      - dependency-name: "org.jetbrains:annotations"
+      - dependency-name: "org.junit*"
+      - dependency-name: "org.projectlombok:lombok"
+
+      # plugins
+      - dependency-name: "com.diffplug.spotless"
+
+    ignore:
+      - dependency-name: "com.flowpowered:flow-math"
+        versions: ["version-update:semver-major"] # no breaking api change
+      - dependency-name: "com.google.code.gson:gson"
+        versions: [">=2.9.0"] # depends on all implementations
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
