@@ -10,4 +10,4 @@ junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref 
 lombok = { module = "org.projectlombok:lombok", version = "1.18.48" }
 
 [plugins]
-spotless = { id = "com.diffplug.spotless", version = "8.10.2" }
+spotless = { id = "com.diffplug.spotless", version = "8.10.3" }
